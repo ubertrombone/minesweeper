@@ -3,17 +3,23 @@ package com.minesweepermobile
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.*
+import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.minesweepermobile.databinding.FragmentFinalMessageBinding
 import com.minesweepermobile.model.MinesweeperViewModel
+import java.lang.ClassCastException
+import java.lang.NullPointerException
 
 class FinalMessageFragment : DialogFragment() {
 
@@ -86,7 +92,7 @@ class FinalMessageFragment : DialogFragment() {
         createCardView(sharedViewModel.convertCoordsToNumber(coords), background = false, clickable = trueOrFalse)
     private fun createCardView(card: Int, background: Boolean, clickable: Boolean): CardView {
         val cardView = requireActivity().findViewById<CardView>(card)
-        if (background) cardView.setBackgroundColor(getColor(requireContext(), MinesweeperFragment().getCardBackgroundColor(card, R.color.gray_400, R.color.gray_dark)))
+        //if (background) cardView.setBackgroundColor(getColor(requireContext(), MinesweeperFragment().getCardBackgroundColor(card, R.color.gray_400, R.color.gray_dark)))
         cardView.isClickable = clickable
         cardView.isLongClickable = clickable
         return cardView

@@ -402,4 +402,12 @@ class MinesweeperViewModel: ViewModel() {
             areaAroundFirstMoveList.add(convertCoordsToNumber(listOf(coordinates[0] + j, coordinates[1] + i)) + 1)
         }}
     }
+
+    fun getCardBackgroundColor(card: Int, colorOne: Int, colorTwo: Int): Int {
+        return if (_width % 2 == 0) {
+            if (((card / _width) % 2) % 2 == 0) {
+                if (card % 2 == 0) colorOne else colorTwo
+            } else { if (card % 2 == 0) colorTwo else colorOne }
+        } else { if (card % 2 == 0) colorOne else colorTwo }
+    }
 }

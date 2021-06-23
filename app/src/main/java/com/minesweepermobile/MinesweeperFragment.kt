@@ -164,7 +164,7 @@ class MinesweeperFragment: Fragment() {
         val cardView = CardView(requireContext())
         cardView.setContentPadding(0, 0, 0, 0)
         cardView.id = if (i == 0) j else sharedViewModel.width * i + j
-        cardView.setBackgroundColor(getColor(requireContext(), getCardBackgroundColor(cardView.id, R.color.cyan_900, R.color.cyan_dark)))
+        cardView.setBackgroundColor(getColor(requireContext(), sharedViewModel.getCardBackgroundColor(cardView.id, R.color.cyan_900, R.color.cyan_dark)))
         cardView.layoutParams = params
         return cardView
     }
@@ -393,20 +393,20 @@ class MinesweeperFragment: Fragment() {
 
     private fun createCardView(card: Int, background: Boolean, clickable: Boolean): CardView {
         val cardView = requireActivity().findViewById<CardView>(card)
-        if (background) cardView.setBackgroundColor(getColor(requireContext(), getCardBackgroundColor(card,R.color.gray_400, R.color.gray_dark)))
+        if (background) cardView.setBackgroundColor(getColor(requireContext(), sharedViewModel.getCardBackgroundColor(card,R.color.gray_400, R.color.gray_dark)))
         cardView.isClickable = clickable
         cardView.isLongClickable = clickable
         return cardView
     }
 
     //TODO: Put this in view model
-    fun getCardBackgroundColor(card: Int, colorOne: Int, colorTwo: Int): Int {
-        return if (sharedViewModel.width % 2 == 0) {
-            if (((card / sharedViewModel.width) % 2) % 2 == 0) {
-                if (card % 2 == 0) colorOne else colorTwo
-            } else { if (card % 2 == 0) colorTwo else colorOne }
-        } else { if (card % 2 == 0) colorOne else colorTwo }
-    }
+//    fun getCardBackgroundColor(card: Int, colorOne: Int, colorTwo: Int): Int {
+//        return if (sharedViewModel.width % 2 == 0) {
+//            if (((card / sharedViewModel.width) % 2) % 2 == 0) {
+//                if (card % 2 == 0) colorOne else colorTwo
+//            } else { if (card % 2 == 0) colorTwo else colorOne }
+//        } else { if (card % 2 == 0) colorOne else colorTwo }
+//    }
 
     private fun gameOverMessage(message: Int) {
         binding?.timeCounter?.stop()
@@ -551,16 +551,16 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun restartGame(height: Int, width: Int, numberOfMines: Int) {
-        binding?.timeCounter?.stop()
-        val parentView = binding?.mineLay
+        val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
+        timeCounter.stop()
+        val parentView = requireActivity().findViewById<LinearLayout>(R.id.mine_lay)
         parentView!!.removeAllViews()
         sharedViewModel.resetGame(height, width, numberOfMines)
         buttonSelect()
         startGame(requireView())
-        binding?.timeCounter?.base = SystemClock.elapsedRealtime()
+        timeCounter.base = SystemClock.elapsedRealtime()
     }
 
-    //TODO: Put in view model
     fun checkDifficulty() {
         when (sharedViewModel.getDifficultySet()) {
             EASY.difficulty -> restartGame(10, 10, 10)
