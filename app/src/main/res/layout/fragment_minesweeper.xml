@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".MinesweeperFragment">
+
+    <data>
+        <variable
+                name="minesweeperFragment"
+                type="com.minesweepermobile.MinesweeperFragment" />
+        <variable
+                name="viewModel"
+                type="com.minesweepermobile.model.MinesweeperViewModel" />
+    </data>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lin_lay"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:id="@+id/stats_lay">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mine_image"
+                android:src="@drawable/gnome_gnomine__2_"
+                android:importantForAccessibility="no"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mine_counter"
+                android:textSize="32sp"
+                android:textAppearance="?attr/haloColor"
+                android:textColor="?attr/colorOnSecondary"
+                app:layout_constraintStart_toEndOf="@id/mine_image"
+                app:layout_constraintTop_toTopOf="@id/mine_image"
+                app:layout_constraintBottom_toBottomOf="@id/mine_image"
+                tools:text="1000"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_over_button"
+                android:src="@drawable/flag_restart_game"
+                android:contentDescription="@string/new_game"
+                android:onClick="@{() -> minesweeperFragment.restartGameButtonClickListener()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <Chronometer
+                android:id="@+id/time_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:textAppearance="?attr/haloColor"
+                android:textColor="?attr/colorOnSecondary"
+                app:layout_constraintStart_toEndOf="@id/start_over_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+                android:id="@+id/fab_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:baselineAligned="false">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_flag"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:backgroundTint="@color/cyan_dark"
+                    android:src="@drawable/flag_in_game"
+                    android:contentDescription="@string/flag"
+                    android:focusable="true"
+                    android:alpha=".25"
+                    android:enabled="false"
+                    android:onClick="@{() -> minesweeperFragment.clickTheFlag()}"
+                    app:tint="@color/red_dark"
+                    app:fabSize="mini"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_axe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/cyan_dark"
+                    android:src="@drawable/shovel_and_axe_removebg_preview"
+                    android:contentDescription="@string/pickaxe"
+                    android:focusable="true"
+                    android:alpha=".25"
+                    android:enabled="false"
+                    android:onClick="@{() -> minesweeperFragment.clickTheShovel()}"
+                    app:fabSize="mini"
+                    app:tint="@color/red_dark"/>
+
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="wrap_content" >
+
+            <HorizontalScrollView
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/mine_lay"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="vertical">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+</layout>

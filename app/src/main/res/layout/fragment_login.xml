@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".LoginFragment">
+
+    <data>
+        <variable
+                name="loginFragment"
+                type="com.minesweepermobile.LoginFragment" />
+        <variable
+                name="viewModel"
+                type="com.minesweepermobile.model.MinesweeperViewModel" />
+    </data>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lin_lay"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+                android:id="@+id/google_signin_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="?attr/colorOnPrimary">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/google_button_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorOnSecondary"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+
+                <ImageView
+                        android:id="@+id/google_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:scaleType="center"
+                        app:srcCompat="@drawable/googleg_standard_color_18"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                        android:id="@+id/google_button_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="@string/sign_in_with_google"
+                        android:textAppearance="?textAppearanceSubtitle2"
+                        android:textColor="?attr/colorOnPrimary"
+                        app:layout_constraintStart_toEndOf="@+id/google_logo"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REVOKE"
+            android:onClick="@{() -> loginFragment.revokeAccess()}" />
+
+    </LinearLayout>
+
+</layout>

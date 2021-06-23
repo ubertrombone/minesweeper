@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".NewGameFragment">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.minesweepermobile.model.MinesweeperViewModel"/>
+        <variable
+                name="finalMessageFragment"
+                type="com.minesweepermobile.FinalMessageFragment"/>
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/dialog_rounded" >
+
+            <TextView
+                    android:id="@+id/final_message_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextView"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="18dp"
+                    android:textAppearance="?attr/textAppearanceHeadline4"
+                    android:textColor="@color/cyan_dark"
+                    tools:text="YOU WIN!"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                    android:id="@+id/divider_under_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="?attr/dividerHorizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/final_message_title"/>
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:textColor="@color/black"
+                tools:text="Time: 00:02"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_under_title" />
+
+            <TextView
+                android:id="@+id/moves"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/black"
+                tools:text="Moves: 2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time" />
+
+            <TextView
+                android:id="@+id/play_again"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_marginEnd="18dp"
+                android:layout_marginBottom="9dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:text="@string/play_again"
+                app:layout_constraintTop_toBottomOf="@id/win_percentage"
+                app:layout_constraintEnd_toEndOf="@id/yes"
+                app:layout_constraintBottom_toTopOf="@id/yes" />
+
+            <TextView
+                android:id="@+id/complexity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginEnd="18dp"
+                android:layout_marginStart="18dp"
+                android:textColor="@color/black"
+                tools:text="Complexity: Easy"
+                app:layout_constraintStart_toEndOf="@id/time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/time" />
+
+            <TextView
+                android:id="@+id/games_played"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginEnd="18dp"
+                android:textColor="@color/black"
+                tools:text="Games Played: 1,654"
+                app:layout_constraintStart_toStartOf="@id/complexity"
+                app:layout_constraintTop_toTopOf="@id/moves" />
+
+            <TextView
+                android:id="@+id/win_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginEnd="18dp"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/black"
+                tools:text="Win %: 4.2%"
+                app:layout_constraintStart_toStartOf="@id/complexity"
+                app:layout_constraintTop_toBottomOf="@id/games_played" />
+
+            <Button
+                android:id="@+id/yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes"
+                android:textColor="@color/gray_dark"
+                android:backgroundTint="@color/cyan_900"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{() -> finalMessageFragment.onYes()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/win_percentage"/>
+
+            <Button
+                android:id="@+id/no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:textColor="@color/gray_dark"
+                android:backgroundTint="@color/cyan_900"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{() -> finalMessageFragment.closeDialog()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/yes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/win_percentage"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

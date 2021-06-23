@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       xmlns:tools="http://schemas.android.com/tools"
+       tools:context=".NewGameFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.minesweepermobile.model.MinesweeperViewModel"/>
+        <variable
+            name="newGameFragment"
+            type="com.minesweepermobile.NewGameFragment"/>
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/dialog_rounded" >
+
+            <TextView
+                android:id="@+id/new_game_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:textAppearance="?attr/textAppearanceHeadline4"
+                android:textColor="@color/cyan_dark"
+                tools:text="New Game"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:id="@+id/divider_under_title"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/dividerHorizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/new_game_title"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/rtl_switch"
+                    android:theme="@style/SwitchTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/button_display"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_under_title" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pick_difficulty"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:padding="16dp"
+                    android:textColorHint="@color/black"
+                    app:boxBackgroundColor="@color/gray_dark"
+                    app:layout_constraintTop_toBottomOf="@id/rtl_switch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:helperText="@string/pick_a_difficulty_helper"
+                    app:helperTextTextColor="@color/black">
+
+                <AutoCompleteTextView
+                        android:id="@+id/pick_difficulty_dropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:hint="@string/pick_a_difficulty_hint"
+                        android:textColor="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/height_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/height"
+                    android:textColorHint="@color/black"
+                    app:errorIconDrawable="@drawable/ic_baseline_error_24"
+                    app:errorIconTint="@android:color/holo_red_dark"
+                    app:errorTextColor="@android:color/holo_red_dark"
+                    app:boxBackgroundColor="@color/gray_dark"
+                    app:helperText="@string/custom_max"
+                    android:visibility="gone"
+                    app:helperTextTextColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pick_difficulty"
+                    app:layout_constraintEnd_toStartOf="@id/width_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/height"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textColor="@color/black"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/width_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/width"
+                    android:textColorHint="@color/black"
+                    app:errorIconDrawable="@drawable/ic_baseline_error_24"
+                    app:errorIconTint="@android:color/holo_red_dark"
+                    app:errorTextColor="@android:color/holo_red_dark"
+                    app:boxBackgroundColor="@color/gray_dark"
+                    app:helperText="@string/custom_max"
+                    android:visibility="gone"
+                    app:helperTextTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pick_difficulty"
+                    app:layout_constraintStart_toEndOf="@id/height_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/width"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textColor="@color/black"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/number_of_mines_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mine"
+                    android:layout_marginStart="8dp"
+                    android:textColorHint="@color/black"
+                    app:errorIconDrawable="@drawable/ic_baseline_error_24"
+                    app:errorIconTint="@android:color/holo_red_dark"
+                    app:errorTextColor="@android:color/holo_red_dark"
+                    app:boxBackgroundColor="@color/gray_dark"
+                    app:helperText="@string/number_of_mines"
+                    android:visibility="gone"
+                    app:helperTextTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/height_field"
+                    app:layout_constraintStart_toStartOf="parent" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/number_of_mines"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textColor="@color/black"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                android:textColor="@color/gray_dark"
+                android:backgroundTint="@color/cyan_900"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/number_of_mines_field"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>
