@@ -10,7 +10,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -58,7 +58,6 @@ class MinesweeperFragment: Fragment() {
 
         queryUserFromDatabase()
         observeUserState()
-        binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         startGame(view)
         observeMineCounter()
         restartGameButtonClickListener()
@@ -77,7 +76,7 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun setupDatabase(database: DatabaseReference) {
-        val allComplexities = Statistics(0, 0, 0, 0F, 0L, 0L, 0, 0L, 0, 0, 0F)
+        val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
         sharedViewModel.changeAll(allComplexities)
         database.child(LoginFragment.userId).child(EASY.difficulty).setValue(sharedViewModel.easy[0])
         database.child(LoginFragment.userId).child(MEDIUM.difficulty).setValue(sharedViewModel.medium[0])
@@ -104,6 +103,17 @@ class MinesweeperFragment: Fragment() {
                 LoginFragment.userId = child.key.toString()
             }
         }
+        dataSnapshot.children.forEach { child ->
+            if (child.child("RTL").key.toString() == "RTL") {
+                sharedViewModel.fabButtonSettings(child.child("RTL").value.toString().toBoolean())
+                binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+            }
+        }
+        dataSnapshot.children.forEach { child ->
+            if (child.child("DefaultDifficulty").key.toString() == "DefaultDifficulty") {
+                sharedViewModel.setDifficulty(child.child("DefaultDifficulty").value.toString())
+            }
+        }
     }
 
     private fun pickUpComplexitiesFromDatabase(dataSnapshot: DataSnapshot) {
@@ -120,8 +130,10 @@ class MinesweeperFragment: Fragment() {
             }}
     }
 
-    private fun getComplexityValue(value: MutableList<String>) = Statistics(value[5].toInt(), value[6].toInt(), value[8].toInt(), value[0].toFloat(), value[9].toLong(),
-            value[1].toLong(), value[4].toInt(), value[3].toLong(), value[2].toInt(), value[7].toInt(), value[10].toFloat())
+    private fun getComplexityValue(value: MutableList<String>): Statistics {
+        return Statistics(value[5].toInt(), value[6].toInt(), value[8].toInt(), value[0].toDouble(), value[9].toLong(),
+            value[1].toLong(), value[4].toInt(), value[3].toLong(), value[2].toInt(), value[7].toInt(), value[10].toDouble())
+    }
 
     private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) { if (!it) findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment) }
 
@@ -399,37 +411,16 @@ class MinesweeperFragment: Fragment() {
         return cardView
     }
 
-    //TODO: Put this in view model
-//    fun getCardBackgroundColor(card: Int, colorOne: Int, colorTwo: Int): Int {
-//        return if (sharedViewModel.width % 2 == 0) {
-//            if (((card / sharedViewModel.width) % 2) % 2 == 0) {
-//                if (card % 2 == 0) colorOne else colorTwo
-//            } else { if (card % 2 == 0) colorTwo else colorOne }
-//        } else { if (card % 2 == 0) colorOne else colorTwo }
-//    }
-
     private fun gameOverMessage(message: Int) {
         binding?.timeCounter?.stop()
 //        val time = SystemClock.elapsedRealtime() - binding?.timeCounter?.base!!
 //        sharedViewModel.getTimes(time)
-
-//        val supportFragmentManager = childFragmentManager
-//        FinalMessageFragment.newInstance(getString(message), getString(R.string.time, binding?.timeCounter?.text))
-//            .show(supportFragmentManager, NewGameFragment.TAG)
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(message))
-            .setMessage(getString(R.string.end_of_game_message, binding?.timeCounter?.text, sharedViewModel.moveCounter.toString()))
-            .setCancelable(false)
-            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-                dialog.dismiss()
-                exitGame()
-            }
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> checkDifficulty() }
-            .show()
-        binding?.timeCounter?.base = SystemClock.elapsedRealtime()
+        val supportFragmentManager = childFragmentManager
+        FinalMessageFragment.newInstance(getString(message), getString(R.string.time, binding?.timeCounter?.text))
+            .show(supportFragmentManager, NewGameFragment.TAG)
     }
 
-    private fun exitGame() = (0 until sharedViewModel.width * sharedViewModel.height)
+    fun exitGame() = (0 until sharedViewModel.width * sharedViewModel.height)
         .forEach { makeClickable(sharedViewModel.convertNumberToCoords(it + 1), false) }
 
     fun clickTheFlag() {
@@ -439,11 +430,9 @@ class MinesweeperFragment: Fragment() {
         val cardView = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId)
         val possibleImageId = requireActivity().findViewById<ImageView>(sharedViewModel.getFlagId())
         val coords = sharedViewModel.currentCoords
-        val xCoord = coords[0]
-        val yCoord = coords[1]
 
-        if (cardView.children.contains(possibleImageId)) removeFlag(cardView, possibleImageId, coords, xCoord, yCoord)
-        else placeFlag(cardView, coords, xCoord, yCoord)
+        if (cardView.children.contains(possibleImageId)) removeFlag(cardView, possibleImageId, coords, coords[0], coords[1])
+        else placeFlag(cardView, coords, coords[0], coords[1])
     }
 
     private fun placeFlag(cardView: CardView, coords: List<Int>, x: Int, y: Int) {

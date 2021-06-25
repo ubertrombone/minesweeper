@@ -27,8 +27,10 @@
     <string name="sign_out">Sign Out</string>
     <string name="sign_in">Sign In</string>
     <string name="time">Time: %s</string>
-    <string name="moves">Moves: %s</string>
+    <string name="moves">Moves: %d</string>
     <string name="complexities">Complexity: %s</string>
     <string name="games_played">Games Played: %s</string>
     <string name="win_percentage">Win pct.: %s</string>
+    <string name="difficulty_on_launch">Difficulty on launch</string>
+    <string name="set_difficulty_on_launch">Set difficulty on launch</string>
 </resources>

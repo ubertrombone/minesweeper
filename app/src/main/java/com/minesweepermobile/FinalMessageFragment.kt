@@ -9,17 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.*
-import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.FirebaseDatabase
 import com.minesweepermobile.databinding.FragmentFinalMessageBinding
 import com.minesweepermobile.model.MinesweeperViewModel
-import java.lang.ClassCastException
-import java.lang.NullPointerException
 
 class FinalMessageFragment : DialogFragment() {
 
@@ -71,30 +65,35 @@ class FinalMessageFragment : DialogFragment() {
     }
 
     private fun setupView() {
+        val complexity = when(sharedViewModel.difficultySet.value) {
+            Difficulties.EASY.difficulty -> sharedViewModel.easy
+            Difficulties.MEDIUM.difficulty -> sharedViewModel.medium
+            Difficulties.HARD.difficulty -> sharedViewModel.hard
+            else -> sharedViewModel.expert
+        }
+        val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
+        sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, timeCounter.base, arguments?.getString(KEY_TITLE) == getString(R.string.win))
+
         binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
         binding?.time?.text = arguments?.getString(TIME)
-        binding?.moves?.text = getString(R.string.moves, sharedViewModel.mineCounter.toString())
+        binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter)
         binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.value)
-        binding?.gamesPlayed?.text = getString(R.string.games_played, "1654")
-        binding?.winPercentage?.text = getString(R.string.win_percentage, "4.6%")
+        binding?.gamesPlayed?.text = getString(R.string.games_played, complexity[0].gamesPlayed.toString())
+        binding?.winPercentage?.text = getString(R.string.win_percentage, "%.2f".format(complexity[0].winPercentage * 100) + "%")
+
+        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        database.child(LoginFragment.userId).child(Difficulties.EASY.difficulty).setValue(complexity[0])
     }
 
-    //TODO: Restart Game function will need to be moved here too.
-    fun onYes() = MinesweeperFragment().checkDifficulty()
+    fun onYes() {
+        dismiss()
+        (parentFragment as MinesweeperFragment).checkDifficulty()
+        val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
+        timeCounter.base = SystemClock.elapsedRealtime()
+    }
 
     fun closeDialog() {
         dismiss()
-        exitGame()
-    }
-    private fun exitGame() = (0 until sharedViewModel.width * sharedViewModel.height)
-        .forEach { makeClickable(sharedViewModel.convertNumberToCoords(it + 1), false) }
-    private fun makeClickable(coords: List<Int>, trueOrFalse: Boolean) =
-        createCardView(sharedViewModel.convertCoordsToNumber(coords), background = false, clickable = trueOrFalse)
-    private fun createCardView(card: Int, background: Boolean, clickable: Boolean): CardView {
-        val cardView = requireActivity().findViewById<CardView>(card)
-        //if (background) cardView.setBackgroundColor(getColor(requireContext(), MinesweeperFragment().getCardBackgroundColor(card, R.color.gray_400, R.color.gray_dark)))
-        cardView.isClickable = clickable
-        cardView.isLongClickable = clickable
-        return cardView
+        (parentFragment as MinesweeperFragment).exitGame()
     }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.database.FirebaseDatabase
 import com.minesweepermobile.model.MinesweeperViewModel
 import com.minesweepermobile.Difficulties.*
 import com.minesweepermobile.databinding.FragmentNewGameBinding
@@ -52,8 +53,12 @@ class NewGameFragment: DialogFragment() {
         binding?.height?.filters = arrayOf(InputFilterMinMax(1, 50))
         binding?.width?.filters = arrayOf(InputFilterMinMax(1, 50))
 
+        binding?.rtlSwitch?.isChecked = sharedViewModel.fabButtonRTL
+        binding?.setDifficultyDropdown?.setText(sharedViewModel.difficultySet.value)
         setupView()
         createSpinner(sharedViewModel.listOfDifficulties)
+        binding?.pickDifficultyDropdown?.setText(sharedViewModel.difficultySet.value)
+        createSpinnerForLaunch(sharedViewModel.listOfDifficulties.dropLast(1))
         submitSettings()
     }
 
@@ -72,10 +77,9 @@ class NewGameFragment: DialogFragment() {
 
     private fun createSpinner(dropList: MutableList<String>) {
         val spinnerDropdown = binding?.pickDifficultyDropdown
-        val spinnerDropdownAdapter = MaterialSpinnerAdapter(
-            requireContext(), R.layout.item_list, dropList)
+        val spinnerDropdownAdapter = MaterialSpinnerAdapter(requireContext(), R.layout.item_list, dropList)
         spinnerDropdown?.setAdapter(spinnerDropdownAdapter)
-        spinnerDropdown?.setText(spinnerDropdownAdapter.getItem(0).toString(), false)
+        //spinnerDropdown?.setText(spinnerDropdownAdapter.getItem(0).toString(), false)
         spinnerDropdown?.setOnItemClickListener { _, _, position, _ ->
             if (spinnerDropdownAdapter.getItem(position).toString() == CUSTOM.difficulty) {
                 binding?.heightField?.visibility = View.VISIBLE
@@ -89,6 +93,13 @@ class NewGameFragment: DialogFragment() {
         }
     }
 
+    private fun createSpinnerForLaunch(dropList: List<String>) {
+        val spinnerDropdown = binding?.setDifficultyDropdown
+        val spinnerDropdownAdapter = MaterialSpinnerAdapter(requireContext(), R.layout.item_list, dropList.toMutableList())
+        spinnerDropdown?.setAdapter(spinnerDropdownAdapter)
+        spinnerDropdown?.setText(sharedViewModel.difficultySet.value, false)
+    }
+
     private fun submitSettings() = binding?.submit?.setOnClickListener {
         val dropdownValue = binding?.pickDifficultyDropdown?.text.toString()
         val heightField = binding?.heightField
@@ -100,6 +111,9 @@ class NewGameFragment: DialogFragment() {
         val maxNumberOfMines = try {
             height?.text.toString().toInt() * width?.text.toString().toInt() - 1
         } catch (e: NumberFormatException) { 0 }
+
+        onSwitchClicked()
+        onLaunchDifficultySet()
 
         when (dropdownValue) {
             CUSTOM.difficulty -> {
@@ -139,6 +153,17 @@ class NewGameFragment: DialogFragment() {
         sharedViewModel.fabButtonSettings(binding?.rtlSwitch!!.isChecked)
         val fabButtons = requireActivity().findViewById<LinearLayout>(R.id.fab_buttons)
         fabButtons.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+    }
+
+    private fun onSwitchClicked() {
+        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        database.child(LoginFragment.userId).child("RTL").setValue(binding?.rtlSwitch?.isChecked)
+    }
+
+    private fun onLaunchDifficultySet() {
+        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        println(binding?.setDifficultyDropdown?.text)
+        database.child(LoginFragment.userId).child("DefaultDifficulty").setValue(binding?.setDifficultyDropdown?.text.toString())
     }
 
     private fun orElse(height: TextInputEditText, heightField: TextInputLayout, width: TextInputEditText,

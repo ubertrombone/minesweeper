@@ -1,6 +1,7 @@
 package com.minesweepermobile.model
 
 import androidx.lifecycle.*
+import com.minesweepermobile.Difficulties
 import com.minesweepermobile.Markers.*
 import com.minesweepermobile.Numbers.*
 import com.minesweepermobile.Difficulties.*
@@ -55,6 +56,47 @@ class MinesweeperViewModel: ViewModel() {
         changeMedium(stats)
         changeHard(stats)
         changeExpert(stats)
+    }
+
+    fun updateComplexities(difficulty: String, time: Long, message: Boolean) {
+        val complexity = when(difficulty) {
+            EASY.difficulty -> easy
+            MEDIUM.difficulty -> medium
+            HARD.difficulty -> hard
+            else -> expert
+        }
+        incrementGamesPlayed(complexity)
+        if (message) {
+            incrementWinsAndStreaks(complexity)
+            addMovesAndTime(complexity, time)
+            calculateAverageMovesAndTime(complexity)
+            calculateFewestMovesAndFastestTime(complexity, time)
+        } else resetWinStreak(complexity)
+        calculateWinPercentage(complexity)
+    }
+    private fun incrementGamesPlayed(complexity: List<Statistics>) = complexity[0].gamesPlayed ++
+    private fun calculateWinPercentage(complexity: List<Statistics>) {
+        complexity[0].winPercentage = complexity[0].gamesWon.toDouble() / complexity[0].gamesPlayed
+    }
+    private fun resetWinStreak(complexity: List<Statistics>) {
+        complexity[0].currentStreak = 0
+    }
+    private fun incrementWinsAndStreaks(complexity: List<Statistics>) {
+        complexity[0].gamesWon ++
+        complexity[0].currentStreak ++
+        if (complexity[0].currentStreak > complexity[0].longestStreak) complexity[0].longestStreak = complexity[0].currentStreak
+    }
+    private fun addMovesAndTime(complexity: List<Statistics>, time: Long) {
+        complexity[0].totalMoves += _moveCounter
+        complexity[0].totalTime += time
+    }
+    private fun calculateAverageMovesAndTime(complexity: List<Statistics>) {
+        complexity[0].averageMoves = complexity[0].totalMoves.toDouble() / complexity[0].gamesPlayed
+        complexity[0].averageTime = complexity[0].totalTime / complexity[0].gamesPlayed
+    }
+    private fun calculateFewestMovesAndFastestTime(complexity: List<Statistics>, time: Long) {
+        if (_moveCounter < complexity[0].fewestMoves || complexity[0].fewestMoves == 0) complexity[0].fewestMoves = _moveCounter
+        if (time < complexity[0].fastestGame || complexity[0].fastestGame == 0L) complexity[0].fastestGame = time
     }
 
     fun getIntersectionOfDatabaseAndComplexities() = _listOfDatabaseKeys.intersect(listOfDifficulties)
