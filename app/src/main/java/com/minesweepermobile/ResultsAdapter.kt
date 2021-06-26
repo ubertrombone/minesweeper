@@ -46,8 +46,8 @@ class ResultsAdapter(
             "${sharedViewModel.minutes}min",
             "${sharedViewModel.seconds}s"
         )
-        holder.averagesMoves.text = context.getString(R.string.statistics_average_moves, item[0].averageMoves.toString())
-        holder.winPct.text = context.getString(R.string.records_win_percentage, "${item[0].winPercentage}%")
+        holder.averagesMoves.text = context.getString(R.string.statistics_average_moves, "%.2f".format(item[0].averageMoves))
+        holder.winPct.text = context.getString(R.string.records_win_percentage, "%.2f".format(item[0].winPercentage * 100) + "%")
         sharedViewModel.getTimes(item[0].fastestGame)
         holder.fastestGame.text = context.getString(R.string.records_fastest_game,
             "${sharedViewModel.hours}hr",

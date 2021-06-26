@@ -52,7 +52,6 @@ class NewGameFragment: DialogFragment() {
 
         setupView()
         createSpinner(sharedViewModel.listOfDifficulties)
-        //binding?.pickDifficultyDropdown?.setText(sharedViewModel.difficultyHolder)
         submitNewGame()
     }
 

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.minesweepermobile.databinding.FragmentResultsBinding
 import com.minesweepermobile.model.MinesweeperViewModel
 

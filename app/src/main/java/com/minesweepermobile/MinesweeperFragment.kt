@@ -10,11 +10,9 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.minesweepermobile.model.MinesweeperViewModel
 import com.minesweepermobile.databinding.FragmentMinesweeperBinding
@@ -31,6 +29,7 @@ class MinesweeperFragment: Fragment() {
     private var binding: FragmentMinesweeperBinding? = null
     private val sharedViewModel: MinesweeperViewModel by activityViewModels()
     private lateinit var auth: FirebaseAuth
+    private val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
     private var shovelEmptySwitch = false
     private var mineSelectedOnEmptySwitch = false
@@ -64,7 +63,6 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun queryUserFromDatabase() {
-        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
         database.addListenerForSingleValueEvent(readDatabase("user"))
 
         if (!sharedViewModel.startSwitch) {
@@ -414,11 +412,9 @@ class MinesweeperFragment: Fragment() {
 
     private fun gameOverMessage(message: Int) {
         binding?.timeCounter?.stop()
-//        val time = SystemClock.elapsedRealtime() - binding?.timeCounter?.base!!
-//        sharedViewModel.getTimes(time)
         val supportFragmentManager = childFragmentManager
         FinalMessageFragment.newInstance(getString(message), getString(R.string.time, binding?.timeCounter?.text))
-            .show(supportFragmentManager, NewGameFragment.TAG)
+            .show(supportFragmentManager, FinalMessageFragment.TAG)
     }
 
     fun exitGame() = (0 until sharedViewModel.width * sharedViewModel.height)
@@ -527,7 +523,6 @@ class MinesweeperFragment: Fragment() {
             }
             R.id.sign_out -> {
                 sharedViewModel.getUser(false)
-                val database = Firebase.database("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
                 database.child(LoginFragment.userId).child("userLog").setValue(sharedViewModel.user.value)
                 true
             }

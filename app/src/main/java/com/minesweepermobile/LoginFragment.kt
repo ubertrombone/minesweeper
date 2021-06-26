@@ -3,10 +3,10 @@ package com.minesweepermobile
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -106,15 +106,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    fun revokeAccess() {
-        // Firebase sign out
-        auth.signOut()
-        // Google revoke access
-        googleSignInClient.revokeAccess().addOnCompleteListener(requireActivity()) {
-            updateUI(null)
-        }
-    }
-
     override fun onClick(v: View) {
         if (v.id == R.id.google_signin_button) {
             signIn()
@@ -129,6 +120,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
             val database = Firebase.database("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
             database.child(userId).child("userLog").setValue(sharedViewModel.user.value)
+            database.child(userId).child("RTL").setValue(true)
+            database.child(userId).child("DefaultDifficulty").setValue(Difficulties.MEDIUM.difficulty)
 
         } else findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
     }

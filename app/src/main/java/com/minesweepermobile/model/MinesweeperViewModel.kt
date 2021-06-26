@@ -17,8 +17,6 @@ class MinesweeperViewModel: ViewModel() {
     fun getUser(user: Boolean) { _user.value = user }
 
     private var _listOfDatabaseKeys = mutableListOf<String>()
-    val listOfDatabaseKeys: List<String>
-        get() = _listOfDatabaseKeys
 
     fun addKey(key: String) = _listOfDatabaseKeys.add(key)
 
@@ -274,7 +272,6 @@ class MinesweeperViewModel: ViewModel() {
         get() = _seconds
 
     fun getTimes(time: Long) {
-        println("TIME: $time")
         _hours = getHours(time)
         _minutes = getMinutes(time - (_hours * 3_600_000))
         _seconds = getSeconds(time - (_hours * 3_600_000) - (_minutes * 60_000))

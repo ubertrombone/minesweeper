@@ -72,7 +72,8 @@ class FinalMessageFragment : DialogFragment() {
             else -> sharedViewModel.expert
         }
         val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
-        sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, timeCounter.base, arguments?.getString(KEY_TITLE) == getString(R.string.win))
+        val time = SystemClock.elapsedRealtime() - timeCounter?.base!!
+        sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, time, arguments?.getString(KEY_TITLE) == getString(R.string.win))
 
         binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
         binding?.time?.text = arguments?.getString(TIME)

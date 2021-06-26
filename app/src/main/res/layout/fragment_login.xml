@@ -15,17 +15,18 @@
     </data>
 
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lin_lay"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
+        android:background="@drawable/dialog_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lin_lay"
+        android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
                 android:id="@+id/google_signin_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="60dp"
+                android:layout_gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardBackgroundColor="?attr/colorOnPrimary">
 
@@ -65,11 +66,18 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <Button
+        <TextView
+            android:id="@+id/revoke_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="REVOKE"
-            android:onClick="@{() -> loginFragment.revokeAccess()}" />
+            android:text="@string/revoke_notice"
+            android:autoLink="email"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            android:textAppearance="?attr/textAppearanceSubtitle2"/>
 
     </LinearLayout>
 

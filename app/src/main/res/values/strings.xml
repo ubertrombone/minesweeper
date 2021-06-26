@@ -46,4 +46,7 @@
     <string name="results">Results</string>
     <string name="save">Save</string>
     <string name="close">Close</string>
+    <string name="revoke_notice">To delete your account and all personal information associated with it, please
+        contact josh.rose213@gmail.com
+    </string>
 </resources>

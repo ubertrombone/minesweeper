@@ -17,8 +17,8 @@ import com.minesweepermobile.model.MinesweeperViewModel
 class SettingsFragment : DialogFragment() {
 
     private val sharedViewModel: MinesweeperViewModel by activityViewModels()
-
     private var binding: FragmentSettingsBinding? = null
+    private val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
     companion object {
         const val TAG = "SettingsFragment"
@@ -72,7 +72,6 @@ class SettingsFragment : DialogFragment() {
         val spinnerDropdown = binding?.setDifficultyDropdown
         val spinnerDropdownAdapter = MaterialSpinnerAdapter(requireContext(), R.layout.item_list, dropList.toMutableList())
         spinnerDropdown?.setAdapter(spinnerDropdownAdapter)
-        spinnerDropdown?.setText(sharedViewModel.difficultySet.value, false)
     }
 
     private fun saveSettings() = binding?.save?.setOnClickListener {
@@ -88,13 +87,11 @@ class SettingsFragment : DialogFragment() {
     }
 
     private fun onSwitchClicked() {
-        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
         database.child(LoginFragment.userId).child("RTL").setValue(binding?.rtlSwitch?.isChecked)
         orientFABButtons()
     }
 
     private fun onLaunchDifficultySet() {
-        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
         database.child(LoginFragment.userId).child("DefaultDifficulty").setValue(binding?.setDifficultyDropdown?.text.toString())
         sharedViewModel.setDifficultyHolder(binding?.setDifficultyDropdown?.text.toString())
     }

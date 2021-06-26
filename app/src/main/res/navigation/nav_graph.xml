@@ -10,13 +10,16 @@
         android:name="com.minesweepermobile.MinesweeperFragment"
         android:label="Minesweeper"
         tools:layout="@layout/fragment_minesweeper" >
-        <action android:id="@+id/action_minesweeperFragment_to_loginFragment" app:destination="@id/loginFragment"
-                app:popUpTo="@id/minesweeperFragment"/>
+        <action
+            android:id="@+id/action_minesweeperFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/minesweeperFragment"/>
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.minesweepermobile.LoginFragment"
-        android:label="@string/sign_in">
+        android:label="@string/sign_in"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_minesweeperFragment"
             app:destination="@id/minesweeperFragment"
