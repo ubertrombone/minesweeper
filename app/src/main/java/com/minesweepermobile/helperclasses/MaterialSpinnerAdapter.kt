@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.helperclasses
 import android.content.Context
 import android.widget.ArrayAdapter
 import android.widget.Filter

@@ -10,7 +10,7 @@
                 type="com.minesweepermobile.model.MinesweeperViewModel" />
         <variable
                 name="resultsFragment"
-                type="com.minesweepermobile.ResultsFragment" />
+                type="com.minesweepermobile.results.ResultsFragment" />
     </data>
 
     <FrameLayout

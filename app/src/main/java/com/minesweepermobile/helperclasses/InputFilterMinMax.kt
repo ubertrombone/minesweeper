@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.helperclasses
 
 import android.text.InputFilter
 import android.text.Spanned

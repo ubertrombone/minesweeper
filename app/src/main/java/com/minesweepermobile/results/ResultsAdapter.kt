@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.results
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.minesweepermobile.R
 import com.minesweepermobile.database.Statistics
 import com.minesweepermobile.model.MinesweeperViewModel
 
@@ -41,7 +42,8 @@ class ResultsAdapter(
         holder.gamesWon.text = context.getString(R.string.statistics_games_won, item[0].gamesWon)
         holder.currentStreak.text = context.getString(R.string.statistics_current_streak, item[0].currentStreak)
         sharedViewModel.getTimes(item[0].averageTime)
-        holder.averageTime.text = context.getString(R.string.statistics_average_time,
+        holder.averageTime.text = context.getString(
+            R.string.statistics_average_time,
             "${sharedViewModel.hours}hr",
             "${sharedViewModel.minutes}min",
             "${sharedViewModel.seconds}s"
@@ -49,7 +51,8 @@ class ResultsAdapter(
         holder.averagesMoves.text = context.getString(R.string.statistics_average_moves, "%.2f".format(item[0].averageMoves))
         holder.winPct.text = context.getString(R.string.records_win_percentage, "%.2f".format(item[0].winPercentage * 100) + "%")
         sharedViewModel.getTimes(item[0].fastestGame)
-        holder.fastestGame.text = context.getString(R.string.records_fastest_game,
+        holder.fastestGame.text = context.getString(
+            R.string.records_fastest_game,
             "${sharedViewModel.hours}hr",
             "${sharedViewModel.minutes}min",
             "${sharedViewModel.seconds}s"

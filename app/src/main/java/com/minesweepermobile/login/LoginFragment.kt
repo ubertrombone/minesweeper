@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -19,6 +19,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.minesweepermobile.Difficulties
+import com.minesweepermobile.R
 import com.minesweepermobile.databinding.FragmentLoginBinding
 import com.minesweepermobile.model.MinesweeperViewModel
 
@@ -56,7 +58,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
         observeUserState()
     }
 
-    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) { if (it) findNavController().navigate(R.id.action_loginFragment_to_minesweeperFragment) }
+    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) { if (it) findNavController().navigate(
+        R.id.action_loginFragment_to_minesweeperFragment
+    ) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

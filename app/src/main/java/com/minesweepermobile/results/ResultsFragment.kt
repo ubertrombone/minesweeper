@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.results
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

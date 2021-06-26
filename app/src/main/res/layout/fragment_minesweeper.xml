@@ -3,12 +3,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".MinesweeperFragment">
+        tools:context=".minesweeper.MinesweeperFragment">
 
     <data>
         <variable
                 name="minesweeperFragment"
-                type="com.minesweepermobile.MinesweeperFragment" />
+                type="com.minesweepermobile.minesweeper.MinesweeperFragment" />
         <variable
                 name="viewModel"
                 type="com.minesweepermobile.model.MinesweeperViewModel" />

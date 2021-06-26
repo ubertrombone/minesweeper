@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.newgame
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,7 +10,10 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.minesweepermobile.model.MinesweeperViewModel
 import com.minesweepermobile.Difficulties.*
+import com.minesweepermobile.R
 import com.minesweepermobile.databinding.FragmentNewGameBinding
+import com.minesweepermobile.helperclasses.InputFilterMinMax
+import com.minesweepermobile.helperclasses.MaterialSpinnerAdapter
 import java.lang.NumberFormatException
 
 class NewGameFragment: DialogFragment() {

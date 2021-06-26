@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.minesweeper
 
 import android.os.Bundle
 import android.os.SystemClock
@@ -20,7 +20,13 @@ import java.lang.ClassCastException
 import com.minesweepermobile.Markers.*
 import com.minesweepermobile.Numbers.*
 import com.minesweepermobile.Difficulties.*
+import com.minesweepermobile.newgame.NewGameFragment
+import com.minesweepermobile.R
+import com.minesweepermobile.settings.SettingsFragment
 import com.minesweepermobile.database.Statistics
+import com.minesweepermobile.finalmessage.FinalMessageFragment
+import com.minesweepermobile.login.LoginFragment
+import com.minesweepermobile.results.ResultsFragment
 import java.lang.NullPointerException
 import java.lang.NumberFormatException
 
@@ -134,7 +140,9 @@ class MinesweeperFragment: Fragment() {
             value[1].toLong(), value[4].toInt(), value[3].toLong(), value[2].toInt(), value[7].toInt(), value[10].toDouble())
     }
 
-    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) { if (!it) findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment) }
+    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) { if (!it) findNavController().navigate(
+        R.id.action_minesweeperFragment_to_loginFragment
+    ) }
 
     private fun startGame(view: View) {
         binding?.mineCounter?.text = sharedViewModel.howManyMines.toString()
@@ -175,7 +183,10 @@ class MinesweeperFragment: Fragment() {
         val cardView = CardView(requireContext())
         cardView.setContentPadding(0, 0, 0, 0)
         cardView.id = if (i == 0) j else sharedViewModel.width * i + j
-        cardView.setBackgroundColor(getColor(requireContext(), sharedViewModel.getCardBackgroundColor(cardView.id, R.color.cyan_900, R.color.cyan_dark)))
+        cardView.setBackgroundColor(getColor(requireContext(), sharedViewModel.getCardBackgroundColor(cardView.id,
+            R.color.cyan_900,
+            R.color.cyan_dark
+        )))
         cardView.layoutParams = params
         return cardView
     }
@@ -404,7 +415,10 @@ class MinesweeperFragment: Fragment() {
 
     private fun createCardView(card: Int, background: Boolean, clickable: Boolean): CardView {
         val cardView = requireActivity().findViewById<CardView>(card)
-        if (background) cardView.setBackgroundColor(getColor(requireContext(), sharedViewModel.getCardBackgroundColor(card,R.color.gray_400, R.color.gray_dark)))
+        if (background) cardView.setBackgroundColor(getColor(requireContext(), sharedViewModel.getCardBackgroundColor(card,
+            R.color.gray_400,
+            R.color.gray_dark
+        )))
         cardView.isClickable = clickable
         cardView.isLongClickable = clickable
         return cardView

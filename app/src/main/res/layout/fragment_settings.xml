@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".NewGameFragment">
+        tools:context=".newgame.NewGameFragment">
 
     <data>
         <variable
@@ -11,7 +11,7 @@
                 type="com.minesweepermobile.model.MinesweeperViewModel"/>
         <variable
                 name="settingsFragment"
-                type="com.minesweepermobile.SettingsFragment"/>
+                type="com.minesweepermobile.settings.SettingsFragment"/>
     </data>
 
     <FrameLayout

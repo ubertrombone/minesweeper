@@ -3,12 +3,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".LoginFragment">
+        tools:context=".login.LoginFragment">
 
     <data>
         <variable
                 name="loginFragment"
-                type="com.minesweepermobile.LoginFragment" />
+                type="com.minesweepermobile.login.LoginFragment" />
         <variable
                 name="viewModel"
                 type="com.minesweepermobile.model.MinesweeperViewModel" />

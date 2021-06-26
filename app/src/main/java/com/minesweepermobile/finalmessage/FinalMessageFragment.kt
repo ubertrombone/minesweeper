@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweepermobile.finalmessage
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -12,7 +12,11 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.firebase.database.FirebaseDatabase
+import com.minesweepermobile.Difficulties
+import com.minesweepermobile.minesweeper.MinesweeperFragment
+import com.minesweepermobile.R
 import com.minesweepermobile.databinding.FragmentFinalMessageBinding
+import com.minesweepermobile.login.LoginFragment
 import com.minesweepermobile.model.MinesweeperViewModel
 
 class FinalMessageFragment : DialogFragment() {
@@ -73,7 +77,9 @@ class FinalMessageFragment : DialogFragment() {
         }
         val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
         val time = SystemClock.elapsedRealtime() - timeCounter?.base!!
-        sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, time, arguments?.getString(KEY_TITLE) == getString(R.string.win))
+        sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, time, arguments?.getString(KEY_TITLE) == getString(
+            R.string.win
+        ))
 
         binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
         binding?.time?.text = arguments?.getString(TIME)
