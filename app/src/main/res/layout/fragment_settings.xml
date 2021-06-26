@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".NewGameFragment">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.minesweepermobile.model.MinesweeperViewModel"/>
+        <variable
+                name="settingsFragment"
+                type="com.minesweepermobile.SettingsFragment"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/dialog_rounded" >
+
+                <TextView
+                        android:id="@+id/settings_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.TextView"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="18dp"
+                        android:textAppearance="?attr/textAppearanceHeadline4"
+                        android:textColor="@color/cyan_dark"
+                        tools:text="Settings"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                <View
+                        android:id="@+id/divider_under_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="?attr/dividerHorizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/settings_title"/>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/rtl_switch"
+                        android:theme="@style/SwitchTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/button_display"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider_under_title" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/set_difficulty"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:padding="16dp"
+                        android:textColorHint="@color/black"
+                        app:boxBackgroundColor="@color/gray_dark"
+                        app:layout_constraintTop_toBottomOf="@id/rtl_switch"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:helperText="@string/set_difficulty_on_launch"
+                        app:helperTextTextColor="@color/black">
+
+                    <AutoCompleteTextView
+                            android:id="@+id/set_difficulty_dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:inputType="none"
+                            android:hint="@string/difficulty_on_launch"
+                            android:textColor="@color/black"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                        android:id="@+id/save"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/save"
+                        android:textColor="@color/gray_dark"
+                        android:backgroundTint="@color/cyan_900"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/set_difficulty"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:padding="16dp"
+            android:clickable="true"
+            android:src="@drawable/close"
+            android:focusable="true"
+            android:onClick="@{() -> settingsFragment.dismiss()}"
+            android:contentDescription="@string/close"/>
+
+    </FrameLayout>
+
+</layout>

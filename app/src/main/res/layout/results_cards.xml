@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/card_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray_dark"
+            android:padding="8dp">
+
+        <TextView
+            android:id="@+id/complexity_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Easy"
+            android:textAppearance="?attr/textAppearanceHeadline4"
+            android:textColor="@color/cyan_dark"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/cyan_dark"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:text="@string/statistics"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/complexity_title"/>
+
+        <TextView
+            android:id="@+id/games_played"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Games Played:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stats"
+            app:layout_constraintEnd_toEndOf="@id/divider_between"/>
+
+        <TextView
+            android:id="@+id/games_won"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Games Won:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/games_played"
+            app:layout_constraintEnd_toEndOf="@id/divider_between"/>
+
+        <TextView
+            android:id="@+id/current_streak"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Current Streak:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/games_won"
+            app:layout_constraintEnd_toEndOf="@id/divider_between"/>
+
+        <TextView
+            android:id="@+id/average_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Average Time:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/current_streak"
+            app:layout_constraintEnd_toEndOf="@id/divider_between"/>
+
+        <TextView
+            android:id="@+id/average_moves"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Average Moves:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/average_time"
+            app:layout_constraintEnd_toEndOf="@id/divider_between"/>
+
+        <View
+            android:id="@+id/divider_between"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/dividerVertical"
+            app:layout_constraintTop_toBottomOf="@id/complexity_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/records"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/cyan_dark"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:text="@string/records"
+            app:layout_constraintStart_toStartOf="@id/divider_between"
+            app:layout_constraintTop_toBottomOf="@id/complexity_title"/>
+
+        <TextView
+            android:id="@+id/win_pct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Win Percentage: 100.00%"
+            app:layout_constraintStart_toStartOf="@id/divider_between"
+            app:layout_constraintTop_toBottomOf="@id/records"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/fastest_game"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Fastest Game: 0hr 5min 17s"
+            app:layout_constraintStart_toStartOf="@id/divider_between"
+            app:layout_constraintTop_toBottomOf="@id/win_pct"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/fewest_moves"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Fewest Moves: 231"
+            app:layout_constraintStart_toStartOf="@id/divider_between"
+            app:layout_constraintTop_toBottomOf="@id/fastest_game"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/longest_streak"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Longest Streak: 12"
+            app:layout_constraintStart_toStartOf="@id/divider_between"
+            app:layout_constraintTop_toBottomOf="@id/fewest_moves"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

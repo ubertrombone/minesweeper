@@ -1,7 +1,6 @@
 package com.minesweepermobile.model
 
 import androidx.lifecycle.*
-import com.minesweepermobile.Difficulties
 import com.minesweepermobile.Markers.*
 import com.minesweepermobile.Numbers.*
 import com.minesweepermobile.Difficulties.*
@@ -165,6 +164,14 @@ class MinesweeperViewModel: ViewModel() {
     val difficultySet: LiveData<String>
         get() = _difficultySet
 
+    private var _difficultyHolder = MEDIUM.difficulty
+    val difficultyHolder: String
+        get() = _difficultyHolder
+
+    fun setDifficultyHolder(difficulty: String) {
+        _difficultyHolder = difficulty
+    }
+
     private var _flagCounter: Int
 
     private var _moveCounter: Int
@@ -256,20 +263,26 @@ class MinesweeperViewModel: ViewModel() {
 
     fun addToSelections(selection: List<Int>) = _listOfSelections.add(selection)
 
+    private var _hours = 0L
+    val hours: Long
+        get() = _hours
+    private var _minutes = 0L
+    val minutes: Long
+        get() = _minutes
+    private var _seconds = 0L
+    val seconds: Long
+        get() = _seconds
+
     fun getTimes(time: Long) {
         println("TIME: $time")
-        val hoursTime: Long = getHours(time)
-        val minutesTime: Long = getMinutes(time - (hoursTime * 3_600_000))
-        val secondsTime: Long = getSeconds(time - (hoursTime * 3_600_000) - (minutesTime * 60_000))
-
-        println("HOURS: $hoursTime")
-        println("MINUTES: $minutesTime")
-        println("SECONDS: $secondsTime")
+        _hours = getHours(time)
+        _minutes = getMinutes(time - (_hours * 3_600_000))
+        _seconds = getSeconds(time - (_hours * 3_600_000) - (_minutes * 60_000))
     }
 
-    fun getSeconds(time: Long) = TimeUnit.MILLISECONDS.toSeconds(time)
-    fun getMinutes(time: Long) = TimeUnit.MILLISECONDS.toMinutes(time)
-    fun getHours(time: Long) = TimeUnit.MILLISECONDS.toHours(time)
+    private fun getSeconds(time: Long) = TimeUnit.MILLISECONDS.toSeconds(time)
+    private fun getMinutes(time: Long) = TimeUnit.MILLISECONDS.toMinutes(time)
+    private fun getHours(time: Long) = TimeUnit.MILLISECONDS.toHours(time)
 
     fun resetGame(height: Int, width: Int, numberOfMines: Int) {
         _height = height

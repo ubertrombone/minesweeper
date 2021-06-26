@@ -4,12 +4,10 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
-import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.database.FirebaseDatabase
 import com.minesweepermobile.model.MinesweeperViewModel
 import com.minesweepermobile.Difficulties.*
 import com.minesweepermobile.databinding.FragmentNewGameBinding
@@ -37,7 +35,6 @@ class NewGameFragment: DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val fragmentBinding = FragmentNewGameBinding.inflate(inflater, container, false)
         binding = fragmentBinding
-        isCancelable = true
         return fragmentBinding.root
     }
 
@@ -53,13 +50,10 @@ class NewGameFragment: DialogFragment() {
         binding?.height?.filters = arrayOf(InputFilterMinMax(1, 50))
         binding?.width?.filters = arrayOf(InputFilterMinMax(1, 50))
 
-        binding?.rtlSwitch?.isChecked = sharedViewModel.fabButtonRTL
-        binding?.setDifficultyDropdown?.setText(sharedViewModel.difficultySet.value)
         setupView()
         createSpinner(sharedViewModel.listOfDifficulties)
-        binding?.pickDifficultyDropdown?.setText(sharedViewModel.difficultySet.value)
-        createSpinnerForLaunch(sharedViewModel.listOfDifficulties.dropLast(1))
-        submitSettings()
+        //binding?.pickDifficultyDropdown?.setText(sharedViewModel.difficultyHolder)
+        submitNewGame()
     }
 
     override fun onStart() {
@@ -79,7 +73,7 @@ class NewGameFragment: DialogFragment() {
         val spinnerDropdown = binding?.pickDifficultyDropdown
         val spinnerDropdownAdapter = MaterialSpinnerAdapter(requireContext(), R.layout.item_list, dropList)
         spinnerDropdown?.setAdapter(spinnerDropdownAdapter)
-        //spinnerDropdown?.setText(spinnerDropdownAdapter.getItem(0).toString(), false)
+        spinnerDropdown?.setText(spinnerDropdownAdapter.getItem(0).toString(), false)
         spinnerDropdown?.setOnItemClickListener { _, _, position, _ ->
             if (spinnerDropdownAdapter.getItem(position).toString() == CUSTOM.difficulty) {
                 binding?.heightField?.visibility = View.VISIBLE
@@ -93,14 +87,7 @@ class NewGameFragment: DialogFragment() {
         }
     }
 
-    private fun createSpinnerForLaunch(dropList: List<String>) {
-        val spinnerDropdown = binding?.setDifficultyDropdown
-        val spinnerDropdownAdapter = MaterialSpinnerAdapter(requireContext(), R.layout.item_list, dropList.toMutableList())
-        spinnerDropdown?.setAdapter(spinnerDropdownAdapter)
-        spinnerDropdown?.setText(sharedViewModel.difficultySet.value, false)
-    }
-
-    private fun submitSettings() = binding?.submit?.setOnClickListener {
+    private fun submitNewGame() = binding?.submit?.setOnClickListener {
         val dropdownValue = binding?.pickDifficultyDropdown?.text.toString()
         val heightField = binding?.heightField
         val height = binding?.height
@@ -111,9 +98,6 @@ class NewGameFragment: DialogFragment() {
         val maxNumberOfMines = try {
             height?.text.toString().toInt() * width?.text.toString().toInt() - 1
         } catch (e: NumberFormatException) { 0 }
-
-        onSwitchClicked()
-        onLaunchDifficultySet()
 
         when (dropdownValue) {
             CUSTOM.difficulty -> {
@@ -134,7 +118,6 @@ class NewGameFragment: DialogFragment() {
                         sharedViewModel.setDifficulty(dropdownValue)
                         orElse(height!!, heightField!!, width!!, widthField!!, mine!!, mineField!!, maxNumberOfMines,
                             errorOne = false, errorTwo = false)
-                        orientFABButtons()
                         dismiss()
                     }
                 }
@@ -143,27 +126,9 @@ class NewGameFragment: DialogFragment() {
                 sharedViewModel.setDifficulty(dropdownValue)
                 orElse(height!!, heightField!!, width!!, widthField!!, mine!!, mineField!!, maxNumberOfMines,
                     errorOne = false, errorTwo = false)
-                orientFABButtons()
                 dismiss()
             }
         }
-    }
-
-    private fun orientFABButtons() {
-        sharedViewModel.fabButtonSettings(binding?.rtlSwitch!!.isChecked)
-        val fabButtons = requireActivity().findViewById<LinearLayout>(R.id.fab_buttons)
-        fabButtons.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-    }
-
-    private fun onSwitchClicked() {
-        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
-        database.child(LoginFragment.userId).child("RTL").setValue(binding?.rtlSwitch?.isChecked)
-    }
-
-    private fun onLaunchDifficultySet() {
-        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
-        println(binding?.setDifficultyDropdown?.text)
-        database.child(LoginFragment.userId).child("DefaultDifficulty").setValue(binding?.setDifficultyDropdown?.text.toString())
     }
 
     private fun orElse(height: TextInputEditText, heightField: TextInputLayout, width: TextInputEditText,

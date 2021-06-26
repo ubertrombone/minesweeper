@@ -82,7 +82,7 @@ class FinalMessageFragment : DialogFragment() {
         binding?.winPercentage?.text = getString(R.string.win_percentage, "%.2f".format(complexity[0].winPercentage * 100) + "%")
 
         val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
-        database.child(LoginFragment.userId).child(Difficulties.EASY.difficulty).setValue(complexity[0])
+        database.child(LoginFragment.userId).child(sharedViewModel.difficultySet.value.toString()).setValue(complexity[0])
     }
 
     fun onYes() {

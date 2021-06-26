@@ -112,6 +112,7 @@ class MinesweeperFragment: Fragment() {
         dataSnapshot.children.forEach { child ->
             if (child.child("DefaultDifficulty").key.toString() == "DefaultDifficulty") {
                 sharedViewModel.setDifficulty(child.child("DefaultDifficulty").value.toString())
+                sharedViewModel.setDifficultyHolder(child.child("DefaultDifficulty").value.toString())
             }
         }
     }
@@ -517,10 +518,10 @@ class MinesweeperFragment: Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(R.menu.new_game_menu, menu)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val supportFragmentManager = childFragmentManager
         return when (item.itemId) {
             R.id.new_game_button -> {
-                val supportFragmentManager = childFragmentManager
-                NewGameFragment.newInstance(getString(R.string.settings))
+                NewGameFragment.newInstance(getString(R.string.new_game))
                     .show(supportFragmentManager, NewGameFragment.TAG)
                 true
             }
@@ -528,6 +529,16 @@ class MinesweeperFragment: Fragment() {
                 sharedViewModel.getUser(false)
                 val database = Firebase.database("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
                 database.child(LoginFragment.userId).child("userLog").setValue(sharedViewModel.user.value)
+                true
+            }
+            R.id.settings -> {
+                SettingsFragment.newInstance(getString(R.string.settings))
+                    .show(supportFragmentManager, SettingsFragment.TAG)
+                true
+            }
+            R.id.results -> {
+                ResultsFragment.newInstance(getString(R.string.results))
+                    .show(supportFragmentManager, ResultsFragment.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)

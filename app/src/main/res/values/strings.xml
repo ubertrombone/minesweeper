@@ -33,4 +33,17 @@
     <string name="win_percentage">Win pct.: %s</string>
     <string name="difficulty_on_launch">Difficulty on launch</string>
     <string name="set_difficulty_on_launch">Set difficulty on launch</string>
+    <string name="statistics_games_won">Games Won: %d</string>
+    <string name="statistics_current_streak">Current Streak: %d</string>
+    <string name="statistics_average_time">Average Time: %s %s %s</string>
+    <string name="statistics_average_moves">Average Moves: %s</string>
+    <string name="records_win_percentage">Win Percentage: %s</string>
+    <string name="records_fastest_game">Fastest Game: %s %s %s</string>
+    <string name="records_fewest_moves">Fewest Games: %d</string>
+    <string name="records_longest_streak">Longest Streak: %d</string>
+    <string name="records">Records</string>
+    <string name="statistics">Statistics</string>
+    <string name="results">Results</string>
+    <string name="save">Save</string>
+    <string name="close">Close</string>
 </resources>
