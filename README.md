@@ -4,9 +4,9 @@ A minesweeper game designed for Android devices (handheld devices in particular)
 
 In this game:
 - a user can play on 4 standard difficulties (Easy, Medium, Hard, and Expert); 
-  - create a custom board with a custom number of mines; 
-    - can check the records of their game play; 
-      - can customize the game to allow for left-handed/right-handed preference.
+- create a custom board with a custom number of mines; 
+- can check the records of their game play; 
+- can customize the game to allow for left-handed/right-handed preference.
 
 A user should have a Google account in order to log in and play the game.
 
