@@ -88,8 +88,8 @@ class MinesweeperViewModel: ViewModel() {
         complexity[0].totalTime += time
     }
     private fun calculateAverageMovesAndTime(complexity: List<Statistics>) {
-        complexity[0].averageMoves = complexity[0].totalMoves.toDouble() / complexity[0].gamesPlayed
-        complexity[0].averageTime = complexity[0].totalTime / complexity[0].gamesPlayed
+        complexity[0].averageMoves = complexity[0].totalMoves.toDouble() / complexity[0].gamesWon
+        complexity[0].averageTime = complexity[0].totalTime / complexity[0].gamesWon
     }
     private fun calculateFewestMovesAndFastestTime(complexity: List<Statistics>, time: Long) {
         if (_moveCounter < complexity[0].fewestMoves || complexity[0].fewestMoves == 0) complexity[0].fewestMoves = _moveCounter
