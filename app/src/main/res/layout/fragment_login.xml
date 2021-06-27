@@ -15,7 +15,7 @@
     </data>
 
     <LinearLayout
-        android:background="@drawable/dialog_rounded"
+        android:background="@drawable/dialog_straight"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lin_lay"

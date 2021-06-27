@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.minesweepermobile.model.MinesweeperViewModel
 
@@ -20,6 +21,12 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        setupActionBarWithNavController(navController)
+        val appBarConfiguration = AppBarConfiguration
+            .Builder(
+                R.id.minesweeperFragment,
+                R.id.loginFragment)
+            .build()
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 }
