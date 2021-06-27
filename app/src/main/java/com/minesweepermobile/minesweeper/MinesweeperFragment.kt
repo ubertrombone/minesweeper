@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.children
@@ -42,6 +43,7 @@ class MinesweeperFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.show()
         auth = Firebase.auth
         setHasOptionsMenu(true)
     }
@@ -140,9 +142,9 @@ class MinesweeperFragment: Fragment() {
             value[1].toLong(), value[4].toInt(), value[3].toLong(), value[2].toInt(), value[7].toInt(), value[10].toDouble())
     }
 
-    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) { if (!it) findNavController().navigate(
-        R.id.action_minesweeperFragment_to_loginFragment
-    ) }
+    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) {
+        if (!it) findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
+    }
 
     private fun startGame(view: View) {
         binding?.mineCounter?.text = sharedViewModel.howManyMines.toString()

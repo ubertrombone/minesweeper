@@ -1,12 +1,11 @@
 package com.minesweepermobile.login
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.ActionBar
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -38,6 +37,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
         var userId = ""
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.hide()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val fragmentBinding = FragmentLoginBinding.inflate(inflater, container, false)
         binding = fragmentBinding
@@ -46,6 +50,12 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding?.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = sharedViewModel
+            loginFragment = this@LoginFragment
+        }
 
         auth = Firebase.auth
         binding?.googleSigninButton?.setOnClickListener(this)
@@ -59,9 +69,13 @@ class LoginFragment : Fragment(), View.OnClickListener {
         observeUserState()
     }
 
-    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) { if (it) findNavController().navigate(
-        R.id.action_loginFragment_to_minesweeperFragment
-    ) }
+    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) {
+        if (it) {
+            binding?.googleSigninButton?.visibility = View.GONE
+            binding?.loadingPanel?.visibility = View.VISIBLE
+            findNavController().navigate(R.id.action_loginFragment_to_minesweeperFragment)
+        }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

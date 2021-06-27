@@ -14,18 +14,24 @@
                 type="com.minesweepermobile.model.MinesweeperViewModel" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:background="@drawable/dialog_straight"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lin_lay"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:src="@drawable/logo"
+            android:layout_marginTop="60dp" />
+
         <com.google.android.material.card.MaterialCardView
                 android:id="@+id/google_signin_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardBackgroundColor="?attr/colorOnPrimary">
@@ -74,11 +80,20 @@
             android:autoLink="email"
             android:layout_gravity="bottom"
             android:gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:padding="16dp"
             android:textColor="@color/black"
             android:textAppearance="?attr/textAppearanceSubtitle2"/>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/loading_panel"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
 </layout>
