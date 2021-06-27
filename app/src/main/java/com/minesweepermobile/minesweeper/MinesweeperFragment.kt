@@ -549,7 +549,7 @@ class MinesweeperFragment: Fragment() {
                 true
             }
             R.id.results -> {
-                ResultsFragment.newInstance(getString(R.string.results))
+                ResultsFragment.newInstance(getString(R.string.records))
                     .show(supportFragmentManager, ResultsFragment.TAG)
                 true
             }
