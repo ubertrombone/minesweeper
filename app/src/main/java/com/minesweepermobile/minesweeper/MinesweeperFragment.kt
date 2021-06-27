@@ -351,8 +351,11 @@ class MinesweeperFragment: Fragment() {
 
         var minesLeft = sharedViewModel.mineLocations.size
 
-        while (minesLeft > 0) {
+        repeat(minesLeft) {
             val mine = mines.random()
+            val imageOfFlag = requireActivity().findViewById<ImageView>(mine - 1 + 5000)
+            val cardViewId = requireActivity().findViewById<CardView>(mine - 1)
+            cardViewId.removeView(imageOfFlag)
             createCardAndImage(R.drawable.gnome_gnomine__2_, mine - 1, 0, false)
             mines.remove(mine)
             minesLeft --
