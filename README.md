@@ -15,7 +15,7 @@ and most recently logged it.
 
 User's may at any time request their account to be deleted by contacting the email provided on the login screen.
 
-### **Sources**
+## **Sources**
 
 Mine Image: By KDE Kmines team: - gnomine artwork., GPL, https://commons.wikimedia.org/w/index.php?curid=2102166
 
