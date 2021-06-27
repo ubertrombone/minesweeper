@@ -79,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:layoutDirection="rtl">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_flag"

@@ -139,8 +139,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
             val database = Firebase.database("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
             database.child(userId).child("userLog").setValue(sharedViewModel.user.value)
-            database.child(userId).child("RTL").setValue(true)
-            database.child(userId).child("DefaultDifficulty").setValue(Difficulties.MEDIUM.difficulty)
+            database.child(userId).child("RTL").setValue(sharedViewModel.fabButtonRTL)
+            database.child(userId).child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder)
 
         } else findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
     }
