@@ -19,5 +19,5 @@ Mine Image: By KDE Kmines team: [1] - gnomine artwork., GPL, https://commons.wik
 Number Images: By Clipart Library http://clipart-library.com/
 Shovel and Axe Image: By Bttuogymdmy, SubPNG, https://www.subpng.com/
 
-Logo on Login provided by: Cool Text: Logo and Graphics Generator (https://cooltext.com)
+Logo on Login provided by: Cool Text: Logo and Graphics Generator (https://cooltext.com)\n
 Image backgrounds removed using https://www.remove.bg/
