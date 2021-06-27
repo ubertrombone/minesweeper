@@ -36,7 +36,7 @@ class MinesweeperFragment: Fragment() {
     private var binding: FragmentMinesweeperBinding? = null
     private val sharedViewModel: MinesweeperViewModel by activityViewModels()
     private lateinit var auth: FirebaseAuth
-    private val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
+    private lateinit var database: DatabaseReference
 
     private var shovelEmptySwitch = false
     private var mineSelectedOnEmptySwitch = false
@@ -45,6 +45,8 @@ class MinesweeperFragment: Fragment() {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.show()
         auth = Firebase.auth
+        database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${auth.uid}/")
+        LoginFragment.userId = auth.uid!!
         setHasOptionsMenu(true)
     }
 
@@ -84,10 +86,10 @@ class MinesweeperFragment: Fragment() {
     private fun setupDatabase(database: DatabaseReference) {
         val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
         sharedViewModel.changeAll(allComplexities)
-        database.child(LoginFragment.userId).child(EASY.difficulty).setValue(sharedViewModel.easy[0])
-        database.child(LoginFragment.userId).child(MEDIUM.difficulty).setValue(sharedViewModel.medium[0])
-        database.child(LoginFragment.userId).child(HARD.difficulty).setValue(sharedViewModel.hard[0])
-        database.child(LoginFragment.userId).child(EXPERT.difficulty).setValue(sharedViewModel.expert[0])
+        database.child(EASY.difficulty).setValue(sharedViewModel.easy[0])
+        database.child(MEDIUM.difficulty).setValue(sharedViewModel.medium[0])
+        database.child(HARD.difficulty).setValue(sharedViewModel.hard[0])
+        database.child(EXPERT.difficulty).setValue(sharedViewModel.expert[0])
     }
 
     private fun readDatabase(reference: String): ValueEventListener {
@@ -103,38 +105,34 @@ class MinesweeperFragment: Fragment() {
 
     private fun pickUpUserFromDatabase(dataSnapshot: DataSnapshot) {
         dataSnapshot.children.forEach { child ->
-            child.children.forEach { sharedViewModel.addKey(it.key.toString()) }
-            if (child.child("userLog").key.toString() == "userLog") {
-                sharedViewModel.getUser(child.child("userLog").value.toString().toBoolean())
-                LoginFragment.userId = child.key.toString()
-            }
+            sharedViewModel.addKey(child.key.toString())
+            if (child.key.toString() == "userLog") sharedViewModel.getUser(child.value.toString().toBoolean())
         }
         dataSnapshot.children.forEach { child ->
-            if (child.child("RTL").key.toString() == "RTL") {
-                sharedViewModel.fabButtonSettings(child.child("RTL").value.toString().toBoolean())
+            if (child.key.toString() == "RTL") {
+                sharedViewModel.fabButtonSettings(child.value.toString().toBoolean())
                 binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
             }
         }
         dataSnapshot.children.forEach { child ->
-            if (child.child("DefaultDifficulty").key.toString() == "DefaultDifficulty") {
-                sharedViewModel.setDifficulty(child.child("DefaultDifficulty").value.toString())
-                sharedViewModel.setDifficultyHolder(child.child("DefaultDifficulty").value.toString())
+            if (child.key.toString() == "DefaultDifficulty") {
+                sharedViewModel.setDifficulty(child.value.toString())
+                sharedViewModel.setDifficultyHolder(child.value.toString())
             }
         }
     }
 
     private fun pickUpComplexitiesFromDatabase(dataSnapshot: DataSnapshot) {
         dataSnapshot.children.forEach { child ->
-            child.children.forEach {
-                val complexityChildren = mutableListOf<String>()
-                it.children.forEach { item -> complexityChildren.add(item.value.toString()) }
-                when (it.key) {
-                    EASY.difficulty -> sharedViewModel.changeEasy(getComplexityValue(complexityChildren))
-                    MEDIUM.difficulty -> sharedViewModel.changeMedium(getComplexityValue(complexityChildren))
-                    HARD.difficulty -> sharedViewModel.changeHard(getComplexityValue(complexityChildren))
-                    EXPERT.difficulty -> sharedViewModel.changeExpert(getComplexityValue(complexityChildren))
-                }
-            }}
+            val complexityChildren = mutableListOf<String>()
+            child.children.forEach { item -> complexityChildren.add(item.value.toString()) }
+            when (child.key) {
+                EASY.difficulty -> sharedViewModel.changeEasy(getComplexityValue(complexityChildren))
+                MEDIUM.difficulty -> sharedViewModel.changeMedium(getComplexityValue(complexityChildren))
+                HARD.difficulty -> sharedViewModel.changeHard(getComplexityValue(complexityChildren))
+                EXPERT.difficulty -> sharedViewModel.changeExpert(getComplexityValue(complexityChildren))
+            }
+        }
     }
 
     private fun getComplexityValue(value: MutableList<String>): Statistics {
@@ -542,7 +540,7 @@ class MinesweeperFragment: Fragment() {
             }
             R.id.sign_out -> {
                 sharedViewModel.getUser(false)
-                database.child(LoginFragment.userId).child("userLog").setValue(sharedViewModel.user.value)
+                database.child("userLog").setValue(sharedViewModel.user.value)
                 true
             }
             R.id.settings -> {

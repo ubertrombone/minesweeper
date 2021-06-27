@@ -21,7 +21,7 @@ class SettingsFragment : DialogFragment() {
 
     private val sharedViewModel: MinesweeperViewModel by activityViewModels()
     private var binding: FragmentSettingsBinding? = null
-    private val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
+    private val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference(LoginFragment.userId)
 
     companion object {
         const val TAG = "SettingsFragment"
@@ -90,12 +90,12 @@ class SettingsFragment : DialogFragment() {
     }
 
     private fun onSwitchClicked() {
-        database.child(LoginFragment.userId).child("RTL").setValue(binding?.rtlSwitch?.isChecked)
+        database.child("RTL").setValue(binding?.rtlSwitch?.isChecked)
         orientFABButtons()
     }
 
     private fun onLaunchDifficultySet() {
-        database.child(LoginFragment.userId).child("DefaultDifficulty").setValue(binding?.setDifficultyDropdown?.text.toString())
+        database.child("DefaultDifficulty").setValue(binding?.setDifficultyDropdown?.text.toString())
         sharedViewModel.setDifficultyHolder(binding?.setDifficultyDropdown?.text.toString())
     }
 }

@@ -88,8 +88,8 @@ class FinalMessageFragment : DialogFragment() {
         binding?.gamesPlayed?.text = getString(R.string.games_played, complexity[0].gamesPlayed.toString())
         binding?.winPercentage?.text = getString(R.string.win_percentage, "%.2f".format(complexity[0].winPercentage * 100) + "%")
 
-        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
-        database.child(LoginFragment.userId).child(sharedViewModel.difficultySet.value.toString()).setValue(complexity[0])
+        val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference(LoginFragment.userId)
+        database.child(sharedViewModel.difficultySet.value.toString()).setValue(complexity[0])
     }
 
     fun onYes() {

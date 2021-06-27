@@ -1,7 +1,6 @@
 package com.minesweepermobile.login
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -19,7 +18,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.minesweepermobile.Difficulties
 import com.minesweepermobile.R
 import com.minesweepermobile.databinding.FragmentLoginBinding
 import com.minesweepermobile.model.MinesweeperViewModel
@@ -137,10 +135,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
             userId = user.uid
             sharedViewModel.getUser(true)
 
-            val database = Firebase.database("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
-            database.child(userId).child("userLog").setValue(sharedViewModel.user.value)
-            database.child(userId).child("RTL").setValue(sharedViewModel.fabButtonRTL)
-            database.child(userId).child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder)
+            val database = Firebase.database("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference(
+                userId)
+            database.child("userLog").setValue(sharedViewModel.user.value)
+            database.child("RTL").setValue(sharedViewModel.fabButtonRTL)
+            database.child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder)
 
         } else findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
     }
