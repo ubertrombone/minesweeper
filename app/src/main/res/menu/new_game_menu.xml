@@ -9,7 +9,7 @@
           app:showAsAction="never" />
 
     <item android:id="@+id/results"
-          android:title="@string/results"
+          android:title="@string/records"
           app:showAsAction="never" />
 
     <item android:id="@+id/sign_out"
