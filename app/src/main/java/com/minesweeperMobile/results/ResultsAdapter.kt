@@ -1,4 +1,4 @@
-package com.minesweepermobile.results
+package com.minesweeperMobile.results
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.minesweepermobile.R
-import com.minesweepermobile.database.Statistics
-import com.minesweepermobile.model.MinesweeperViewModel
+import com.minesweeperMobile.R
+import com.minesweeperMobile.database.Statistics
+import com.minesweeperMobile.model.MinesweeperViewModel
 
 class ResultsAdapter(
     private val context: Context,

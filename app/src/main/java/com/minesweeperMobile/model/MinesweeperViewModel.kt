@@ -1,10 +1,10 @@
-package com.minesweepermobile.model
+package com.minesweeperMobile.model
 
 import androidx.lifecycle.*
-import com.minesweepermobile.Markers.*
-import com.minesweepermobile.Numbers.*
-import com.minesweepermobile.Difficulties.*
-import com.minesweepermobile.database.Statistics
+import com.minesweeperMobile.Markers.*
+import com.minesweeperMobile.Numbers.*
+import com.minesweeperMobile.Difficulties.*
+import com.minesweeperMobile.database.Statistics
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 

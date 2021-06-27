@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MinesweeperMobile</string>
+    <string name="app_name">Minesweeper</string>
     <string name="new_game">New Game</string>
     <string name="select_a_difficulty">Select a difficulty</string>
     <string name="flag">flag</string>

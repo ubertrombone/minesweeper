@@ -1,4 +1,4 @@
-package com.minesweepermobile.minesweeper
+package com.minesweeperMobile.minesweeper
 
 import android.os.Bundle
 import android.os.SystemClock
@@ -15,19 +15,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import com.minesweepermobile.model.MinesweeperViewModel
-import com.minesweepermobile.databinding.FragmentMinesweeperBinding
+import com.minesweeperMobile.model.MinesweeperViewModel
+import com.minesweeperMobile.databinding.FragmentMinesweeperBinding
 import java.lang.ClassCastException
-import com.minesweepermobile.Markers.*
-import com.minesweepermobile.Numbers.*
-import com.minesweepermobile.Difficulties.*
-import com.minesweepermobile.newgame.NewGameFragment
-import com.minesweepermobile.R
-import com.minesweepermobile.settings.SettingsFragment
-import com.minesweepermobile.database.Statistics
-import com.minesweepermobile.finalmessage.FinalMessageFragment
-import com.minesweepermobile.login.LoginFragment
-import com.minesweepermobile.results.ResultsFragment
+import com.minesweeperMobile.Markers.*
+import com.minesweeperMobile.Numbers.*
+import com.minesweeperMobile.Difficulties.*
+import com.minesweeperMobile.newgame.NewGameFragment
+import com.minesweeperMobile.R
+import com.minesweeperMobile.settings.SettingsFragment
+import com.minesweeperMobile.database.Statistics
+import com.minesweeperMobile.finalmessage.FinalMessageFragment
+import com.minesweeperMobile.login.LoginFragment
+import com.minesweeperMobile.results.ResultsFragment
 import java.lang.NullPointerException
 import java.lang.NumberFormatException
 

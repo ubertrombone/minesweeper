@@ -8,10 +8,10 @@
     <data>
         <variable
             name="viewModel"
-            type="com.minesweepermobile.model.MinesweeperViewModel"/>
+            type="com.minesweeperMobile.model.MinesweeperViewModel"/>
         <variable
             name="newGameFragment"
-            type="com.minesweepermobile.newgame.NewGameFragment"/>
+            type="com.minesweeperMobile.newgame.NewGameFragment"/>
     </data>
 
     <FrameLayout

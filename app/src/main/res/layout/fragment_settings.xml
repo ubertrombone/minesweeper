@@ -8,10 +8,10 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.minesweepermobile.model.MinesweeperViewModel"/>
+                type="com.minesweeperMobile.model.MinesweeperViewModel"/>
         <variable
                 name="settingsFragment"
-                type="com.minesweepermobile.settings.SettingsFragment"/>
+                type="com.minesweeperMobile.settings.SettingsFragment"/>
     </data>
 
     <FrameLayout

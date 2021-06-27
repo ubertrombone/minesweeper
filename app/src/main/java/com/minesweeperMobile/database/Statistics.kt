@@ -1,4 +1,4 @@
-package com.minesweepermobile.database
+package com.minesweeperMobile.database
 
 data class Statistics(
     var gamesPlayed: Int,

@@ -1,4 +1,4 @@
-package com.minesweepermobile.settings
+package com.minesweeperMobile.settings
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,11 +11,11 @@ import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.firebase.database.FirebaseDatabase
-import com.minesweepermobile.R
-import com.minesweepermobile.databinding.FragmentSettingsBinding
-import com.minesweepermobile.helperclasses.MaterialSpinnerAdapter
-import com.minesweepermobile.login.LoginFragment
-import com.minesweepermobile.model.MinesweeperViewModel
+import com.minesweeperMobile.R
+import com.minesweeperMobile.databinding.FragmentSettingsBinding
+import com.minesweeperMobile.helperclasses.MaterialSpinnerAdapter
+import com.minesweeperMobile.login.LoginFragment
+import com.minesweeperMobile.model.MinesweeperViewModel
 
 class SettingsFragment : DialogFragment() {
 

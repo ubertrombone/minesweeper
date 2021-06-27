@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/minesweeperFragment"
-        android:name="com.minesweepermobile.minesweeper.MinesweeperFragment"
+        android:name="com.minesweeperMobile.minesweeper.MinesweeperFragment"
         android:label="Minesweeper"
         tools:layout="@layout/fragment_minesweeper" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.minesweepermobile.login.LoginFragment"
+        android:name="com.minesweeperMobile.login.LoginFragment"
         android:label="@string/sign_in"
         tools:layout="@layout/fragment_login">
         <action

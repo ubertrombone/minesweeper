@@ -1,4 +1,4 @@
-package com.minesweepermobile
+package com.minesweeperMobile
 
 enum class Markers(val mark: String) {
     MINE("X"),

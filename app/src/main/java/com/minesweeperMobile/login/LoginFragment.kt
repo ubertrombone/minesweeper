@@ -1,4 +1,4 @@
-package com.minesweepermobile.login
+package com.minesweeperMobile.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,9 +18,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.minesweepermobile.R
-import com.minesweepermobile.databinding.FragmentLoginBinding
-import com.minesweepermobile.model.MinesweeperViewModel
+import com.minesweeperMobile.R
+import com.minesweeperMobile.databinding.FragmentLoginBinding
+import com.minesweeperMobile.model.MinesweeperViewModel
 
 class LoginFragment : Fragment(), View.OnClickListener {
 
@@ -30,7 +30,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private lateinit var googleSignInClient: GoogleSignInClient
 
     companion object {
-        private const val G_TAG = "GoogleActivity"
         private const val RC_SIGN_IN = 9001
         var userId = ""
     }
@@ -83,28 +82,15 @@ class LoginFragment : Fragment(), View.OnClickListener {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d(G_TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(G_TAG, "Google sign in failed", e)
-                updateUI(null)
-            }
+            } catch (e: ApiException) { updateUI(null) }
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    Log.d(G_TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    updateUI(user)
-                } else {
-                    Log.w(G_TAG, "signInWithCredential:failure", task.exception)
-                }
-            }
+            .addOnCompleteListener(requireActivity()) { task -> if (task.isSuccessful) updateUI(auth.currentUser) }
     }
 
     private fun signIn() {

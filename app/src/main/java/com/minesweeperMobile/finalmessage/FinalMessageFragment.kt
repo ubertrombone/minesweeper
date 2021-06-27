@@ -1,4 +1,4 @@
-package com.minesweepermobile.finalmessage
+package com.minesweeperMobile.finalmessage
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -12,12 +12,12 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.firebase.database.FirebaseDatabase
-import com.minesweepermobile.Difficulties
-import com.minesweepermobile.minesweeper.MinesweeperFragment
-import com.minesweepermobile.R
-import com.minesweepermobile.databinding.FragmentFinalMessageBinding
-import com.minesweepermobile.login.LoginFragment
-import com.minesweepermobile.model.MinesweeperViewModel
+import com.minesweeperMobile.Difficulties
+import com.minesweeperMobile.minesweeper.MinesweeperFragment
+import com.minesweeperMobile.R
+import com.minesweeperMobile.databinding.FragmentFinalMessageBinding
+import com.minesweeperMobile.login.LoginFragment
+import com.minesweeperMobile.model.MinesweeperViewModel
 
 class FinalMessageFragment : DialogFragment() {
 

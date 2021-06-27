@@ -8,10 +8,10 @@
     <data>
         <variable
                 name="loginFragment"
-                type="com.minesweepermobile.login.LoginFragment" />
+                type="com.minesweeperMobile.login.LoginFragment" />
         <variable
                 name="viewModel"
-                type="com.minesweepermobile.model.MinesweeperViewModel" />
+                type="com.minesweeperMobile.model.MinesweeperViewModel" />
     </data>
 
     <FrameLayout

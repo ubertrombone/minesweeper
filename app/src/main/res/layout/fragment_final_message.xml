@@ -8,10 +8,10 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.minesweepermobile.model.MinesweeperViewModel"/>
+                type="com.minesweeperMobile.model.MinesweeperViewModel"/>
         <variable
                 name="finalMessageFragment"
-                type="com.minesweepermobile.finalmessage.FinalMessageFragment"/>
+                type="com.minesweeperMobile.finalmessage.FinalMessageFragment"/>
     </data>
 
     <androidx.core.widget.NestedScrollView

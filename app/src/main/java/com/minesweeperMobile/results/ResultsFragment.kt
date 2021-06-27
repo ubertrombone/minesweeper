@@ -1,4 +1,4 @@
-package com.minesweepermobile.results
+package com.minesweeperMobile.results
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.minesweepermobile.databinding.FragmentResultsBinding
-import com.minesweepermobile.model.MinesweeperViewModel
+import com.minesweeperMobile.databinding.FragmentResultsBinding
+import com.minesweeperMobile.model.MinesweeperViewModel
 
 class ResultsFragment : DialogFragment() {
 

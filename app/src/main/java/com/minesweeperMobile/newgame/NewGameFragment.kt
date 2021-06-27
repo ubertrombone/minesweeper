@@ -1,4 +1,4 @@
-package com.minesweepermobile.newgame
+package com.minesweeperMobile.newgame
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -8,12 +8,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.minesweepermobile.model.MinesweeperViewModel
-import com.minesweepermobile.Difficulties.*
-import com.minesweepermobile.R
-import com.minesweepermobile.databinding.FragmentNewGameBinding
-import com.minesweepermobile.helperclasses.InputFilterMinMax
-import com.minesweepermobile.helperclasses.MaterialSpinnerAdapter
+import com.minesweeperMobile.model.MinesweeperViewModel
+import com.minesweeperMobile.Difficulties.*
+import com.minesweeperMobile.R
+import com.minesweeperMobile.databinding.FragmentNewGameBinding
+import com.minesweeperMobile.helperclasses.InputFilterMinMax
+import com.minesweeperMobile.helperclasses.MaterialSpinnerAdapter
 import java.lang.NumberFormatException
 
 class NewGameFragment: DialogFragment() {
