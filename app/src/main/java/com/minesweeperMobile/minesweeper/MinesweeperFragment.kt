@@ -79,17 +79,8 @@ class MinesweeperFragment: Fragment() {
             sharedViewModel.changeStartSwitch(true)
             return
         }
-        val sharedValues = sharedViewModel.getIntersectionOfDatabaseAndComplexities()
-        if (sharedValues.size != 4) setupDatabase(database) else database.addListenerForSingleValueEvent(readDatabase("complexities"))
-    }
 
-    private fun setupDatabase(database: DatabaseReference) {
-        val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
-        sharedViewModel.changeAll(allComplexities)
-        database.child(EASY.difficulty).setValue(sharedViewModel.easy[0])
-        database.child(MEDIUM.difficulty).setValue(sharedViewModel.medium[0])
-        database.child(HARD.difficulty).setValue(sharedViewModel.hard[0])
-        database.child(EXPERT.difficulty).setValue(sharedViewModel.expert[0])
+        database.addListenerForSingleValueEvent(readDatabase("complexities"))
     }
 
     private fun readDatabase(reference: String): ValueEventListener {
@@ -105,7 +96,6 @@ class MinesweeperFragment: Fragment() {
 
     private fun pickUpUserFromDatabase(dataSnapshot: DataSnapshot) {
         dataSnapshot.children.forEach { child ->
-            sharedViewModel.addKey(child.key.toString())
             if (child.key.toString() == "userLog") sharedViewModel.getUser(child.value.toString().toBoolean())
         }
         dataSnapshot.children.forEach { child ->

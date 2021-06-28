@@ -18,8 +18,6 @@ class MinesweeperViewModel: ViewModel() {
 
     private var _listOfDatabaseKeys = mutableListOf<String>()
 
-    fun addKey(key: String) = _listOfDatabaseKeys.add(key)
-
     private var _startSwitch = false
     val startSwitch: Boolean
         get() = _startSwitch
@@ -95,8 +93,6 @@ class MinesweeperViewModel: ViewModel() {
         if (_moveCounter < complexity[0].fewestMoves || complexity[0].fewestMoves == 0) complexity[0].fewestMoves = _moveCounter
         if (time < complexity[0].fastestGame || complexity[0].fastestGame == 0L) complexity[0].fastestGame = time
     }
-
-    fun getIntersectionOfDatabaseAndComplexities() = _listOfDatabaseKeys.intersect(listOfDifficulties)
 
     private var _height: Int
     val height: Int

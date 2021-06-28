@@ -16,9 +16,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.minesweeperMobile.Difficulties
 import com.minesweeperMobile.R
+import com.minesweeperMobile.database.Statistics
 import com.minesweeperMobile.databinding.FragmentLoginBinding
 import com.minesweeperMobile.model.MinesweeperViewModel
 
@@ -126,7 +129,17 @@ class LoginFragment : Fragment(), View.OnClickListener {
             database.child("userLog").setValue(sharedViewModel.user.value)
             database.child("RTL").setValue(sharedViewModel.fabButtonRTL)
             database.child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder)
+            setupDatabase(database)
 
         } else findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
+    }
+
+    private fun setupDatabase(database: DatabaseReference) {
+        val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
+        sharedViewModel.changeAll(allComplexities)
+        database.child(Difficulties.EASY.difficulty).setValue(sharedViewModel.easy[0])
+        database.child(Difficulties.MEDIUM.difficulty).setValue(sharedViewModel.medium[0])
+        database.child(Difficulties.HARD.difficulty).setValue(sharedViewModel.hard[0])
+        database.child(Difficulties.EXPERT.difficulty).setValue(sharedViewModel.expert[0])
     }
 }
