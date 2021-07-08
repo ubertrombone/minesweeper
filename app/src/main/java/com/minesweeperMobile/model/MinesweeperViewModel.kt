@@ -16,8 +16,6 @@ class MinesweeperViewModel: ViewModel() {
 
     fun getUser(user: Boolean) { _user.value = user }
 
-    private var _listOfDatabaseKeys = mutableListOf<String>()
-
     private var _startSwitch = false
     val startSwitch: Boolean
         get() = _startSwitch

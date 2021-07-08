@@ -46,7 +46,7 @@ class MinesweeperFragment: Fragment() {
         (activity as AppCompatActivity).supportActionBar?.show()
         auth = Firebase.auth
         database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${auth.uid}/")
-        LoginFragment.userId = auth.uid!!
+        LoginFragment.userId = if (auth.uid.isNullOrEmpty()) "" else auth.uid!!
         setHasOptionsMenu(true)
     }
 
@@ -89,7 +89,6 @@ class MinesweeperFragment: Fragment() {
                 if (reference == "user") pickUpUserFromDatabase(dataSnapshot)
                 else if (reference == "complexities") pickUpComplexitiesFromDatabase(dataSnapshot)
             }
-
             override fun onCancelled(error: DatabaseError) = println("FAIL")
         }
     }
@@ -258,7 +257,7 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun boxSize(height: Int) = when (height) {
-        100 -> R.drawable.small_box_50
+        100 -> R.drawable.small_box_50_2
         76 -> R.drawable.small_box_38
         70 -> R.drawable.small_box_35
         else -> R.drawable.small_box_31
