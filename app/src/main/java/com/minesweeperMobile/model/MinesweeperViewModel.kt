@@ -449,11 +449,17 @@ class MinesweeperViewModel: ViewModel() {
         }}
     }
 
-    fun getCardBackgroundColor(card: Int, colorOne: Int, colorTwo: Int): Int {
-        return if (_width % 2 == 0) {
+    fun getCardBackgroundColor(card: Int, colorOne: Int, colorTwo: Int) =
+        if (_width % 2 == 0) {
             if (((card / _width) % 2) % 2 == 0) {
                 if (card % 2 == 0) colorOne else colorTwo
             } else { if (card % 2 == 0) colorTwo else colorOne }
         } else { if (card % 2 == 0) colorOne else colorTwo }
+
+    fun refreshedBackgroundColor(cardId: Int, colorOne: Int, colorTwo: Int, colorThree: Int, colorFour: Int): Int {
+        val currentCoords = convertNumberToCoords(cardId + 1)
+        return if (listOfSelections.contains(currentCoords) && !listOfFlags.contains(currentCoords)) {
+            getCardBackgroundColor(cardId, colorThree, colorFour)
+        } else getCardBackgroundColor(cardId, colorOne, colorTwo)
     }
 }

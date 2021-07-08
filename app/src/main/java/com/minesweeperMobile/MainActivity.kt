@@ -30,5 +30,5 @@ class MainActivity : AppCompatActivity() {
 }
 
 //TODO:
-// - try box background change instead of highlighting
 // - On win message: Highlight new records
+// - Add toast with initial instructions

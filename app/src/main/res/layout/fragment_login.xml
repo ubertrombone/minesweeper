@@ -40,7 +40,7 @@
                     android:id="@+id/google_button_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?attr/colorOnSecondary"
+                    android:background="@color/black"
                     android:paddingTop="6dp"
                     android:paddingBottom="6dp"
                     android:paddingStart="8dp"
@@ -64,7 +64,7 @@
                         android:paddingEnd="8dp"
                         android:text="@string/sign_in_with_google"
                         android:textAppearance="?textAppearanceSubtitle2"
-                        android:textColor="?attr/colorOnPrimary"
+                        android:textColor="@color/white"
                         app:layout_constraintStart_toEndOf="@+id/google_logo"
                         app:layout_constraintTop_toTopOf="parent"/>
 

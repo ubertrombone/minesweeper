@@ -15,15 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.minesweeperMobile.Difficulties
 import com.minesweeperMobile.R
-import com.minesweeperMobile.database.Statistics
+import com.minesweeperMobile.database.Database
 import com.minesweeperMobile.databinding.FragmentLoginBinding
 import com.minesweeperMobile.model.MinesweeperViewModel
 
@@ -33,6 +27,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private val sharedViewModel: MinesweeperViewModel by activityViewModels()
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var databaseClass: Database
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -60,6 +55,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
 
         auth = Firebase.auth
+        databaseClass = Database(auth)
         binding?.googleSigninButton?.setOnClickListener(this)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -120,35 +116,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
             userId = user.uid
             sharedViewModel.getUser(true)
 
-            val database = Firebase.database("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference(
-                userId)
+            val database = databaseClass.database
             database.child("userLog").setValue(sharedViewModel.user.value)
-            database.addListenerForSingleValueEvent(readDatabase(database))
+            database.addListenerForSingleValueEvent(databaseClass.readDatabase(database))
 
         } //else findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
-    }
-
-    private fun readDatabase(database: DatabaseReference): ValueEventListener {
-        return object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) = pickUpUserFromDatabase(dataSnapshot, database)
-            override fun onCancelled(error: DatabaseError) = println("FAIL")
-        }
-    }
-
-    private fun pickUpUserFromDatabase(dataSnapshot: DataSnapshot, database: DatabaseReference) {
-        dataSnapshot.children.forEach { child ->
-            if (child.key.toString() == "userLog") if (!child.value.toString().toBoolean()) setupDatabase(database)
-        }
-    }
-
-    private fun setupDatabase(database: DatabaseReference) {
-        database.child("RTL").setValue(sharedViewModel.fabButtonRTL)
-        database.child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder)
-        val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
-        sharedViewModel.changeAll(allComplexities)
-        database.child(Difficulties.EASY.difficulty).setValue(sharedViewModel.easy[0])
-        database.child(Difficulties.MEDIUM.difficulty).setValue(sharedViewModel.medium[0])
-        database.child(Difficulties.HARD.difficulty).setValue(sharedViewModel.hard[0])
-        database.child(Difficulties.EXPERT.difficulty).setValue(sharedViewModel.expert[0])
     }
 }

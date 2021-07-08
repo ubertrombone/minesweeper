@@ -2,11 +2,13 @@ package com.minesweeperMobile.minesweeper
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,21 +17,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import com.minesweeperMobile.model.MinesweeperViewModel
-import com.minesweeperMobile.databinding.FragmentMinesweeperBinding
-import java.lang.ClassCastException
+import com.minesweeperMobile.Difficulties.*
 import com.minesweeperMobile.Markers.*
 import com.minesweeperMobile.Numbers.*
-import com.minesweeperMobile.Difficulties.*
-import com.minesweeperMobile.newgame.NewGameFragment
 import com.minesweeperMobile.R
-import com.minesweeperMobile.settings.SettingsFragment
 import com.minesweeperMobile.database.Statistics
+import com.minesweeperMobile.databinding.FragmentMinesweeperBinding
 import com.minesweeperMobile.finalmessage.FinalMessageFragment
 import com.minesweeperMobile.login.LoginFragment
+import com.minesweeperMobile.model.MinesweeperViewModel
+import com.minesweeperMobile.newgame.NewGameFragment
 import com.minesweeperMobile.results.ResultsFragment
-import java.lang.NullPointerException
-import java.lang.NumberFormatException
+import com.minesweeperMobile.settings.SettingsFragment
 
 class MinesweeperFragment: Fragment() {
 
@@ -44,6 +43,8 @@ class MinesweeperFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.show()
+        (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(getDrawable(requireContext(), R.drawable.dialog_straight))
+        (activity as AppCompatActivity).supportActionBar?.elevation = 0F
         auth = Firebase.auth
         database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${auth.uid}/")
         LoginFragment.userId = if (auth.uid.isNullOrEmpty()) "" else auth.uid!!
@@ -141,6 +142,16 @@ class MinesweeperFragment: Fragment() {
             rowLinearLayout.orientation = LinearLayout.HORIZONTAL
             (0 until sharedViewModel.width).forEach { j ->
                 val params = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                //TODO: Try on tablet
+//                val displayMetrics = DisplayMetrics()
+//                activity?.windowManager?.defaultDisplay?.getRealMetrics(displayMetrics)
+//                println(displayMetrics.heightPixels)
+//                println(displayMetrics.widthPixels)
+//
+//                params.width = displayMetrics.widthPixels / sharedViewModel.width
+//                params.height = displayMetrics.widthPixels / sharedViewModel.width
+
                 params.height = getParams(sharedViewModel.width)
                 params.width = getParams(sharedViewModel.width)
 
@@ -159,8 +170,6 @@ class MinesweeperFragment: Fragment() {
                     true
                 }
 
-                val imageView = setupUIImageView(params.height, cardView.id)
-                cardLinearLayout.addView(imageView)
                 cardView.addView(cardLinearLayout)
                 rowLinearLayout.addView(cardView)
             }
@@ -180,15 +189,6 @@ class MinesweeperFragment: Fragment() {
         return cardView
     }
 
-    private fun setupUIImageView(params: Int, cardViewId: Int): ImageView {
-        val imageView = createImageView(boxSize(params))
-        imageView.scaleType = ImageView.ScaleType.CENTER
-        imageView.visibility = View.GONE
-        // all of these image views will have their ID the same as the cardView + 2500
-        imageView.id = cardViewId + 2500
-        return imageView
-    }
-
     private fun onClickSettings(flagAlpha: Float, flagEnable: Boolean, axeAlpha: Float, axeEnable: Boolean, shovelSwitch: Boolean) {
         fabFlagSettings(flagAlpha, flagEnable)
         fabAxeSettings(axeAlpha, axeEnable)
@@ -197,8 +197,10 @@ class MinesweeperFragment: Fragment() {
 
     private fun sharedViewModelSetters(view: View, cardView: CardView) {
         try {
-            val findViewOfPrevious = view.findViewById<ImageView>(sharedViewModel.selectedCellBackgroundId)
-            findViewOfPrevious.visibility = View.GONE
+            val findViewOfPreviouslySelected = view.findViewById<CardView>(sharedViewModel.selectedCardId)
+            findViewOfPreviouslySelected.setBackgroundColor(getColor(requireContext(), sharedViewModel.refreshedBackgroundColor(
+                sharedViewModel.selectedCardId, R.color.cyan_900, R.color.cyan_dark, R.color.gray_400, R.color.gray_dark
+            )))
         } catch (e: ClassCastException) {}
 
         sharedViewModel.getSelectedCardId(cardView.id)
@@ -218,8 +220,8 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun onShortClickListener(view: View, coords: List<Int>, coordsValue: String, cardView: CardView) {
-        val findViewOfCurrent = view.findViewById<ImageView>(sharedViewModel.selectedCellBackgroundId)
-        findViewOfCurrent.visibility = View.VISIBLE
+        val findViewOfCurrentSelected = view.findViewById<CardView>(sharedViewModel.selectedCardId)
+        findViewOfCurrentSelected.setBackgroundColor(getColor(requireContext(), R.color.red_200))
         val possibleImageId = requireActivity().findViewById<ImageView>(sharedViewModel.getFlagId())
 
         when {
@@ -254,13 +256,6 @@ class MinesweeperFragment: Fragment() {
         size <= 13 -> 76
         size <= 14 -> 70
         else -> 62
-    }
-
-    private fun boxSize(height: Int) = when (height) {
-        100 -> R.drawable.small_box_50_2
-        76 -> R.drawable.small_box_38
-        70 -> R.drawable.small_box_35
-        else -> R.drawable.small_box_31
     }
 
     private fun buttonSelect() {
