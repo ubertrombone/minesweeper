@@ -196,12 +196,7 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun sharedViewModelSetters(view: View, cardView: CardView) {
-        try {
-            val findViewOfPreviouslySelected = view.findViewById<CardView>(sharedViewModel.selectedCardId)
-            findViewOfPreviouslySelected.setBackgroundColor(getColor(requireContext(), sharedViewModel.refreshedBackgroundColor(
-                sharedViewModel.selectedCardId, R.color.cyan_900, R.color.cyan_dark, R.color.gray_400, R.color.gray_dark
-            )))
-        } catch (e: ClassCastException) {}
+        try { resetBackgroundColorAfterSelection() } catch (e: ClassCastException) {}
 
         sharedViewModel.getSelectedCardId(cardView.id)
         // ID is zeroed and needs to be offset by 1 when converting to coords
@@ -442,6 +437,7 @@ class MinesweeperFragment: Fragment() {
         cardView.addView(imageView)
         checkAroundTheFlags()
         sharedViewModel.incrementMoveCounter()
+        resetBackgroundColorAfterSelection()
     }
 
     private fun removeFlag(cardView: CardView, imageView: ImageView, coords: List<Int>, x: Int, y: Int) {
@@ -449,6 +445,14 @@ class MinesweeperFragment: Fragment() {
         sharedViewModel.removeFlag(sharedViewModel.listOfFlags, coords, sharedViewModel.minefieldWithNumbers[y][x])
         cardView.removeView(imageView)
         sharedViewModel.incrementMoveCounter()
+        resetBackgroundColorAfterSelection()
+    }
+
+    private fun resetBackgroundColorAfterSelection() {
+        val findViewOfPreviouslySelected = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId)
+        findViewOfPreviouslySelected.setBackgroundColor(getColor(requireContext(), sharedViewModel.refreshedBackgroundColor(
+            sharedViewModel.selectedCardId, R.color.cyan_900, R.color.cyan_dark, R.color.gray_400, R.color.gray_dark
+        )))
     }
 
     private fun createImageView(image: Int): ImageView {
