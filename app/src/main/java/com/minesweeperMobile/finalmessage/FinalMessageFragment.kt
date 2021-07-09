@@ -83,7 +83,20 @@ class FinalMessageFragment : DialogFragment() {
 
         binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
         binding?.time?.text = arguments?.getString(TIME)
+        if (sharedViewModel.fastestGame){
+            binding?.timeRecord?.visibility = View.VISIBLE
+            sharedViewModel.setFastestGame(false)
+        }
         binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter)
+        if (sharedViewModel.fewestMoves) {
+            binding?.movesRecord?.visibility = View.VISIBLE
+            sharedViewModel.setFewestMoves(false)
+        }
+        binding?.currentStreak?.text = getString(R.string.statistics_current_streak, complexity[0].currentStreak)
+        if (sharedViewModel.longestStreak) {
+            binding?.streakRecord?.visibility = View.VISIBLE
+            sharedViewModel.setLongestStreak(false)
+        }
         binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.value)
         binding?.gamesPlayed?.text = getString(R.string.games_played, complexity[0].gamesPlayed.toString())
         binding?.winPercentage?.text = getString(R.string.win_percentage, "%.2f".format(complexity[0].winPercentage * 100) + "%")

@@ -51,12 +51,30 @@ class MinesweeperViewModel: ViewModel() {
         changeExpert(stats)
     }
 
+    private var _longestStreak = false
+    val longestStreak: Boolean
+        get() = _longestStreak
+    private var _fewestMoves = false
+    val fewestMoves: Boolean
+        get() = _fewestMoves
+    private var _fastestGame = false
+    val fastestGame: Boolean
+        get() = _fastestGame
+    fun setLongestStreak(set: Boolean) {
+        _longestStreak = set
+    }fun setFastestGame(set: Boolean) {
+        _fastestGame = set
+    }
+    fun setFewestMoves(set: Boolean) {
+        _fewestMoves = set
+    }
+
     fun updateComplexities(difficulty: String, time: Long, message: Boolean) {
         val complexity = when(difficulty) {
-            EASY.difficulty -> easy
-            MEDIUM.difficulty -> medium
-            HARD.difficulty -> hard
-            else -> expert
+            EASY.difficulty -> _easy
+            MEDIUM.difficulty -> _medium
+            HARD.difficulty -> _hard
+            else -> _expert
         }
         incrementGamesPlayed(complexity)
         if (message) {
@@ -77,7 +95,10 @@ class MinesweeperViewModel: ViewModel() {
     private fun incrementWinsAndStreaks(complexity: List<Statistics>) {
         complexity[0].gamesWon ++
         complexity[0].currentStreak ++
-        if (complexity[0].currentStreak > complexity[0].longestStreak) complexity[0].longestStreak = complexity[0].currentStreak
+        if (complexity[0].currentStreak > complexity[0].longestStreak) {
+            complexity[0].longestStreak = complexity[0].currentStreak
+            _longestStreak = true
+        }
     }
     private fun addMovesAndTime(complexity: List<Statistics>, time: Long) {
         complexity[0].totalMoves += _moveCounter
@@ -88,8 +109,14 @@ class MinesweeperViewModel: ViewModel() {
         complexity[0].averageTime = complexity[0].totalTime / complexity[0].gamesWon
     }
     private fun calculateFewestMovesAndFastestTime(complexity: List<Statistics>, time: Long) {
-        if (_moveCounter < complexity[0].fewestMoves || complexity[0].fewestMoves == 0) complexity[0].fewestMoves = _moveCounter
-        if (time < complexity[0].fastestGame || complexity[0].fastestGame == 0L) complexity[0].fastestGame = time
+        if (_moveCounter < complexity[0].fewestMoves || complexity[0].fewestMoves == 0) {
+            complexity[0].fewestMoves = _moveCounter
+            _fewestMoves = true
+        }
+        if (time < complexity[0].fastestGame || complexity[0].fastestGame == 0L) {
+            complexity[0].fastestGame = time
+            _fastestGame = true
+        }
     }
 
     private var _height: Int

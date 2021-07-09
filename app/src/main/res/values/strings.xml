@@ -48,4 +48,7 @@
     <string name="revoke_notice">To delete your account and all personal information associated with it, please
         contact josh.rose213@gmail.com
     </string>
+    <string name="fastest_time">**Fastest Time**</string>
+    <string name="fewest_moves">**Fewest Moves**</string>
+    <string name="longest_streak">**Longest Streak**</string>
 </resources>

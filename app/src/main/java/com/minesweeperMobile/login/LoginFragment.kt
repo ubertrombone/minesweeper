@@ -3,6 +3,7 @@ package com.minesweeperMobile.login
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -72,6 +73,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
             binding?.googleSigninButton?.visibility = View.GONE
             binding?.loadingPanel?.visibility = View.VISIBLE
             findNavController().navigate(R.id.action_loginFragment_to_minesweeperFragment)
+            val toast = Toast.makeText(requireContext(), "Long press to \n\n- lay a flag \n\n- clear numbers", Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
         }
     }
 

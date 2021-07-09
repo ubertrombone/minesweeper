@@ -58,6 +58,19 @@
                 app:layout_constraintTop_toBottomOf="@id/divider_under_title" />
 
             <TextView
+                android:id="@+id/time_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginStart="18dp"
+                android:textColor="@color/black"
+                android:text="@string/fastest_time"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time" />
+
+            <TextView
                 android:id="@+id/moves"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +80,45 @@
                 android:textColor="@color/black"
                 tools:text="Moves: 2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/time" />
+                app:layout_constraintTop_toBottomOf="@id/time_record" />
+
+            <TextView
+                android:id="@+id/moves_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_marginStart="18dp"
+                android:textColor="@color/black"
+                android:text="@string/fewest_moves"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/moves" />
+
+            <TextView
+                    android:id="@+id/current_streak"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextView"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/black"
+                    tools:text="Streak: 1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/moves_record" />
+
+            <TextView
+                    android:id="@+id/streak_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextView"
+                    android:layout_marginStart="18dp"
+                    android:textColor="@color/black"
+                    android:text="@string/longest_streak"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/current_streak" />
 
             <TextView
                 android:id="@+id/play_again"
@@ -80,7 +131,7 @@
                 android:layout_marginTop="16dp"
                 android:textColor="@color/black"
                 android:text="@string/play_again"
-                app:layout_constraintTop_toBottomOf="@id/win_percentage"
+                app:layout_constraintTop_toBottomOf="@id/streak_record"
                 app:layout_constraintEnd_toEndOf="@id/yes"
                 app:layout_constraintBottom_toTopOf="@id/yes" />
 
@@ -106,7 +157,7 @@
                 android:textColor="@color/black"
                 tools:text="Games Played: 1,654"
                 app:layout_constraintStart_toStartOf="@id/complexity"
-                app:layout_constraintTop_toTopOf="@id/moves" />
+                app:layout_constraintTop_toTopOf="@id/time_record" />
 
             <TextView
                 android:id="@+id/win_percentage"
