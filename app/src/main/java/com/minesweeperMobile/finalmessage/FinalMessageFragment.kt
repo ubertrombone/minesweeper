@@ -12,7 +12,7 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.firebase.database.FirebaseDatabase
-import com.minesweeperMobile.Difficulties
+import com.minesweeperMobile.Difficulties.*
 import com.minesweeperMobile.minesweeper.MinesweeperFragment
 import com.minesweeperMobile.R
 import com.minesweeperMobile.databinding.FragmentFinalMessageBinding
@@ -69,10 +69,22 @@ class FinalMessageFragment : DialogFragment() {
     }
 
     private fun setupView() {
+
+        if (sharedViewModel.difficultySet.value == CUSTOM.difficulty) {
+            binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
+            binding?.time?.text = arguments?.getString(TIME)
+            binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter)
+            binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.value)
+            binding?.currentStreak?.visibility = View.GONE
+            binding?.gamesPlayed?.visibility = View.GONE
+            binding?.winPercentage?.visibility = View.GONE
+            return
+        }
+
         val complexity = when(sharedViewModel.difficultySet.value) {
-            Difficulties.EASY.difficulty -> sharedViewModel.easy
-            Difficulties.MEDIUM.difficulty -> sharedViewModel.medium
-            Difficulties.HARD.difficulty -> sharedViewModel.hard
+            EASY.difficulty -> sharedViewModel.easy
+            MEDIUM.difficulty -> sharedViewModel.medium
+            HARD.difficulty -> sharedViewModel.hard
             else -> sharedViewModel.expert
         }
         val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
