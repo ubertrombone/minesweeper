@@ -125,9 +125,11 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
                         android:orientation="vertical">
 
                     <LinearLayout
+                            android:background="@drawable/customborder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/mine_lay"
