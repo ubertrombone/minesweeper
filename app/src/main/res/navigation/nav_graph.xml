@@ -13,7 +13,8 @@
         <action
             android:id="@+id/action_minesweeperFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/minesweeperFragment"/>
+            app:popUpTo="@id/nav_graph.xml"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -23,7 +24,8 @@
         <action
             android:id="@+id/action_loginFragment_to_minesweeperFragment"
             app:destination="@id/minesweeperFragment"
-            app:popUpTo="@id/loginFragment"/>
+            app:popUpTo="@id/nav_graph.xml"
+            app:popUpToInclusive="true"/>
     </fragment>
 
 </navigation>
