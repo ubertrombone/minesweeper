@@ -57,6 +57,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
 
         auth = Firebase.auth
+        userId = auth.uid.toString()
         binding?.googleSigninButton?.setOnClickListener(this)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
