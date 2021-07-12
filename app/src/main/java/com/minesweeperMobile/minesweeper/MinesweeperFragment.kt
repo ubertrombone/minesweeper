@@ -36,7 +36,6 @@ class MinesweeperFragment: Fragment() {
     private val sharedViewModel: MinesweeperViewModel by activityViewModels()
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-
     private var shovelEmptySwitch = false
     private var mineSelectedOnEmptySwitch = false
 
@@ -47,7 +46,6 @@ class MinesweeperFragment: Fragment() {
         (activity as AppCompatActivity).supportActionBar?.elevation = 0F
         auth = Firebase.auth
         database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${auth.uid}/")
-        LoginFragment.userId = if (auth.uid.isNullOrEmpty()) "" else auth.uid!!
         setHasOptionsMenu(true)
     }
 
@@ -160,12 +158,12 @@ class MinesweeperFragment: Fragment() {
                 cardLinearLayout.orientation = LinearLayout.VERTICAL
 
                 cardView.setOnClickListener {
-                    sharedViewModelSetters(view, cardView)
+                    sharedViewModelSetters(cardView)
                     getCoordsAndSetupClickListeners(view, cardView, true)
                 }
 
                 cardView.setOnLongClickListener {
-                    sharedViewModelSetters(view, cardView)
+                    sharedViewModelSetters(cardView)
                     getCoordsAndSetupClickListeners(view, cardView,false)
                     true
                 }
@@ -195,7 +193,7 @@ class MinesweeperFragment: Fragment() {
         shovelEmptySwitch = shovelSwitch
     }
 
-    private fun sharedViewModelSetters(view: View, cardView: CardView) {
+    private fun sharedViewModelSetters(cardView: CardView) {
         try { resetBackgroundColorAfterSelection() } catch (e: ClassCastException) {}
 
         sharedViewModel.getSelectedCardId(cardView.id)
