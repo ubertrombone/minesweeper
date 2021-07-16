@@ -124,7 +124,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${userId}/")
             database.child("userLog").setValue(sharedViewModel.user.value)
             database.addListenerForSingleValueEvent(readDatabase(database))
-        } //else findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
+        }
     }
 
     private fun readDatabase(database: DatabaseReference): ValueEventListener {
