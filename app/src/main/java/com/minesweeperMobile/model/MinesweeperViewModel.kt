@@ -16,13 +16,36 @@ class MinesweeperViewModel: ViewModel() {
 
     fun getUser(user: Boolean) { _user.value = user }
 
+    private var _usernameSwitch = false
+    val usernameSwitch: Boolean
+        get() = _usernameSwitch
+
+    fun changeUsernameSwitch(switch: Boolean) { _usernameSwitch = switch }
+
+    private var _username = MutableLiveData(true)
+    val username: LiveData<Boolean>
+        get() = _username
+
+    fun getUsername(username: Boolean) { _username.value = username }
+
+    private var _usernameFromDB = ""
+    val usernameFromDB: String
+        get() = _usernameFromDB
+
+    fun setUsername(name: String) { _usernameFromDB = name }
+
     private var _startSwitch = false
     val startSwitch: Boolean
         get() = _startSwitch
 
-    fun changeStartSwitch(switch: Boolean) {
-        _startSwitch = switch
-    }
+    fun changeStartSwitch(switch: Boolean) { _startSwitch = switch }
+
+    private var _usernames = mutableListOf<String>()
+    val usernames: List<String>
+        get() = _usernames
+
+    fun checkUsernameUniqueness(username: String) = _usernames.contains(username)
+    fun addToUsernames(username: String) = _usernames.add(username)
 
     private var _easy = mutableListOf<Statistics>()
     val easy: List<Statistics>

@@ -51,4 +51,8 @@
     <string name="fastest_time">**Fastest Time**</string>
     <string name="fewest_moves">**Fewest Moves**</string>
     <string name="longest_streak">**Longest Streak**</string>
+    <string name="username">Username</string>
+    <string name="username_title">Username:</string>
+    <string name="username_exists">Username exists</string>
+    <string name="choose_username">Choose a username</string>
 </resources>

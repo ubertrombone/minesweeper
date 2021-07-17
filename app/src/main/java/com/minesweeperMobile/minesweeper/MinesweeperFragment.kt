@@ -2,7 +2,6 @@ package com.minesweeperMobile.minesweeper
 
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -24,11 +23,12 @@ import com.minesweeperMobile.R
 import com.minesweeperMobile.database.Statistics
 import com.minesweeperMobile.databinding.FragmentMinesweeperBinding
 import com.minesweeperMobile.finalmessage.FinalMessageFragment
-import com.minesweeperMobile.login.LoginFragment
 import com.minesweeperMobile.model.MinesweeperViewModel
 import com.minesweeperMobile.newgame.NewGameFragment
 import com.minesweeperMobile.results.ResultsFragment
 import com.minesweeperMobile.settings.SettingsFragment
+import com.minesweeperMobile.username.UsernameFragment
+import java.util.*
 
 class MinesweeperFragment: Fragment() {
 
@@ -108,6 +108,10 @@ class MinesweeperFragment: Fragment() {
                 sharedViewModel.setDifficultyHolder(child.value.toString())
             }
         }
+        val children = mutableMapOf<String, String>()
+        dataSnapshot.children.forEach { child -> children[child.key.toString()] = child.value.toString() }
+        sharedViewModel.getUsername(children.keys.contains("username"))
+        if (children.keys.contains("username")) sharedViewModel.setUsername(children["username"].toString())
     }
 
     private fun pickUpComplexitiesFromDatabase(dataSnapshot: DataSnapshot) {
@@ -128,8 +132,18 @@ class MinesweeperFragment: Fragment() {
             value[1].toLong(), value[4].toInt(), value[3].toLong(), value[2].toInt(), value[7].toInt(), value[10].toDouble())
     }
 
-    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) {
-        if (!it) findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
+    private fun observeUserState() {
+        sharedViewModel.user.observe(viewLifecycleOwner) {
+            if (!it) findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
+        }
+
+        sharedViewModel.username.observe(viewLifecycleOwner) { if (!it) createUsernameDialog() }
+    }
+
+    private fun createUsernameDialog() {
+        val supportFragmentManager = childFragmentManager
+        UsernameFragment.newInstance(getString(R.string.username_title))
+            .show(supportFragmentManager, NewGameFragment.TAG)
     }
 
     private fun startGame(view: View) {
@@ -535,7 +549,7 @@ class MinesweeperFragment: Fragment() {
                 true
             }
             R.id.results -> {
-                ResultsFragment.newInstance(getString(R.string.records))
+                ResultsFragment.newInstance(sharedViewModel.usernameFromDB.uppercase())
                     .show(supportFragmentManager, ResultsFragment.TAG)
                 true
             }
