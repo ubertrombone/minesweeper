@@ -153,6 +153,7 @@ class MinesweeperViewModel: ViewModel() {
     val listOfDifficulties = mutableListOf(EASY.difficulty, MEDIUM.difficulty, HARD.difficulty, EXPERT.difficulty, CUSTOM.difficulty)
     private val listOfNonNumbers = listOf(MINE.mark, EMPTY.mark, FLAG.mark, CLEARED.mark)
     val listOfNumbers = listOf(ONE.alphaNumber, TWO.alphaNumber, THREE.alphaNumber, FOUR.alphaNumber, FIVE.alphaNumber, SIX.alphaNumber, SEVEN.alphaNumber, EIGHT.alphaNumber)
+    val listOfRecords = listOf("Most Wins", "Fastest Game", "Fewest Moves", "Longest Streak", "Longest Current Streak", "Win Percentage")
 
     private var _selectedCellBackgroundId: Int
     val selectedCellBackgroundId: Int

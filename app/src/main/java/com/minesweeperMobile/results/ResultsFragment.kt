@@ -3,6 +3,7 @@ package com.minesweeperMobile.results
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,8 +52,10 @@ class ResultsFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.defaultDisplay?.getRealMetrics(displayMetrics)
         dialog?.window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
+            displayMetrics.widthPixels - (displayMetrics.widthPixels * .1).toInt(),
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
