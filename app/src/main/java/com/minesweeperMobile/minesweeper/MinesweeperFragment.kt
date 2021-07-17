@@ -23,6 +23,7 @@ import com.minesweeperMobile.R
 import com.minesweeperMobile.database.Statistics
 import com.minesweeperMobile.databinding.FragmentMinesweeperBinding
 import com.minesweeperMobile.finalmessage.FinalMessageFragment
+import com.minesweeperMobile.leaderboard.LeaderBoardFragment
 import com.minesweeperMobile.model.MinesweeperViewModel
 import com.minesweeperMobile.newgame.NewGameFragment
 import com.minesweeperMobile.results.ResultsFragment
@@ -551,6 +552,10 @@ class MinesweeperFragment: Fragment() {
             R.id.results -> {
                 ResultsFragment.newInstance(sharedViewModel.usernameFromDB.uppercase())
                     .show(supportFragmentManager, ResultsFragment.TAG)
+                true
+            }
+            R.id.leader_board -> {
+                LeaderBoardFragment.newInstance().show(supportFragmentManager, LeaderBoardFragment.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)

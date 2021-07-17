@@ -55,4 +55,9 @@
     <string name="username_title">Username:</string>
     <string name="username_exists">Username exists</string>
     <string name="choose_username">Choose a username</string>
+    <string name="leader_boards">Leader Boards</string>
+    <string name="expert">Expert</string>
+    <string name="hard">Hard</string>
+    <string name="medium">Medium</string>
+    <string name="easy">Easy</string>
 </resources>

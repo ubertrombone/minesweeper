@@ -12,6 +12,10 @@
           android:title="@string/records"
           app:showAsAction="never" />
 
+    <item android:id="@+id/leader_board"
+          android:title="@string/leader_boards"
+          app:showAsAction="never" />
+
     <item android:id="@+id/sign_out"
           android:title="@string/sign_out"
           app:showAsAction="never" />
