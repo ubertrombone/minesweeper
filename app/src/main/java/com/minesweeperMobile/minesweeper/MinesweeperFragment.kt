@@ -29,7 +29,6 @@ import com.minesweeperMobile.newgame.NewGameFragment
 import com.minesweeperMobile.results.ResultsFragment
 import com.minesweeperMobile.settings.SettingsFragment
 import com.minesweeperMobile.username.UsernameFragment
-import java.util.*
 
 class MinesweeperFragment: Fragment() {
 

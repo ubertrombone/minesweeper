@@ -89,6 +89,8 @@ class UsernameFragment : DialogFragment() {
         }
         else inputEmpty(usernameInput!!, usernameField!!, false)
 
+        // TODO: check a list of curse words to make sure a username doesn't contain them
+
         if (!sharedViewModel.checkUsernameUniqueness(usernameInput.text.toString())) {
             sharedViewModel.setUsername(usernameInput.text.toString())
             database.child("username").setValue(sharedViewModel.usernameFromDB)
