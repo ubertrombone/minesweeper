@@ -11,7 +11,7 @@ import com.minesweeperMobile.database.Statistics
 import com.minesweeperMobile.model.MinesweeperViewModel
 
 class LeaderBoardObjectAdapter:
-    ListAdapter<Map<String, Statistics>, LeaderBoardObjectAdapter.LeaderBoardObjectViewHolder>(LeaderBoardObjectDiffCallback()) {
+    ListAdapter<Map<String, Float>, LeaderBoardObjectAdapter.LeaderBoardObjectViewHolder>(LeaderBoardObjectDiffCallback()) {
 
     private val sharedViewModel = MinesweeperViewModel()
 
@@ -29,7 +29,7 @@ class LeaderBoardObjectAdapter:
     }
 }
 
-class LeaderBoardObjectDiffCallback: DiffUtil.ItemCallback<Map<String, Statistics>>() {
-    override fun areItemsTheSame(oldItem: Map<String, Statistics>, newItem: Map<String, Statistics>) = oldItem == newItem
-    override fun areContentsTheSame(oldItem: Map<String, Statistics>, newItem: Map<String, Statistics>) = oldItem == newItem
+class LeaderBoardObjectDiffCallback: DiffUtil.ItemCallback<Map<String, Float>>() {
+    override fun areItemsTheSame(oldItem: Map<String, Float>, newItem: Map<String, Float>) = oldItem == newItem
+    override fun areContentsTheSame(oldItem: Map<String, Float>, newItem: Map<String, Float>) = oldItem == newItem
 }

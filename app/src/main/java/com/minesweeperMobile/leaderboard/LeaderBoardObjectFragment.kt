@@ -20,6 +20,7 @@ import com.minesweeperMobile.database.Statistics
 import com.minesweeperMobile.databinding.FragmentLeaderBoardObjectBinding
 import com.minesweeperMobile.model.MinesweeperViewModel
 import java.lang.IndexOutOfBoundsException
+import java.lang.NumberFormatException
 
 class LeaderBoardObjectFragment : Fragment() {
 
@@ -47,7 +48,7 @@ class LeaderBoardObjectFragment : Fragment() {
         }
 
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            binding?.sectionTitle?.text = sharedViewModel.listOfRecords[getInt(ARG_OBJECT) - 1]
+            binding?.sectionTitle?.text = sharedViewModel.listOfRecords[getInt(ARG_OBJECT)]
         }
 
         setClickListeners(view, R.id.text_view_easy)
@@ -85,9 +86,11 @@ class LeaderBoardObjectFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        sharedViewModel.leaderBoardDate.observe(viewLifecycleOwner) { data ->
-//            adapter.submitList(listOf(data))
-            sharedViewModel.leaderBoardDate.value!!.values.forEach { println(it.winPercentage) }
+        sharedViewModel.leaderBoardData.observe(viewLifecycleOwner) { data ->
+//            adapter.submitList(listOf(data.toList().sortedByDescending { (_, value) -> value }.toMap()))
+            val sorted = data.toList().sortedByDescending { (_, value) -> value }.toMap()
+            sorted.forEach { println(it) }
+            //sharedViewModel.leaderBoardData.value!!.forEach { println(it) }
         }
         sharedViewModel.leaderBoardComplexitySelection.observe(viewLifecycleOwner) {
             readDatabase()
@@ -96,27 +99,33 @@ class LeaderBoardObjectFragment : Fragment() {
     }
 
     private fun readDatabase() {
+
+        val mapValue = when (binding?.sectionTitle?.text.toString()) {
+            sharedViewModel.listOfRecords[0] -> "gamesWon"
+            sharedViewModel.listOfRecords[1] -> "fastestGame"
+            sharedViewModel.listOfRecords[2] -> "fewestMoves"
+            sharedViewModel.listOfRecords[3] -> "longestStreak"
+            sharedViewModel.listOfRecords[4] -> "currentStreak"
+            sharedViewModel.listOfRecords[5] -> "winPercentage"
+            else -> ""
+        }
+
         val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
         val statisticsListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 dataSnapshot.children.forEach { child ->
-                    val username = dataSnapshot.child(child.key.toString()).child("username").value
-                    val listOfStatistics = mutableListOf<String>()
-                    child.child(sharedViewModel.leaderBoardComplexitySelection.value.toString()).children.forEach { child2 ->
-                        listOfStatistics.add(child2.value.toString())
-                    }
+                    val username = child.child("username").value
+                    val values = child.child(sharedViewModel.leaderBoardComplexitySelection.value.toString()).child(mapValue).value
                     try {
-                        sharedViewModel.newLeaderBoardData(username.toString(), toStatistics(listOfStatistics))
-                    } catch (e: IndexOutOfBoundsException) { println("EMPTY") }
+                        sharedViewModel.newLeaderBoardData(username.toString(), values.toString().toFloat())
+                    } catch (e: IndexOutOfBoundsException) { println("EMPTY") } catch (e: NumberFormatException) { println("EMPTY") }
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) = println("FAIL")
         }
         database.addValueEventListener(statisticsListener)
     }
-
-    private fun toStatistics(value: List<String>): Statistics {
-        return Statistics(value[5].toInt(), value[6].toInt(), value[8].toInt(), value[0].toDouble(), value[9].toLong(),
-            value[1].toLong(), value[4].toInt(), value[3].toLong(), value[2].toInt(), value[7].toInt(), value[10].toDouble())
-    }
 }
+
+//TODO: Game remembers the complexity toggled, need to make UI remember it from page to page
+//TODO: Float numbers should lost decimal
