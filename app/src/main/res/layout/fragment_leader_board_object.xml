@@ -19,179 +19,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/dialog_rounded">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/difficulty_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/easy_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/medium_card"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/dialog_straight_cyan" >
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/easy_constraint"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/dialog_straight_selected"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginEnd="2dp"
-                            android:layout_marginBottom="4dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent">
-
-                        <TextView
-                                android:id="@+id/text_view_easy"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textAppearance="?attr/textAppearanceHeadline5"
-                                android:textColor="@color/cyan_900"
-                                android:text="@string/easy"
-                                android:padding="4dp"/>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/medium_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/easy_card"
-                    app:layout_constraintEnd_toStartOf="@id/hard_card"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/dialog_straight_cyan" >
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/medium_constraint"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/dialog_straight"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginEnd="2dp"
-                            android:layout_marginBottom="4dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent">
-
-                        <TextView
-                                android:id="@+id/text_view_medium"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@color/cyan_900"
-                                android:textAppearance="?attr/textAppearanceHeadline5"
-                                android:text="@string/medium"
-                                android:padding="4dp"/>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/hard_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/medium_card"
-                    app:layout_constraintEnd_toStartOf="@id/expert_card"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/dialog_straight_cyan" >
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/hard_constraint"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/dialog_straight"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginEnd="2dp"
-                            android:layout_marginBottom="4dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent">
-
-                        <TextView
-                                android:id="@+id/text_view_hard"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@color/cyan_900"
-                                android:textAppearance="?attr/textAppearanceHeadline5"
-                                android:text="@string/hard"
-                                android:padding="4dp"/>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/expert_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/hard_card"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/dialog_straight_cyan" >
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/expert_constraint"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/dialog_straight"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginEnd="4dp"
-                            android:layout_marginBottom="4dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent">
-
-                        <TextView
-                                android:id="@+id/text_view_expert"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@color/cyan_900"
-                                android:textAppearance="?attr/textAppearanceHeadline5"
-                                android:text="@string/expert"
-                                android:padding="4dp" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/section_title"
@@ -203,9 +31,20 @@
             android:textAppearance="?attr/textAppearanceHeadline4"
             android:textAllCaps="true"
             android:textColor="@color/cyan_dark"
-            app:layout_constraintTop_toBottomOf="@id/difficulty_buttons"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="Best"/>
+
+        <ProgressBar
+                android:id="@+id/loadingPanel"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"

@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.minesweeperMobile.Difficulties.*
 import com.minesweeperMobile.R
-import com.minesweeperMobile.database.Statistics
 import com.minesweeperMobile.databinding.FragmentLeaderBoardObjectBinding
 import com.minesweeperMobile.model.MinesweeperViewModel
 import java.lang.IndexOutOfBoundsException
@@ -51,33 +50,13 @@ class LeaderBoardObjectFragment : Fragment() {
             binding?.sectionTitle?.text = sharedViewModel.listOfRecords[getInt(ARG_OBJECT)]
         }
 
-        setClickListeners(view, R.id.text_view_easy)
-        setClickListeners(view, R.id.text_view_medium)
-        setClickListeners(view, R.id.text_view_hard)
-        setClickListeners(view, R.id.text_view_expert)
-
         recyclerView = binding?.recyclerView!!
         setupAdapter()
+    }
+
+    override fun onResume() {
+        super.onResume()
         observeViewModel()
-    }
-
-    private fun setClickListeners(view: View, id: Int) {
-        val textView = view.findViewById<TextView>(id)
-        textView.setOnClickListener { getID(textView) }
-    }
-
-    private fun getID(textView: TextView) {
-        setSelected(textView, EASY.difficulty, R.id.easy_constraint)
-        setSelected(textView, MEDIUM.difficulty, R.id.medium_constraint)
-        setSelected(textView, HARD.difficulty, R.id.hard_constraint)
-        setSelected(textView, EXPERT.difficulty, R.id.expert_constraint)
-        sharedViewModel.setLeaderBoardComplexitySelection(textView.text.toString())
-    }
-
-    private fun setSelected(textView: TextView, difficulty: String, id: Int) {
-        val constraint = requireView().findViewById<ConstraintLayout>(id)
-        if (textView.text.toString() == difficulty) constraint.background = getDrawable(requireContext(), R.drawable.dialog_straight_selected)
-        else constraint.background = getDrawable(requireContext(), R.drawable.dialog_straight)
     }
 
     private fun setupAdapter() {
@@ -87,14 +66,15 @@ class LeaderBoardObjectFragment : Fragment() {
 
     private fun observeViewModel() {
         sharedViewModel.leaderBoardData.observe(viewLifecycleOwner) { data ->
-//            adapter.submitList(listOf(data.toList().sortedByDescending { (_, value) -> value }.toMap()))
-            val sorted = data.toList().sortedByDescending { (_, value) -> value }.toMap()
-            sorted.forEach { println(it) }
-            //sharedViewModel.leaderBoardData.value!!.forEach { println(it) }
+            println("LEADERBOARDDATA OBSERVER: ${sharedViewModel.leaderBoardData.value}")
+            adapter.submitList(data.sortedByDescending { (_, value) -> value })
+            binding?.loadingPanel?.visibility = View.GONE
         }
         sharedViewModel.leaderBoardComplexitySelection.observe(viewLifecycleOwner) {
+            println("LEADERBOARDCOMPLEXITYSELECTION OBSERVER BEFORE: ${sharedViewModel.leaderBoardData.value}")
+            sharedViewModel.clearLeaderBoardData()
+            println("LEADERBOARDCOMPLEXITYSELECTION OBSERVER AFTER: ${sharedViewModel.leaderBoardData.value}")
             readDatabase()
-            // TODO: hide progress bar
         }
     }
 
@@ -128,4 +108,4 @@ class LeaderBoardObjectFragment : Fragment() {
 }
 
 //TODO: Game remembers the complexity toggled, need to make UI remember it from page to page
-//TODO: Float numbers should lost decimal
+//TODO: Float numbers should lose decimal

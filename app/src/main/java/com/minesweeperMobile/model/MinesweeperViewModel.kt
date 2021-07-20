@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.minesweeperMobile.Markers.*
 import com.minesweeperMobile.Numbers.*
 import com.minesweeperMobile.Difficulties.*
+import com.minesweeperMobile.database.LeaderPairs
 import com.minesweeperMobile.database.Statistics
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
@@ -142,13 +143,18 @@ class MinesweeperViewModel: ViewModel() {
         }
     }
 
-    private var _leaderBoardData = MutableLiveData<Map<String, Float>>()
-    val leaderBoardData: LiveData<Map<String, Float>>
+    private var _leaderBoardData = MutableLiveData<List<LeaderPairs>>()
+    val leaderBoardData: LiveData<List<LeaderPairs>>
         get() = _leaderBoardData
 
     fun newLeaderBoardData(username: String, value: Float) {
-        if (_leaderBoardData.value.isNullOrEmpty()) _leaderBoardData.value = mapOf(username to value)
-        else _leaderBoardData.value = _leaderBoardData.value!!.plus(username to value)
+        if (_leaderBoardData.value.isNullOrEmpty()) _leaderBoardData.value = listOf(LeaderPairs(username, value))
+        else _leaderBoardData.value = _leaderBoardData.value!!.plus(LeaderPairs(username, value))
+    }
+
+    fun clearLeaderBoardData() {
+        if (_leaderBoardData.value.isNullOrEmpty()) return
+        _leaderBoardData.value!!.forEach { _leaderBoardData.value = _leaderBoardData.value!!.minus(it) }
     }
 
     private var _leaderBoardComplexitySelection = MutableLiveData("Easy")
