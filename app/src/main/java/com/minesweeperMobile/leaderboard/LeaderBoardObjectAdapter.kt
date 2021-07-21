@@ -34,9 +34,8 @@ class LeaderBoardObjectAdapter(private val context: Context, private val page: S
     override fun onBindViewHolder(holder: LeaderBoardObjectViewHolder, position: Int) {
         val item = getItem(position)
 
-        holder.number.text = (position + 1).toString() + "."
+        holder.number.text = context.getString(R.string.position, position + 1)
         holder.username.text = item.username
-        println(sharedViewModel.leaderBoardFragmentPage)
         holder.record.text = when (page) {
             "fastestGame" -> {
                 sharedViewModel.getTimes(item.record.toLong())

@@ -60,6 +60,6 @@
     <string name="hard">Hard</string>
     <string name="medium">Medium</string>
     <string name="easy">Easy</string>
-    <string name="position">%s.</string>
+    <string name="position">%d.</string>
     <string name="record">%s %s</string>
 </resources>

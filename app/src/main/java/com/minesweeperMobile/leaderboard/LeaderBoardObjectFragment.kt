@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.minesweeperMobile.database.LeaderPairs
 import com.minesweeperMobile.databinding.FragmentLeaderBoardObjectBinding
 import com.minesweeperMobile.model.MinesweeperViewModel
 import java.lang.IndexOutOfBoundsException
@@ -51,7 +52,6 @@ class LeaderBoardObjectFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         sharedViewModel.getLeaderBoardFragmentPage(binding?.sectionTitle?.text.toString())
-        println("ONRESUME: ${sharedViewModel.leaderBoardFragmentPage}")
         setupAdapter()
         observeViewModel()
     }
@@ -63,11 +63,13 @@ class LeaderBoardObjectFragment : Fragment() {
 
     private fun observeViewModel() {
         sharedViewModel.leaderBoardData.observe(viewLifecycleOwner) { data ->
-            println("OBSERVER: ${sharedViewModel.leaderBoardFragmentPage}")
             val distinctlySorted = if (sharedViewModel.listOfDescendingRecords.contains(sharedViewModel.leaderBoardFragmentPage)) {
                 data.distinct().sortedBy { (_, value) -> value }
             } else data.distinct().sortedByDescending { (_, value) -> value }
-            adapter.submitList(distinctlySorted)
+            val distinctlyCleaned = mutableListOf<LeaderPairs>()
+            distinctlySorted.forEach { if (it.record.toDouble() != 0.0) distinctlyCleaned.add(it) }
+
+            adapter.submitList(distinctlyCleaned)
             binding?.loadingPanel?.visibility = View.GONE
         }
         sharedViewModel.leaderBoardComplexitySelection.observe(viewLifecycleOwner) { readDatabase() }
@@ -92,5 +94,3 @@ class LeaderBoardObjectFragment : Fragment() {
         database.addListenerForSingleValueEvent(statisticsListener)
     }
 }
-
-//TODO: Float numbers should lose decimal
