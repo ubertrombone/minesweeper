@@ -175,6 +175,15 @@ class MinesweeperViewModel: ViewModel() {
     private val listOfNonNumbers = listOf(MINE.mark, EMPTY.mark, FLAG.mark, CLEARED.mark)
     val listOfNumbers = listOf(ONE.alphaNumber, TWO.alphaNumber, THREE.alphaNumber, FOUR.alphaNumber, FIVE.alphaNumber, SIX.alphaNumber, SEVEN.alphaNumber, EIGHT.alphaNumber)
     val listOfRecords = listOf("Most Wins", "Fastest Game", "Fewest Moves", "Longest Streak", "Longest Current Streak", "Win Percentage")
+    private val mapOfRecords = mapOf(listOfRecords[0] to "gamesWon", listOfRecords[1] to "fastestGame", listOfRecords[2] to "fewestMoves",
+        listOfRecords[3] to "longestStreak", listOfRecords[4] to "currentStreak", listOfRecords[5] to "winPercentage")
+    val listOfDescendingRecords = listOf(mapOfRecords[listOfRecords[1]], mapOfRecords[listOfRecords[2]])
+
+    private var _leaderBoardFragmentPage = mapOfRecords[listOfRecords[0]]!!
+    val leaderBoardFragmentPage: String
+        get() = _leaderBoardFragmentPage
+
+    fun getLeaderBoardFragmentPage(string: String) { _leaderBoardFragmentPage = mapOfRecords[string]!! }
 
     private var _selectedCellBackgroundId: Int
     val selectedCellBackgroundId: Int

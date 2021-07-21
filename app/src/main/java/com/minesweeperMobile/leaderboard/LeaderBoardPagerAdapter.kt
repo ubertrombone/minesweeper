@@ -13,10 +13,7 @@ class LeaderBoardPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragmen
 
     override fun createFragment(position: Int): Fragment {
         val fragment = LeaderBoardObjectFragment()
-        fragment.arguments = Bundle().apply {
-            // Our object is just an integer :-P
-            putInt(LeaderBoardObjectFragment.ARG_OBJECT, position)
-        }
+        fragment.arguments = Bundle().apply { putInt(LeaderBoardObjectFragment.ARG_OBJECT, position) }
         return fragment
     }
 }

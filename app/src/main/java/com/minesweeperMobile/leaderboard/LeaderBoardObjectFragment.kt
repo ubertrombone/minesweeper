@@ -5,17 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.*
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.minesweeperMobile.Difficulties.*
-import com.minesweeperMobile.R
 import com.minesweeperMobile.databinding.FragmentLeaderBoardObjectBinding
 import com.minesweeperMobile.model.MinesweeperViewModel
 import java.lang.IndexOutOfBoundsException
@@ -51,51 +46,42 @@ class LeaderBoardObjectFragment : Fragment() {
         }
 
         recyclerView = binding?.recyclerView!!
-        setupAdapter()
     }
 
     override fun onResume() {
         super.onResume()
+        sharedViewModel.getLeaderBoardFragmentPage(binding?.sectionTitle?.text.toString())
+        println("ONRESUME: ${sharedViewModel.leaderBoardFragmentPage}")
+        setupAdapter()
         observeViewModel()
     }
 
     private fun setupAdapter() {
-        adapter = LeaderBoardObjectAdapter()
+        adapter = LeaderBoardObjectAdapter(requireContext(), sharedViewModel.leaderBoardFragmentPage)
         recyclerView.adapter = adapter
     }
 
     private fun observeViewModel() {
         sharedViewModel.leaderBoardData.observe(viewLifecycleOwner) { data ->
-            println("LEADERBOARDDATA OBSERVER: ${sharedViewModel.leaderBoardData.value}")
-            adapter.submitList(data.sortedByDescending { (_, value) -> value })
+            println("OBSERVER: ${sharedViewModel.leaderBoardFragmentPage}")
+            val distinctlySorted = if (sharedViewModel.listOfDescendingRecords.contains(sharedViewModel.leaderBoardFragmentPage)) {
+                data.distinct().sortedBy { (_, value) -> value }
+            } else data.distinct().sortedByDescending { (_, value) -> value }
+            adapter.submitList(distinctlySorted)
             binding?.loadingPanel?.visibility = View.GONE
         }
-        sharedViewModel.leaderBoardComplexitySelection.observe(viewLifecycleOwner) {
-            println("LEADERBOARDCOMPLEXITYSELECTION OBSERVER BEFORE: ${sharedViewModel.leaderBoardData.value}")
-            sharedViewModel.clearLeaderBoardData()
-            println("LEADERBOARDCOMPLEXITYSELECTION OBSERVER AFTER: ${sharedViewModel.leaderBoardData.value}")
-            readDatabase()
-        }
+        sharedViewModel.leaderBoardComplexitySelection.observe(viewLifecycleOwner) { readDatabase() }
     }
 
     private fun readDatabase() {
-
-        val mapValue = when (binding?.sectionTitle?.text.toString()) {
-            sharedViewModel.listOfRecords[0] -> "gamesWon"
-            sharedViewModel.listOfRecords[1] -> "fastestGame"
-            sharedViewModel.listOfRecords[2] -> "fewestMoves"
-            sharedViewModel.listOfRecords[3] -> "longestStreak"
-            sharedViewModel.listOfRecords[4] -> "currentStreak"
-            sharedViewModel.listOfRecords[5] -> "winPercentage"
-            else -> ""
-        }
-
+        sharedViewModel.clearLeaderBoardData()
         val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").reference
         val statisticsListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 dataSnapshot.children.forEach { child ->
                     val username = child.child("username").value
-                    val values = child.child(sharedViewModel.leaderBoardComplexitySelection.value.toString()).child(mapValue).value
+                    val values = child.child(sharedViewModel.leaderBoardComplexitySelection.value.toString())
+                        .child(sharedViewModel.leaderBoardFragmentPage).value
                     try {
                         sharedViewModel.newLeaderBoardData(username.toString(), values.toString().toFloat())
                     } catch (e: IndexOutOfBoundsException) { println("EMPTY") } catch (e: NumberFormatException) { println("EMPTY") }
@@ -103,9 +89,8 @@ class LeaderBoardObjectFragment : Fragment() {
             }
             override fun onCancelled(databaseError: DatabaseError) = println("FAIL")
         }
-        database.addValueEventListener(statisticsListener)
+        database.addListenerForSingleValueEvent(statisticsListener)
     }
 }
 
-//TODO: Game remembers the complexity toggled, need to make UI remember it from page to page
 //TODO: Float numbers should lose decimal

@@ -1,6 +1,7 @@
 package com.minesweeperMobile.leaderboard
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.minesweeperMobile.R
 import com.minesweeperMobile.database.LeaderPairs
+import com.minesweeperMobile.model.MinesweeperViewModel
+import kotlin.math.roundToInt
 
-class LeaderBoardObjectAdapter:
+class LeaderBoardObjectAdapter(private val context: Context, private val page: String):
     ListAdapter<LeaderPairs, LeaderBoardObjectAdapter.LeaderBoardObjectViewHolder>(LeaderBoardObjectDiffCallback()) {
+
+    private val sharedViewModel = MinesweeperViewModel()
 
     class LeaderBoardObjectViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         var number: TextView = view.findViewById(R.id.number)
@@ -31,7 +36,16 @@ class LeaderBoardObjectAdapter:
 
         holder.number.text = (position + 1).toString() + "."
         holder.username.text = item.username
-        holder.record.text = item.record.toString()
+        println(sharedViewModel.leaderBoardFragmentPage)
+        holder.record.text = when (page) {
+            "fastestGame" -> {
+                sharedViewModel.getTimes(item.record.toLong())
+                context.getString(R.string.record,
+                    "${sharedViewModel.minutes}min", "${sharedViewModel.seconds}s")
+            }
+            "winPercentage" -> "%.2f".format(item.record * 100) + "%"
+            else -> item.record.roundToInt().toString()
+        }
     }
 }
 
