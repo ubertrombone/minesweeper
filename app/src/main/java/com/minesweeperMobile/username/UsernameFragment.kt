@@ -75,9 +75,7 @@ class UsernameFragment : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    private fun setupView() {
-        binding?.usernameTitle?.text = arguments?.getString(KEY_TITLE)
-    }
+    private fun setupView() { binding?.usernameTitle?.text = arguments?.getString(KEY_TITLE) }
 
     fun confirmUsername() {
         val usernameInput = binding?.username
