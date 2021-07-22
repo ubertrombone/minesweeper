@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.minesweeperMobile.R
 import com.minesweeperMobile.database.LeaderPairs
 import com.minesweeperMobile.databinding.FragmentLeaderBoardObjectBinding
 import com.minesweeperMobile.model.MinesweeperViewModel

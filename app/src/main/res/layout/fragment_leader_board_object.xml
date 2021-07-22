@@ -19,8 +19,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/dialog_rounded">
 
-
-
         <TextView
             android:id="@+id/section_title"
             android:layout_width="match_parent"

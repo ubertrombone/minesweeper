@@ -93,6 +93,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:textColor="@color/black"
+            android:paddingBottom="32dp"
             tools:text="Average Moves:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/average_time"
