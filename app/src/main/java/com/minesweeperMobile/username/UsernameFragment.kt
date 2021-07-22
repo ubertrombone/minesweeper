@@ -86,10 +86,12 @@ class UsernameFragment : DialogFragment() {
         if (usernameInput?.text.toString().isEmpty()) {
             inputEmpty(usernameInput!!, usernameField!!, true)
             return
-        }
-        else inputEmpty(usernameInput!!, usernameField!!, false)
+        } else inputEmpty(usernameInput!!, usernameField!!, false)
 
-        // TODO: check a list of curse words to make sure a username doesn't contain them
+        if (sharedViewModel.checkProfanityFilter(usernameInput.text.toString())) {
+            usernameProfane(usernameInput, usernameField, true)
+            return
+        } else usernameProfane(usernameInput, usernameField, false)
 
         if (!sharedViewModel.checkUsernameUniqueness(usernameInput.text.toString())) {
             sharedViewModel.setUsername(usernameInput.text.toString())
@@ -109,6 +111,10 @@ class UsernameFragment : DialogFragment() {
 
     private fun usernameExists(input: TextInputEditText, field: TextInputLayout, error: Boolean) {
         errorCheck(error, sharedViewModel.usernames.contains(input.text.toString()), field, R.string.username_exists)
+    }
+
+    private fun usernameProfane(input: TextInputEditText, field: TextInputLayout, error: Boolean) {
+        errorCheck(error, sharedViewModel.checkProfanityFilter(input.text.toString()), field, R.string.profanity_filter)
     }
 
     private fun errorCheck(error: Boolean, condition: Boolean, field: TextInputLayout, string: Int) {
