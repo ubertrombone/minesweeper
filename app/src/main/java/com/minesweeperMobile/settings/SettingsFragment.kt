@@ -112,6 +112,7 @@ class SettingsFragment : DialogFragment() {
     }
 
     private fun mineSwitchWarning() {
+        //TODO: setup warning
         println(binding?.mineAssistSwitch?.isChecked)
     }
 

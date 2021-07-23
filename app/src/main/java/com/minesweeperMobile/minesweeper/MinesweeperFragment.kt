@@ -93,31 +93,22 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun pickUpUserFromDatabase(dataSnapshot: DataSnapshot) {
-        dataSnapshot.children.forEach { child ->
-            if (child.key.toString() == "userLog") sharedViewModel.getUser(child.value.toString().toBoolean())
-        }
-        dataSnapshot.children.forEach { child ->
-            if (child.key.toString() == "RTL") {
-                sharedViewModel.fabButtonSettings(child.value.toString().toBoolean())
-                binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-            }
-        }
-        dataSnapshot.children.forEach { child ->
-            if (child.key.toString() == "DefaultDifficulty") {
-                sharedViewModel.setDifficulty(child.value.toString())
-                sharedViewModel.setDifficultyHolder(child.value.toString())
-            }
-        }
-        dataSnapshot.children.forEach { child ->
-            if (child.key.toString() == "MineAssist") {
-                sharedViewModel.mineAssistSettings(child.value.toString().toBoolean())
-                binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB
-                if (sharedViewModel.mineAssistFAB) binding?.fabMine?.alpha = 1F
-            }
-        }
+        //TODO: Make MineAssist work
         val children = mutableMapOf<String, String>()
         dataSnapshot.children.forEach { child -> children[child.key.toString()] = child.value.toString() }
-        //TODO: println(children)
+
+        sharedViewModel.getUser(children["userLog"].toString().toBoolean())
+
+        sharedViewModel.fabButtonSettings(children["RTL"].toString().toBoolean())
+        binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+
+        sharedViewModel.setDifficulty(children["DefaultDifficulty"].toString())
+        sharedViewModel.setDifficultyHolder(children["DefaultDifficulty"].toString())
+
+        sharedViewModel.mineAssistSettings(children["MineAssist"].toString().toBoolean())
+        binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB
+        if (sharedViewModel.mineAssistFAB) binding?.fabMine?.alpha = 1F
+
         sharedViewModel.getUsername(children.keys.contains("username"))
         if (children.keys.contains("username")) sharedViewModel.setUsername(children["username"].toString())
     }
