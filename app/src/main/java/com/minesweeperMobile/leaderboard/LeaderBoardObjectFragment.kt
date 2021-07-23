@@ -66,12 +66,13 @@ class LeaderBoardObjectFragment : Fragment() {
     private fun observeViewModel() {
         sharedViewModel.leaderBoardData.observe(viewLifecycleOwner) { data ->
             val distinctlySorted = if (sharedViewModel.listOfDescendingRecords.contains(sharedViewModel.leaderBoardFragmentPage)) {
-                data.distinct().sortedBy { (_, value) -> value }
+                val distinctlyCleaned = data.distinct().sortedBy { (_, value) -> value }
+                val cleaned = mutableListOf<LeaderPairs>()
+                distinctlyCleaned.forEach { if (it.record.toDouble() != 0.0) cleaned.add(it) }
+                cleaned
             } else data.distinct().sortedByDescending { (_, value) -> value }
-            val distinctlyCleaned = mutableListOf<LeaderPairs>()
-            distinctlySorted.forEach { if (it.record.toDouble() != 0.0) distinctlyCleaned.add(it) }
 
-            adapter.submitList(distinctlyCleaned)
+            adapter.submitList(distinctlySorted)
             binding?.loadingPanel?.visibility = View.GONE
         }
         sharedViewModel.leaderBoardComplexitySelection.observe(viewLifecycleOwner) { readDatabase() }
