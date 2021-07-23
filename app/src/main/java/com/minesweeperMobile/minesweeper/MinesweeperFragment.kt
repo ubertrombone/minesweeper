@@ -108,8 +108,16 @@ class MinesweeperFragment: Fragment() {
                 sharedViewModel.setDifficultyHolder(child.value.toString())
             }
         }
+        dataSnapshot.children.forEach { child ->
+            if (child.key.toString() == "MineAssist") {
+                sharedViewModel.mineAssistSettings(child.value.toString().toBoolean())
+                binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB
+                if (sharedViewModel.mineAssistFAB) binding?.fabMine?.alpha = 1F
+            }
+        }
         val children = mutableMapOf<String, String>()
         dataSnapshot.children.forEach { child -> children[child.key.toString()] = child.value.toString() }
+        //TODO: println(children)
         sharedViewModel.getUsername(children.keys.contains("username"))
         if (children.keys.contains("username")) sharedViewModel.setUsername(children["username"].toString())
     }

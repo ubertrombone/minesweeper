@@ -144,6 +144,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         database.child("RTL").setValue(sharedViewModel.fabButtonRTL)
         database.child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder)
         database.child("userLog").setValue(sharedViewModel.user.value)
+        database.child("MineAssist").setValue(sharedViewModel.mineAssistFAB)
         val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
         sharedViewModel.changeAll(allComplexities)
         database.child(Difficulties.EASY.difficulty).setValue(sharedViewModel.easy[0])

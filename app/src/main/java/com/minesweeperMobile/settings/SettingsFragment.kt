@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.FirebaseDatabase
 import com.minesweeperMobile.R
 import com.minesweeperMobile.databinding.FragmentSettingsBinding
@@ -53,10 +54,12 @@ class SettingsFragment : DialogFragment() {
         }
 
         binding?.rtlSwitch?.isChecked = sharedViewModel.fabButtonRTL
+        binding?.mineAssistSwitch?.isChecked = sharedViewModel.mineAssistFAB
         setupView()
         createSpinnerForLaunch(sharedViewModel.listOfDifficulties.dropLast(1))
         binding?.setDifficultyDropdown?.setText(sharedViewModel.difficultyHolder)
         saveSettings()
+        binding?.mineAssistSwitch?.setOnClickListener { mineSwitchWarning() }
     }
 
     override fun onStart() {
@@ -82,6 +85,7 @@ class SettingsFragment : DialogFragment() {
 
     private fun saveSettings() = binding?.save?.setOnClickListener {
         onSwitchClicked()
+        onMineAssistSwitch()
         onLaunchDifficultySet()
         dismiss()
     }
@@ -100,5 +104,21 @@ class SettingsFragment : DialogFragment() {
     private fun onLaunchDifficultySet() {
         database.child("DefaultDifficulty").setValue(binding?.setDifficultyDropdown?.text.toString())
         sharedViewModel.setDifficultyHolder(binding?.setDifficultyDropdown?.text.toString())
+    }
+
+    private fun onMineAssistSwitch() {
+        database.child("MineAssist").setValue(binding?.mineAssistSwitch?.isChecked)
+        engageMineAssist()
+    }
+
+    private fun mineSwitchWarning() {
+        println(binding?.mineAssistSwitch?.isChecked)
+    }
+
+    private fun engageMineAssist() {
+        sharedViewModel.mineAssistSettings(binding?.mineAssistSwitch!!.isChecked)
+        val mineAssistButton = requireActivity().findViewById<FloatingActionButton>(R.id.fab_mine)
+        mineAssistButton.isEnabled = sharedViewModel.mineAssistFAB
+        mineAssistButton.alpha = if (sharedViewModel.mineAssistFAB) 1F else .25F
     }
 }

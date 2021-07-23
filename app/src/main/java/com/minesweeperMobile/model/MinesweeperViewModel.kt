@@ -234,6 +234,10 @@ class MinesweeperViewModel: ViewModel() {
     val fabButtonRTL: Boolean
         get() = _fabButtonsRTL
 
+    private var _mineAssistFAB = false
+    val mineAssistFAB: Boolean
+        get() = _mineAssistFAB
+
     private var _mineCounter: Int
     val mineCounter: Int
         get() = _mineCounter
@@ -250,9 +254,7 @@ class MinesweeperViewModel: ViewModel() {
     val difficultyHolder: String
         get() = _difficultyHolder
 
-    fun setDifficultyHolder(difficulty: String) {
-        _difficultyHolder = difficulty
-    }
+    fun setDifficultyHolder(difficulty: String) { _difficultyHolder = difficulty }
 
     private var _flagCounter: Int
 
@@ -264,41 +266,27 @@ class MinesweeperViewModel: ViewModel() {
     val firstMoveSwitch: Int
         get() = _firstMoveSwitch
 
-    fun setHeight(height: Int) {
-        _height = height
-    }
+    fun setHeight(height: Int) { _height = height }
 
-    fun setWidth(width: Int) {
-        _width = width
-    }
+    fun setWidth(width: Int) { _width = width }
 
-    fun setMines(mines: Int) {
-        _howManyMines = mines
-    }
+    fun setMines(mines: Int) { _howManyMines = mines }
 
-    fun getSelectedCellBackgroundId(id: Int) {
-        _selectedCellBackgroundId = id
-    }
+    fun getSelectedCellBackgroundId(id: Int) { _selectedCellBackgroundId = id }
 
-    fun getSelectedCardId(id: Int) {
-        _selectedCardId = id
-    }
+    fun getSelectedCardId(id: Int) { _selectedCardId = id }
 
-    fun getCurrentCoords(id: Int) {
-        _currentCoords = convertNumberToCoords(id)
-    }
+    fun getCurrentCoords(id: Int) { _currentCoords = convertNumberToCoords(id) }
 
     fun getFlagId() = _selectedCardId + 5000
     fun getDifficultySet() = _difficultySet.value.toString()
 
     fun incrementMoveCounter() = _moveCounter ++
-    fun setDifficulty(diff: String) {
-        _difficultySet.value = diff
-    }
+    fun setDifficulty(diff: String) { _difficultySet.value = diff }
 
-    fun fabButtonSettings(switch: Boolean) {
-        _fabButtonsRTL = switch
-    }
+    fun fabButtonSettings(switch: Boolean) { _fabButtonsRTL = switch }
+
+    fun mineAssistSettings(switch: Boolean) { _mineAssistFAB = switch }
 
     init {
         _height = 15
