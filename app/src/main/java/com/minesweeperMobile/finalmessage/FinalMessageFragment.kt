@@ -70,7 +70,7 @@ class FinalMessageFragment : DialogFragment() {
 
     private fun setupView() {
 
-        if (sharedViewModel.difficultySet.value == CUSTOM.difficulty) {
+        if (sharedViewModel.difficultySet.value == CUSTOM.difficulty || sharedViewModel.mineAssistFAB) {
             binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
             binding?.time?.text = arguments?.getString(TIME)
             binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter)
