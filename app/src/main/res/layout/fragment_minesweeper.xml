@@ -114,6 +114,22 @@
                     app:fabSize="mini"
                     app:tint="@color/red_dark"/>
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_mine"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/cyan_dark"
+                    android:src="@drawable/gnome_gnomine__2_"
+                    android:contentDescription="@string/mine"
+                    android:focusable="true"
+                    android:alpha=".25"
+                    android:enabled="false"
+
+                    app:fabSize="mini"
+                    app:tint="@color/red_dark"/>
+
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="wrap_content" >

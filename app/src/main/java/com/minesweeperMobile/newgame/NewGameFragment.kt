@@ -3,6 +3,7 @@ package com.minesweeperMobile.newgame
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -60,8 +61,10 @@ class NewGameFragment: DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.defaultDisplay?.getRealMetrics(displayMetrics)
         dialog?.window?.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            displayMetrics.widthPixels - (displayMetrics.widthPixels * .2).toInt(),
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
