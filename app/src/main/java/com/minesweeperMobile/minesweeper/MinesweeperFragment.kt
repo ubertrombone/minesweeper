@@ -107,7 +107,7 @@ class MinesweeperFragment: Fragment() {
 
         sharedViewModel.mineAssistSettings(children["MineAssist"].toString().toBoolean())
         binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB
-        if (sharedViewModel.mineAssistFAB) binding?.fabMine?.alpha = 1F
+        if (sharedViewModel.mineAssistFAB) binding?.fabMine?.visibility = View.VISIBLE
 
         sharedViewModel.getUsername(children.keys.contains("username"))
         if (children.keys.contains("username")) sharedViewModel.setUsername(children["username"].toString())

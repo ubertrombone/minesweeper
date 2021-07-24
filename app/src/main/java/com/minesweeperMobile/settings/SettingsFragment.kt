@@ -126,6 +126,6 @@ class SettingsFragment : DialogFragment() {
         sharedViewModel.mineAssistSettings(binding?.mineAssistSwitch!!.isChecked)
         val mineAssistButton = requireActivity().findViewById<FloatingActionButton>(R.id.fab_mine)
         mineAssistButton.isEnabled = sharedViewModel.mineAssistFAB
-        mineAssistButton.alpha = if (sharedViewModel.mineAssistFAB) 1F else .25F
+        mineAssistButton.visibility = if (sharedViewModel.mineAssistFAB) View.VISIBLE else View.GONE
     }
 }

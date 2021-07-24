@@ -124,8 +124,8 @@
                     android:src="@drawable/gnome_gnomine__2_"
                     android:contentDescription="@string/mine"
                     android:focusable="true"
-                    android:alpha=".25"
                     android:enabled="false"
+                    android:visibility="gone"
                     android:onClick="@{() -> minesweeperFragment.clickMineAssist()}"
                     app:fabSize="mini"
                     app:tint="@color/red_dark"/>
