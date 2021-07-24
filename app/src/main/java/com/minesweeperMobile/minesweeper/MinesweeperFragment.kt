@@ -38,6 +38,7 @@ class MinesweeperFragment: Fragment() {
     private lateinit var database: DatabaseReference
     private var shovelEmptySwitch = false
     private var mineSelectedOnEmptySwitch = false
+    private var checkIfWinMessageHasAlreadyAppeared = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +94,6 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun pickUpUserFromDatabase(dataSnapshot: DataSnapshot) {
-        //TODO: Make MineAssist work
         val children = mutableMapOf<String, String>()
         dataSnapshot.children.forEach { child -> children[child.key.toString()] = child.value.toString() }
 
@@ -146,6 +146,7 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun startGame(view: View) {
+        checkIfWinMessageHasAlreadyAppeared = false
         binding?.mineCounter?.text = sharedViewModel.howManyMines.toString()
         val mainLinearLayout = binding?.mineLay as LinearLayout
         (0 until sharedViewModel.height).forEach { i ->
@@ -245,7 +246,7 @@ class MinesweeperFragment: Fragment() {
             sharedViewModel.firstMoveSwitch == 0 -> clickTheShovel()
             sharedViewModel.listOfSelections.contains(coords) && !sharedViewModel.listOfFlags.contains(coords) && sharedViewModel.listOfNumbers.contains(coordsValue) -> {
                 buttonSelect()
-                onEmptySelected(true)
+                onEmptySelected(sharedViewModel.currentCoords[0], sharedViewModel.currentCoords[1], true)
                 sharedViewModel.incrementMoveCounter()
             }
             else -> {
@@ -300,7 +301,7 @@ class MinesweeperFragment: Fragment() {
         buttonSelect()
 
         if (shovelEmptySwitch) {
-            onEmptySelected(true)
+            onEmptySelected(sharedViewModel.currentCoords[0], sharedViewModel.currentCoords[1], true)
             shovelEmptySwitch = false
             return
         }
@@ -308,7 +309,7 @@ class MinesweeperFragment: Fragment() {
         sharedViewModel.addToSelections(sharedViewModel.currentCoords)
         when (sharedViewModel.getItemAtMinefieldPosition()) {
             MINE.mark -> onMineSelected()
-            EMPTY.mark -> onEmptySelected(false)
+            EMPTY.mark -> onEmptySelected(sharedViewModel.currentCoords[0], sharedViewModel.currentCoords[1], false)
             ONE.alphaNumber -> addImageView(ONE.number, true)
             TWO.alphaNumber -> addImageView(TWO.number, true)
             THREE.alphaNumber -> addImageView(THREE.number, true)
@@ -331,7 +332,21 @@ class MinesweeperFragment: Fragment() {
     }
 
     fun clickMineAssist() {
-        println(sharedViewModel.listOfFlags)
+        sharedViewModel.listOfFlags.forEach {
+            val xVal = it[0]
+            val yVal = it[1]
+            (yVal - 1 .. yVal + 1).forEach { i -> (xVal - 1 .. xVal + 1).forEach j@{ j ->
+                val coords = listOf(j, i)
+                if (coords == listOf(xVal, yVal)) return@j
+                if (!sharedViewModel.listOfSelections.contains(coords)) return@j
+                if (sharedViewModel.listOfFlags.contains(coords)) return@j
+                val cardView = requireActivity().findViewById<CardView>(sharedViewModel.convertCoordsToNumber(coords))
+                if (cardView.isClickable) {
+                    buttonSelect()
+                    onEmptySelected(j, i, true)
+                }
+            } }
+        }
     }
 
     // Mine Image: By KDE Kmines team: [1] - gnomine artwork., GPL, https://commons.wikimedia.org/w/index.php?curid=2102166
@@ -365,12 +380,11 @@ class MinesweeperFragment: Fragment() {
         cardView.addView(imageView)
     }
 
-    private fun onEmptySelected(number: Boolean) {
+    private fun onEmptySelected(xCoord: Int, yCoord: Int, number: Boolean) {
         sharedViewModel.clearEmptySelections()
-        val coords = sharedViewModel.currentCoords
-        sharedViewModel.emptyCells(coords[1], coords[0], sharedViewModel.minefieldWithNumbers, number)
+        sharedViewModel.emptyCells(yCoord, xCoord, sharedViewModel.minefieldWithNumbers, number)
 
-        sharedViewModel.emptySelections.forEach {
+        sharedViewModel.emptySelections.distinct().forEach {
             val id = sharedViewModel.convertCoordsToNumber(it)
             when (sharedViewModel.minefieldWithNumbers[it[1]][it[0]]) {
                 MINE.mark -> {
@@ -391,6 +405,7 @@ class MinesweeperFragment: Fragment() {
         }
 
         if (sharedViewModel.listOfSelections.distinct().size + sharedViewModel.mineCounter == sharedViewModel.height * sharedViewModel.width) {
+            if (checkIfWinMessageHasAlreadyAppeared) return else checkIfWinMessageHasAlreadyAppeared = true
             gameOverMessage(R.string.win)
         }
     }

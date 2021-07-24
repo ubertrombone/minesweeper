@@ -436,19 +436,19 @@ class MinesweeperViewModel: ViewModel() {
                 }
 
                 val currentCell = minefield[yCurrent][xCurrent]
-                if (currentCell == EMPTY.mark) {
+                if (currentCell == EMPTY.mark && !_listOfSelections.contains(currentCoordsInEmptyFunc)) {
                     _listOfSelections.add(currentCoordsInEmptyFunc)
                     emptyCells(yCurrent, xCurrent, minefield, false)
                     if (_listOfFlags.contains(currentCoordsInEmptyFunc)) {
                         _listOfFlags.remove(currentCoordsInEmptyFunc)
                     }
-                } else if (currentCell !in listOfNonNumbers) {
+                } else if (currentCell !in listOfNonNumbers && !_listOfSelections.contains(currentCoordsInEmptyFunc)) {
                     _listOfSelections.add(currentCoordsInEmptyFunc)
                     _emptySelections.add(currentCoordsInEmptyFunc)
                     if (_listOfFlags.contains(currentCoordsInEmptyFunc)) {
                         _listOfFlags.remove(currentCoordsInEmptyFunc)
                     }
-                } else if (currentCell == MINE.mark && currentCoordsInEmptyFunc !in _listOfFlags) {
+                } else if (currentCell == MINE.mark && currentCoordsInEmptyFunc !in _listOfFlags && !_listOfSelections.contains(currentCoordsInEmptyFunc)) {
                     _emptySelections.add(currentCoordsInEmptyFunc)
                 }
             }
