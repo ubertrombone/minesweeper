@@ -112,8 +112,11 @@ class SettingsFragment : DialogFragment() {
     }
 
     private fun mineSwitchWarning() {
-        //TODO: setup warning
-        println(binding?.mineAssistSwitch?.isChecked)
+        if (binding?.mineAssistSwitch?.isChecked == true) {
+            val supportFragmentManager = childFragmentManager
+            WarningFragment.newInstance(getString(R.string.warning).uppercase())
+                .show(supportFragmentManager, WarningFragment.TAG)
+        }
     }
 
     private fun engageMineAssist() {

@@ -64,4 +64,7 @@
     <string name="record">%s %s</string>
     <string name="profanity_filter">Username should not contain profanity</string>
     <string name="mine_assist">Mine Assist</string>
+    <string name="mine_warning">Games using Mine Assist won\'t be recorded.</string>
+    <string name="continue_">continue</string>
+    <string name="warning">Warning!</string>
 </resources>
