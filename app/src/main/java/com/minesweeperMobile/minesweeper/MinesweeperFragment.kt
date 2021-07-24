@@ -340,9 +340,18 @@ class MinesweeperFragment: Fragment() {
                 if (coords == listOf(xVal, yVal)) return@j
                 if (!sharedViewModel.listOfSelections.contains(coords)) return@j
                 if (sharedViewModel.listOfFlags.contains(coords)) return@j
+
+                //Reduces the scope of Mine Assist by only checking cells with unselected cells around them.
+                var flagIsSurroundedBySelectedCells = true
+                (coords[1] - 1 .. coords[1] + 1).forEach { k -> (coords[0] - 1 .. coords[0] + 1).forEach { l ->
+                    val newCoords = listOf(l, k)
+                    if (!sharedViewModel.listOfSelections.contains(newCoords)) flagIsSurroundedBySelectedCells = false
+                } }
+                if (flagIsSurroundedBySelectedCells) return@j
+
                 val cardView = requireActivity().findViewById<CardView>(sharedViewModel.convertCoordsToNumber(coords))
                 if (cardView.isClickable) {
-                    buttonSelect()
+                    sharedViewModel.incrementMoveCounter()
                     onEmptySelected(j, i, true)
                 }
             } }
