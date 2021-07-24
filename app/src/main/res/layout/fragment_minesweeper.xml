@@ -126,7 +126,7 @@
                     android:focusable="true"
                     android:alpha=".25"
                     android:enabled="false"
-
+                    android:onClick="@{() -> minesweeperFragment.clickMineAssist()}"
                     app:fabSize="mini"
                     app:tint="@color/red_dark"/>
 

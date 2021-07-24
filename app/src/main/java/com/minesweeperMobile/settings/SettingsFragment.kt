@@ -17,6 +17,7 @@ import com.minesweeperMobile.R
 import com.minesweeperMobile.databinding.FragmentSettingsBinding
 import com.minesweeperMobile.helperclasses.MaterialSpinnerAdapter
 import com.minesweeperMobile.login.LoginFragment
+import com.minesweeperMobile.minesweeper.MinesweeperFragment
 import com.minesweeperMobile.model.MinesweeperViewModel
 
 class SettingsFragment : DialogFragment() {
@@ -85,9 +86,11 @@ class SettingsFragment : DialogFragment() {
 
     private fun saveSettings() = binding?.save?.setOnClickListener {
         onSwitchClicked()
+        if (sharedViewModel.mineAssistFAB != binding?.mineAssistSwitch?.isChecked) sharedViewModel.changeMineAssist(true)
         onMineAssistSwitch()
         onLaunchDifficultySet()
         dismiss()
+        if (sharedViewModel.mineAssistChanged) (parentFragment as MinesweeperFragment).checkDifficulty()
     }
 
     private fun orientFABButtons() {

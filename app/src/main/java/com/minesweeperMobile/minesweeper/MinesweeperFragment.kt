@@ -330,6 +330,10 @@ class MinesweeperFragment: Fragment() {
         }
     }
 
+    fun clickMineAssist() {
+        println(sharedViewModel.listOfFlags)
+    }
+
     // Mine Image: By KDE Kmines team: [1] - gnomine artwork., GPL, https://commons.wikimedia.org/w/index.php?curid=2102166
     private fun onMineSelected() {
         val mines = sharedViewModel.mineLocations

@@ -178,7 +178,7 @@ class MinesweeperViewModel: ViewModel() {
     private val mapOfRecords = mapOf(listOfRecords[0] to "gamesWon", listOfRecords[1] to "fastestGame", listOfRecords[2] to "fewestMoves",
         listOfRecords[3] to "longestStreak", listOfRecords[4] to "currentStreak", listOfRecords[5] to "winPercentage")
     val listOfDescendingRecords = listOf(mapOfRecords[listOfRecords[1]], mapOfRecords[listOfRecords[2]])
-    val profanityFilter = listOf("fuck", "f4ck", "f4k", "fck", "fuk", "shit", "sh1t", "shiz", "sh1z", "bitch", "b1tch",
+    private val profanityFilter = listOf("fuck", "f4ck", "f4k", "fck", "fuk", "shit", "sh1t", "shiz", "sh1z", "bitch", "b1tch",
         "biatch", "b1atch", "bi4tch", "b14tch", "cunt", "kunt", "ass", "4ss", "balls", "ballz", "b4lls", "b4llz", "dick",
         "d1ck", "dik", "d1k", "dic", "d1c", "fuc", "f4k", "f4c", "vagina", "v4gina", "v4g1na", "v4g1n4", "v4gin4", "vagin4",
         "vag1na", "vag1n4", "pussy", "pusy", "pussee", "pusee", "tits", "t1ts", "titz", "t1tz", "titties", "t1tties")
@@ -237,6 +237,12 @@ class MinesweeperViewModel: ViewModel() {
     private var _mineAssistFAB = false
     val mineAssistFAB: Boolean
         get() = _mineAssistFAB
+
+    private var _mineAssistChanged = false
+    val mineAssistChanged: Boolean
+        get() = _mineAssistChanged
+
+    fun changeMineAssist(switch: Boolean) { _mineAssistChanged = switch }
 
     private var _mineCounter: Int
     val mineCounter: Int
