@@ -116,7 +116,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
-        println("VERSION: ${android.os.Build.VERSION.SDK_INT}")
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) resultLauncher.launch(signInIntent)
         else @Suppress("DEPRECATION") startActivityForResult(signInIntent, RC_SIGN_IN)
     }
