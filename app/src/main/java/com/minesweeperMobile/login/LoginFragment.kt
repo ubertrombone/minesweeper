@@ -1,9 +1,11 @@
 package com.minesweeperMobile.login
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -80,6 +82,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -99,9 +102,23 @@ class LoginFragment : Fragment(), View.OnClickListener {
             .addOnCompleteListener(requireActivity()) { task -> if (task.isSuccessful) updateUI(auth.currentUser) }
     }
 
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) { updateUI(null) }
+        }
+    }
+
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        println("VERSION: ${android.os.Build.VERSION.SDK_INT}")
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) resultLauncher.launch(signInIntent)
+        else @Suppress("DEPRECATION") startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     private fun signOut() {
