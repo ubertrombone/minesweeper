@@ -435,6 +435,8 @@ class MinesweeperViewModel: ViewModel() {
                     continue
                 }
 
+                if (_listOfSelections.contains(currentCoordsInEmptyFunc)) continue
+
                 val currentCell = minefield[yCurrent][xCurrent]
                 if (currentCell == EMPTY.mark && !_listOfSelections.contains(currentCoordsInEmptyFunc)) {
                     _listOfSelections.add(currentCoordsInEmptyFunc)
