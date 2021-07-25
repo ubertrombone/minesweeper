@@ -66,7 +66,9 @@ class SettingsFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.defaultDisplay?.getRealMetrics(displayMetrics)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) activity?.display?.getRealMetrics(displayMetrics)
+        else @Suppress("DEPRECATION") activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+
         dialog?.window?.setLayout(
             displayMetrics.widthPixels - (displayMetrics.widthPixels * .2).toInt(),
             WindowManager.LayoutParams.WRAP_CONTENT

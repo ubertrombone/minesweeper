@@ -2,6 +2,7 @@ package com.minesweeperMobile.minesweeper
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ import com.minesweeperMobile.newgame.NewGameFragment
 import com.minesweeperMobile.results.ResultsFragment
 import com.minesweeperMobile.settings.SettingsFragment
 import com.minesweeperMobile.username.UsernameFragment
+import kotlin.math.roundToInt
 
 class MinesweeperFragment: Fragment() {
 
@@ -155,17 +157,19 @@ class MinesweeperFragment: Fragment() {
             (0 until sharedViewModel.width).forEach { j ->
                 val params = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
-                //TODO: Try on tablet
-//                val displayMetrics = DisplayMetrics()
-//                activity?.windowManager?.defaultDisplay?.getRealMetrics(displayMetrics)
-//                println(displayMetrics.heightPixels)
-//                println(displayMetrics.widthPixels)
-//
-//                params.width = displayMetrics.widthPixels / sharedViewModel.width
-//                params.height = displayMetrics.widthPixels / sharedViewModel.width
+                val displayMetrics = DisplayMetrics()
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) activity?.display?.getRealMetrics(displayMetrics)
+                else @Suppress("DEPRECATION") activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
 
-                params.height = getParams(sharedViewModel.width)
-                params.width = getParams(sharedViewModel.width)
+                val displayWidth = ((displayMetrics.widthPixels - (displayMetrics.widthPixels *.1)) / sharedViewModel.width).roundToInt()
+
+                if (displayWidth < 62) {
+                    params.height = getParams(sharedViewModel.width)
+                    params.width = getParams(sharedViewModel.width)
+                } else {
+                    params.height = displayWidth
+                    params.width = displayWidth
+                }
 
                 val cardView = setupUICardView(i, j, params)
                 val cardLinearLayout = LinearLayout(requireContext())
