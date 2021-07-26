@@ -30,6 +30,7 @@ import com.minesweeperMobile.newgame.NewGameFragment
 import com.minesweeperMobile.results.ResultsFragment
 import com.minesweeperMobile.settings.SettingsFragment
 import com.minesweeperMobile.username.UsernameFragment
+import java.lang.IllegalStateException
 import kotlin.math.roundToInt
 
 class MinesweeperFragment: Fragment() {
@@ -112,6 +113,8 @@ class MinesweeperFragment: Fragment() {
         if (sharedViewModel.mineAssistFAB) binding?.fabMine?.visibility = View.VISIBLE
 
         sharedViewModel.getUsername(children.keys.contains("username"))
+        try { if (sharedViewModel.username.value == false) createUsernameDialog() } catch (e: IllegalStateException) {}
+
         if (children.keys.contains("username")) sharedViewModel.setUsername(children["username"].toString())
     }
 
