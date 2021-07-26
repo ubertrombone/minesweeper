@@ -63,9 +63,7 @@ class ResultsFragment : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    private fun setupView() {
-        binding?.resultsTitle?.text = arguments?.getString(KEY_TITLE)
-    }
+    private fun setupView() { binding?.resultsTitle?.text = arguments?.getString(KEY_TITLE) }
 
     private fun setupAdapter() {
         val listOfComplexities = listOf(sharedViewModel.easy, sharedViewModel.medium, sharedViewModel.hard, sharedViewModel.expert)

@@ -72,9 +72,7 @@ class NewGameFragment: DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    private fun setupView() {
-        binding?.newGameTitle?.text = arguments?.getString(KEY_TITLE)
-    }
+    private fun setupView() { binding?.newGameTitle?.text = arguments?.getString(KEY_TITLE) }
 
     private fun createSpinner(dropList: MutableList<String>) {
         val spinnerDropdown = binding?.pickDifficultyDropdown

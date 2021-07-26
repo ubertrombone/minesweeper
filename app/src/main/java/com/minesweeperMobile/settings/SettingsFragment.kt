@@ -76,9 +76,7 @@ class SettingsFragment : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    private fun setupView() {
-        binding?.settingsTitle?.text = arguments?.getString(KEY_TITLE)
-    }
+    private fun setupView() { binding?.settingsTitle?.text = arguments?.getString(KEY_TITLE) }
 
     private fun createSpinnerForLaunch(dropList: List<String>) {
         val spinnerDropdown = binding?.setDifficultyDropdown
@@ -118,9 +116,8 @@ class SettingsFragment : DialogFragment() {
 
     private fun mineSwitchWarning() {
         if (binding?.mineAssistSwitch?.isChecked == true) {
-            val supportFragmentManager = childFragmentManager
             WarningFragment.newInstance(getString(R.string.warning).uppercase())
-                .show(supportFragmentManager, WarningFragment.TAG)
+                .show(childFragmentManager, WarningFragment.TAG)
         }
     }
 

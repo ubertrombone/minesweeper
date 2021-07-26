@@ -145,9 +145,8 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun createUsernameDialog() {
-        val supportFragmentManager = childFragmentManager
         UsernameFragment.newInstance(getString(R.string.username_title))
-            .show(supportFragmentManager, NewGameFragment.TAG)
+            .show(childFragmentManager, UsernameFragment.TAG)
     }
 
     private fun startGame(view: View) {
@@ -458,9 +457,8 @@ class MinesweeperFragment: Fragment() {
 
     private fun gameOverMessage(message: Int) {
         binding?.timeCounter?.stop()
-        val supportFragmentManager = childFragmentManager
         FinalMessageFragment.newInstance(getString(message), getString(R.string.time, binding?.timeCounter?.text))
-            .show(supportFragmentManager, FinalMessageFragment.TAG)
+            .show(childFragmentManager, FinalMessageFragment.TAG)
     }
 
     fun exitGame() = (0 until sharedViewModel.width * sharedViewModel.height)
@@ -569,11 +567,10 @@ class MinesweeperFragment: Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(R.menu.new_game_menu, menu)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val supportFragmentManager = childFragmentManager
         return when (item.itemId) {
             R.id.new_game_button -> {
                 NewGameFragment.newInstance(getString(R.string.new_game))
-                    .show(supportFragmentManager, NewGameFragment.TAG)
+                    .show(childFragmentManager, NewGameFragment.TAG)
                 true
             }
             R.id.sign_out -> {
@@ -583,16 +580,16 @@ class MinesweeperFragment: Fragment() {
             }
             R.id.settings -> {
                 SettingsFragment.newInstance(getString(R.string.settings))
-                    .show(supportFragmentManager, SettingsFragment.TAG)
+                    .show(childFragmentManager, SettingsFragment.TAG)
                 true
             }
             R.id.results -> {
                 ResultsFragment.newInstance(sharedViewModel.usernameFromDB.uppercase())
-                    .show(supportFragmentManager, ResultsFragment.TAG)
+                    .show(childFragmentManager, ResultsFragment.TAG)
                 true
             }
             R.id.leader_board -> {
-                LeaderBoardFragment.newInstance().show(supportFragmentManager, LeaderBoardFragment.TAG)
+                LeaderBoardFragment.newInstance().show(childFragmentManager, LeaderBoardFragment.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)

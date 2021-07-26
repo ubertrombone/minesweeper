@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.minesweeperMobile.R
 import com.minesweeperMobile.databinding.FragmentWarningBinding
 import com.minesweeperMobile.model.MinesweeperViewModel
 

@@ -26,9 +26,7 @@ class LeaderBoardObjectFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: LeaderBoardObjectAdapter
 
-    companion object {
-        const val ARG_OBJECT = "object"
-    }
+    companion object { const val ARG_OBJECT = "object" }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val fragmentBinding = FragmentLeaderBoardObjectBinding.inflate(inflater, container, false)
