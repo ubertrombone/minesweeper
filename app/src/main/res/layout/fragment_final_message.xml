@@ -63,6 +63,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextView"
                 android:layout_marginStart="18dp"
+                android:layout_marginBottom="4dp"
                 android:textColor="@color/black"
                 android:text="@string/fastest_time"
                 android:textStyle="bold"
@@ -76,7 +77,6 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextView"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
                 android:textColor="@color/black"
                 tools:text="Moves: 2"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +88,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextView"
                 android:layout_marginStart="18dp"
+                android:layout_marginBottom="4dp"
                 android:textColor="@color/black"
                 android:text="@string/fewest_moves"
                 android:textStyle="bold"
@@ -101,7 +102,6 @@
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.TextView"
                     android:layout_marginStart="18dp"
-                    android:layout_marginTop="4dp"
                     android:textColor="@color/black"
                     tools:text="Streak: 1"
                     app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +113,7 @@
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.TextView"
                     android:layout_marginStart="18dp"
+                    android:layout_marginBottom="4dp"
                     android:textColor="@color/black"
                     android:text="@string/longest_streak"
                     android:textStyle="bold"
@@ -157,7 +158,7 @@
                 android:textColor="@color/black"
                 tools:text="Games Played: 1,654"
                 app:layout_constraintStart_toStartOf="@id/complexity"
-                app:layout_constraintTop_toTopOf="@id/time_record" />
+                app:layout_constraintTop_toTopOf="@id/moves" />
 
             <TextView
                 android:id="@+id/win_percentage"
@@ -165,11 +166,10 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextView"
                 android:layout_marginEnd="18dp"
-                android:layout_marginTop="4dp"
                 android:textColor="@color/black"
                 tools:text="Win %: 4.2%"
                 app:layout_constraintStart_toStartOf="@id/complexity"
-                app:layout_constraintTop_toBottomOf="@id/games_played" />
+                app:layout_constraintTop_toTopOf="@id/current_streak" />
 
             <Button
                 android:id="@+id/yes"
