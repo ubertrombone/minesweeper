@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".newgame.NewGameFragment">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.minesweeperMobile.model.MinesweeperViewModel"/>
+        <variable
+                name="forfeitWarningFragment"
+                type="com.minesweeperMobile.minesweeper.ForfeitWarningFragment"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_rounded_cyan">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dialog_rounded"
+                android:layout_margin="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                    android:id="@+id/forfeit_warning_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextView"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="12dp"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textAllCaps="true"
+                    android:textColor="@color/cyan_dark"
+                    tools:text="Warning!"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                    android:id="@+id/forfeit_warning_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/forfeit_warning"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/forfeit_warning_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                    android:id="@+id/forfeit_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    android:textColor="@color/gray_dark"
+                    android:backgroundTint="@color/cyan_900"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp"
+                    android:onClick="@{() -> forfeitWarningFragment.onConfirm()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/forfeit_warning_text" />
+
+            <Button
+                    android:id="@+id/forfeit_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel"
+                    android:textColor="@color/gray_dark"
+                    android:backgroundTint="@color/cyan_900"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp"
+                    android:onClick="@{() -> forfeitWarningFragment.dismiss()}"
+                    app:layout_constraintEnd_toStartOf="@id/forfeit_confirm"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/forfeit_warning_text" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

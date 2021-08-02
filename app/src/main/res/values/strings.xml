@@ -67,4 +67,6 @@
     <string name="mine_warning">Games using Mine Assist won\'t be recorded.</string>
     <string name="continue_">continue</string>
     <string name="warning">Warning!</string>
+    <string name="forfeit">Forfeit?</string>
+    <string name="forfeit_warning">If you select OK, your current game will be forfeited</string>
 </resources>

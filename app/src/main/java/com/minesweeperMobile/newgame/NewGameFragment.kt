@@ -15,6 +15,8 @@ import com.minesweeperMobile.R
 import com.minesweeperMobile.databinding.FragmentNewGameBinding
 import com.minesweeperMobile.helperclasses.InputFilterMinMax
 import com.minesweeperMobile.helperclasses.MaterialSpinnerAdapter
+import com.minesweeperMobile.minesweeper.ForfeitWarningFragment
+import com.minesweeperMobile.minesweeper.MinesweeperFragment
 import java.lang.NumberFormatException
 
 class NewGameFragment: DialogFragment() {
@@ -26,6 +28,7 @@ class NewGameFragment: DialogFragment() {
     companion object {
         const val TAG = "NewGameFragment"
         private const val KEY_TITLE = "KEY_TITLE"
+        var dropdownValueForForfeit = ""
 
         fun newInstance(title: String): NewGameFragment {
             val args = Bundle()
@@ -128,13 +131,21 @@ class NewGameFragment: DialogFragment() {
                 }
             }
             else -> {
-                sharedViewModel.setDifficulty(dropdownValue)
+                dropdownValueForForfeit = dropdownValue
+                if (sharedViewModel.firstMoveSwitch != 0) {
+                    ForfeitWarningFragment.newInstance(getString(R.string.forfeit), TAG)
+                        .show(childFragmentManager, ForfeitWarningFragment.TAG)
+                } else {
+                    sharedViewModel.setDifficulty(dropdownValue)
+                    dismiss()
+                }
                 orElse(height!!, heightField!!, width!!, widthField!!, mine!!, mineField!!, maxNumberOfMines,
                     errorOne = false, errorTwo = false)
-                dismiss()
             }
         }
     }
+
+    fun countTheLossInNewGame() = (parentFragment as MinesweeperFragment).countTheLoss(false)
 
     private fun orElse(height: TextInputEditText, heightField: TextInputLayout, width: TextInputEditText,
                        widthField: TextInputLayout, mines: TextInputEditText, mineField: TextInputLayout, max: Int,

@@ -17,6 +17,7 @@ import com.minesweeperMobile.R
 import com.minesweeperMobile.databinding.FragmentSettingsBinding
 import com.minesweeperMobile.helperclasses.MaterialSpinnerAdapter
 import com.minesweeperMobile.login.LoginFragment
+import com.minesweeperMobile.minesweeper.ForfeitWarningFragment
 import com.minesweeperMobile.minesweeper.MinesweeperFragment
 import com.minesweeperMobile.model.MinesweeperViewModel
 
@@ -25,6 +26,7 @@ class SettingsFragment : DialogFragment() {
     private val sharedViewModel: MinesweeperViewModel by activityViewModels()
     private var binding: FragmentSettingsBinding? = null
     private val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference(LoginFragment.userId)
+    private var mineAssistTurnedOn = false
 
     companion object {
         const val TAG = "SettingsFragment"
@@ -54,6 +56,7 @@ class SettingsFragment : DialogFragment() {
             settingsFragment = this@SettingsFragment
         }
 
+        mineAssistTurnedOn = sharedViewModel.mineAssistFAB
         binding?.rtlSwitch?.isChecked = sharedViewModel.fabButtonRTL
         binding?.mineAssistSwitch?.isChecked = sharedViewModel.mineAssistFAB
         setupView()
@@ -89,8 +92,13 @@ class SettingsFragment : DialogFragment() {
         if (sharedViewModel.mineAssistFAB != binding?.mineAssistSwitch?.isChecked) sharedViewModel.changeMineAssist(true)
         onMineAssistSwitch()
         onLaunchDifficultySet()
-        dismiss()
-        if (sharedViewModel.mineAssistChanged) (parentFragment as MinesweeperFragment).checkDifficulty()
+        if (!mineAssistTurnedOn && sharedViewModel.mineAssistFAB && sharedViewModel.firstMoveSwitch != 0)
+            ForfeitWarningFragment.newInstance(getString(R.string.forfeit), TAG)
+                .show(childFragmentManager, ForfeitWarningFragment.TAG)
+        else {
+            dismiss()
+            if (sharedViewModel.mineAssistChanged) (parentFragment as MinesweeperFragment).checkDifficulty()
+        }
     }
 
     private fun orientFABButtons() {
@@ -127,4 +135,7 @@ class SettingsFragment : DialogFragment() {
         mineAssistButton.isEnabled = sharedViewModel.mineAssistFAB
         mineAssistButton.visibility = if (sharedViewModel.mineAssistFAB) View.VISIBLE else View.GONE
     }
+
+    fun countTheLossInSettings() = (parentFragment as MinesweeperFragment).countTheLoss(false)
+    fun checkDifficultyInSettings() = (parentFragment as MinesweeperFragment).checkDifficulty()
 }
