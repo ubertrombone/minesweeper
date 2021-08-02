@@ -294,6 +294,15 @@ class MinesweeperViewModel: ViewModel() {
 
     fun mineAssistSettings(switch: Boolean) { _mineAssistFAB = switch }
 
+    fun getComplexity(): MutableList<Statistics> {
+        return when(_difficultySet.value) {
+            EASY.difficulty -> _easy
+            MEDIUM.difficulty -> _medium
+            HARD.difficulty -> _hard
+            else -> _expert
+        }
+    }
+
     init {
         _height = 15
         _width = 13
@@ -316,6 +325,8 @@ class MinesweeperViewModel: ViewModel() {
             _firstMoveSwitch ++
         }
     }
+
+    fun resetFirstMove() { _firstMoveSwitch = 0 }
 
     fun convertCoordsToNumber(coords: List<Int>) =
         if (coords[1] == 0) coords[0] else (coords[1]) * _width + coords[0]

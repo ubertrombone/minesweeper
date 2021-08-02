@@ -622,5 +622,18 @@ class MinesweeperFragment: Fragment() {
         }
     }
 
-    fun restartGameButtonClickListener() = checkDifficulty()
+    fun restartGameButtonClickListener() {
+        countTheLoss(false)
+        checkDifficulty()
+    }
+
+    fun countTheLoss(message: Boolean) {
+        if (sharedViewModel.firstMoveSwitch != 0) {
+            val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
+            val time = SystemClock.elapsedRealtime() - timeCounter?.base!!
+            sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, time, message)
+            println(sharedViewModel.getComplexity()[0])
+            database.child(sharedViewModel.difficultySet.value.toString()).setValue(sharedViewModel.getComplexity()[0])
+        }
+    }
 }

@@ -81,17 +81,7 @@ class FinalMessageFragment : DialogFragment() {
             return
         }
 
-        val complexity = when(sharedViewModel.difficultySet.value) {
-            EASY.difficulty -> sharedViewModel.easy
-            MEDIUM.difficulty -> sharedViewModel.medium
-            HARD.difficulty -> sharedViewModel.hard
-            else -> sharedViewModel.expert
-        }
-        val timeCounter = requireActivity().findViewById<Chronometer>(R.id.time_counter)
-        val time = SystemClock.elapsedRealtime() - timeCounter?.base!!
-        sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, time, arguments?.getString(KEY_TITLE) == getString(
-            R.string.win
-        ))
+        (parentFragment as MinesweeperFragment).countTheLoss(arguments?.getString(KEY_TITLE) == getString(R.string.win))
 
         binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
         binding?.time?.text = arguments?.getString(TIME)
@@ -104,17 +94,17 @@ class FinalMessageFragment : DialogFragment() {
             binding?.movesRecord?.visibility = View.VISIBLE
             sharedViewModel.setFewestMoves(false)
         }
-        binding?.currentStreak?.text = getString(R.string.statistics_current_streak, complexity[0].currentStreak)
+        binding?.currentStreak?.text = getString(R.string.statistics_current_streak, sharedViewModel.getComplexity()[0].currentStreak)
         if (sharedViewModel.longestStreak) {
             binding?.streakRecord?.visibility = View.VISIBLE
             sharedViewModel.setLongestStreak(false)
         }
         binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.value)
-        binding?.gamesPlayed?.text = getString(R.string.games_played, complexity[0].gamesPlayed.toString())
-        binding?.winPercentage?.text = getString(R.string.win_percentage, "%.2f".format(complexity[0].winPercentage * 100) + "%")
+        binding?.gamesPlayed?.text = getString(R.string.games_played, sharedViewModel.getComplexity()[0].gamesPlayed.toString())
+        binding?.winPercentage?.text = getString(R.string.win_percentage, "%.2f".format(sharedViewModel.getComplexity()[0].winPercentage * 100) + "%")
 
         val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference(LoginFragment.userId)
-        database.child(sharedViewModel.difficultySet.value.toString()).setValue(complexity[0])
+        database.child(sharedViewModel.difficultySet.value.toString()).setValue(sharedViewModel.getComplexity()[0])
     }
 
     fun onYes() {
@@ -127,5 +117,6 @@ class FinalMessageFragment : DialogFragment() {
     fun closeDialog() {
         dismiss()
         (parentFragment as MinesweeperFragment).exitGame()
+        sharedViewModel.resetFirstMove()
     }
 }
