@@ -89,8 +89,9 @@ class SettingsFragment : DialogFragment() {
 
     private fun saveSettings() = binding?.save?.setOnClickListener {
         onSwitchClicked()
-        if (sharedViewModel.mineAssistFAB != binding?.mineAssistSwitch?.isChecked) sharedViewModel.changeMineAssist(true)
         onMineAssistSwitch()
+        if (sharedViewModel.mineAssistFAB != mineAssistTurnedOn) sharedViewModel.changeMineAssist(true)
+        else sharedViewModel.changeMineAssist(false)
         onLaunchDifficultySet()
         if (!mineAssistTurnedOn && sharedViewModel.mineAssistFAB && sharedViewModel.firstMoveSwitch != 0)
             ForfeitWarningFragment.newInstance(getString(R.string.forfeit), TAG)
