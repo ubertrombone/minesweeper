@@ -105,8 +105,14 @@ class MinesweeperFragment: Fragment() {
         sharedViewModel.fabButtonSettings(children["RTL"].toString().toBoolean())
         binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
 
-        sharedViewModel.setDifficulty(children["DefaultDifficulty"].toString())
-        sharedViewModel.setDifficultyHolder(children["DefaultDifficulty"].toString())
+        sharedViewModel.setDifficulty(
+            if (children["DefaultDifficulty"].toString() == "null") MEDIUM.difficulty
+            else children["DefaultDifficulty"].toString()
+        )
+        sharedViewModel.setDifficultyHolder(
+            if (children["DefaultDifficulty"].toString() == "null") MEDIUM.difficulty
+            else children["DefaultDifficulty"].toString()
+        )
 
         sharedViewModel.mineAssistSettings(children["MineAssist"].toString().toBoolean())
         binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB
@@ -633,11 +639,12 @@ class MinesweeperFragment: Fragment() {
     }
 
     fun countTheLoss(message: Boolean) {
+        if (sharedViewModel.difficultySet.value == CUSTOM.difficulty) return
         if (sharedViewModel.firstMoveSwitch != 0) {
             val timeCounter = requireView().findViewById<Chronometer>(R.id.time_counter)
             val time = SystemClock.elapsedRealtime() - timeCounter?.base!!
             sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, time, message)
-            database.child(sharedViewModel.difficultySet.value.toString()).setValue(sharedViewModel.getComplexity()[0])
+            database.child(sharedViewModel.difficultySet.value!!).setValue(sharedViewModel.getComplexity()[0])
         }
     }
 }

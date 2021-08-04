@@ -106,6 +106,7 @@ class NewGameFragment: DialogFragment() {
         val maxNumberOfMines = try {
             height?.text.toString().toInt() * width?.text.toString().toInt() - 1
         } catch (e: NumberFormatException) { 0 }
+        dropdownValueForForfeit = dropdownValue
 
         when (dropdownValue) {
             CUSTOM.difficulty -> {
@@ -123,25 +124,27 @@ class NewGameFragment: DialogFragment() {
                         sharedViewModel.setHeight(height?.text.toString().toInt())
                         sharedViewModel.setWidth(width?.text.toString().toInt())
                         sharedViewModel.setMines(mine?.text.toString().toInt())
-                        sharedViewModel.setDifficulty(dropdownValue)
+                        isItAForfeit(dropdownValue)
                         orElse(height!!, heightField!!, width!!, widthField!!, mine!!, mineField!!, maxNumberOfMines,
                             errorOne = false, errorTwo = false)
-                        dismiss()
                     }
                 }
             }
             else -> {
-                dropdownValueForForfeit = dropdownValue
-                if (sharedViewModel.firstMoveSwitch != 0) {
-                    ForfeitWarningFragment.newInstance(getString(R.string.forfeit), TAG)
-                        .show(childFragmentManager, ForfeitWarningFragment.TAG)
-                } else {
-                    sharedViewModel.setDifficulty(dropdownValue)
-                    dismiss()
-                }
+                isItAForfeit(dropdownValue)
                 orElse(height!!, heightField!!, width!!, widthField!!, mine!!, mineField!!, maxNumberOfMines,
                     errorOne = false, errorTwo = false)
             }
+        }
+    }
+
+    private fun isItAForfeit(dropdownValue: String) {
+        if (sharedViewModel.firstMoveSwitch != 0) {
+            ForfeitWarningFragment.newInstance(getString(R.string.forfeit), TAG)
+                .show(childFragmentManager, ForfeitWarningFragment.TAG)
+        } else {
+            sharedViewModel.setDifficulty(dropdownValue)
+            dismiss()
         }
     }
 
