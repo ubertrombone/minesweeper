@@ -74,12 +74,12 @@ class ForfeitWarningFragment : DialogFragment() {
             SettingsFragment.TAG -> {
                 (parentFragment as SettingsFragment).dismiss()
                 (parentFragment as SettingsFragment).countTheLossInSettings()
-                if (sharedViewModel.mineAssistChanged) (parentFragment as SettingsFragment).checkDifficultyInSettings()
+                if (sharedViewModel.mineAssistChanged.value) (parentFragment as SettingsFragment).checkDifficultyInSettings()
             }
             NewGameFragment.TAG -> {
                 (parentFragment as NewGameFragment).dismiss()
                 (parentFragment as NewGameFragment).countTheLossInNewGame()
-                sharedViewModel.setDifficulty(NewGameFragment.dropdownValueForForfeit)
+                sharedViewModel.difficultySet.changeValue(NewGameFragment.dropdownValueForForfeit)
             }
         }
     }

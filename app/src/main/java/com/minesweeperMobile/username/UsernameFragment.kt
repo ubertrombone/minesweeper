@@ -58,8 +58,8 @@ class UsernameFragment : DialogFragment() {
             usernameFragment = this@UsernameFragment
         }
 
-        if (!sharedViewModel.usernameSwitch) dismiss()
-        sharedViewModel.changeUsernameSwitch(true)
+        if (!sharedViewModel.usernameSwitch.value) dismiss()
+        sharedViewModel.usernameSwitch.changeValue(true)
         setupView()
         usernamesDatabase.addListenerForSingleValueEvent(readDatabase())
     }
@@ -94,9 +94,9 @@ class UsernameFragment : DialogFragment() {
         } else usernameProfane(usernameInput, usernameField, false)
 
         if (!sharedViewModel.checkUsernameUniqueness(usernameInput.text.toString())) {
-            sharedViewModel.setUsername(usernameInput.text.toString())
+            sharedViewModel.usernameFromDB.changeValue(usernameInput.text.toString())
             database.child("username").setValue(sharedViewModel.usernameFromDB)
-            usernamesDatabase.child(sharedViewModel.usernameFromDB).setValue(sharedViewModel.usernameFromDB)
+            usernamesDatabase.child(sharedViewModel.usernameFromDB.value).setValue(sharedViewModel.usernameFromDB)
             usernameExists(usernameInput, usernameField, false)
             dismiss()
         } else {

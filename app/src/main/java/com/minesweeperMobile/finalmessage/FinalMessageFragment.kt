@@ -70,11 +70,11 @@ class FinalMessageFragment : DialogFragment() {
 
     private fun setupView() {
 
-        if (sharedViewModel.difficultySet.value == CUSTOM.difficulty || sharedViewModel.mineAssistFAB) {
+        if (sharedViewModel.difficultySet.dataValue.value == CUSTOM.difficulty || sharedViewModel.mineAssistFAB.value) {
             binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
             binding?.time?.text = arguments?.getString(TIME)
-            binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter)
-            binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.value)
+            binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter.value)
+            binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.dataValue.value)
             binding?.currentStreak?.visibility = View.GONE
             binding?.gamesPlayed?.visibility = View.GONE
             binding?.winPercentage?.visibility = View.GONE
@@ -85,26 +85,26 @@ class FinalMessageFragment : DialogFragment() {
 
         binding?.finalMessageTitle?.text = arguments?.getString(KEY_TITLE)
         binding?.time?.text = arguments?.getString(TIME)
-        if (sharedViewModel.fastestGame){
+        if (sharedViewModel.fastestGame.value){
             binding?.timeRecord?.visibility = View.VISIBLE
-            sharedViewModel.setFastestGame(false)
+            sharedViewModel.fastestGame.changeValue(false)
         }
-        binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter)
-        if (sharedViewModel.fewestMoves) {
+        binding?.moves?.text = getString(R.string.moves, sharedViewModel.moveCounter.value)
+        if (sharedViewModel.fewestMoves.value) {
             binding?.movesRecord?.visibility = View.VISIBLE
-            sharedViewModel.setFewestMoves(false)
+            sharedViewModel.fewestMoves.changeValue(false)
         }
         binding?.currentStreak?.text = getString(R.string.statistics_current_streak, sharedViewModel.getComplexity()[0].currentStreak)
-        if (sharedViewModel.longestStreak) {
+        if (sharedViewModel.longestStreak.value) {
             binding?.streakRecord?.visibility = View.VISIBLE
-            sharedViewModel.setLongestStreak(false)
+            sharedViewModel.longestStreak.changeValue(false)
         }
-        binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.value)
+        binding?.complexity?.text = getString(R.string.complexities, sharedViewModel.difficultySet.dataValue.value)
         binding?.gamesPlayed?.text = getString(R.string.games_played, sharedViewModel.getComplexity()[0].gamesPlayed.toString())
         binding?.winPercentage?.text = getString(R.string.win_percentage, "%.2f".format(sharedViewModel.getComplexity()[0].winPercentage * 100) + "%")
 
         val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference(LoginFragment.userId)
-        database.child(sharedViewModel.difficultySet.value.toString()).setValue(sharedViewModel.getComplexity()[0])
+        database.child(sharedViewModel.difficultySet.dataValue.value.toString()).setValue(sharedViewModel.getComplexity()[0])
     }
 
     fun onYes() {

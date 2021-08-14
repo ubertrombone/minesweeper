@@ -78,7 +78,7 @@ class LeaderBoardFragment : DialogFragment() {
         setSelected(textView, MEDIUM.difficulty, R.id.medium_constraint)
         setSelected(textView, HARD.difficulty, R.id.hard_constraint)
         setSelected(textView, EXPERT.difficulty, R.id.expert_constraint)
-        sharedViewModel.setLeaderBoardComplexitySelection(textView.text.toString())
+        sharedViewModel.leaderBoardComplexitySelection.changeValue(textView.text.toString())
     }
 
     private fun setSelected(textView: TextView, difficulty: String, id: Int) {

@@ -78,8 +78,8 @@ class MinesweeperFragment: Fragment() {
     private fun queryUserFromDatabase() {
         database.addListenerForSingleValueEvent(readDatabase("user"))
 
-        if (!sharedViewModel.startSwitch) {
-            sharedViewModel.changeStartSwitch(true)
+        if (!sharedViewModel.startSwitch.value) {
+            sharedViewModel.startSwitch.changeValue(true)
             return
         }
 
@@ -100,28 +100,28 @@ class MinesweeperFragment: Fragment() {
         val children = mutableMapOf<String, String>()
         dataSnapshot.children.forEach { child -> children[child.key.toString()] = child.value.toString() }
 
-        sharedViewModel.getUser(children["userLog"].toString().toBoolean())
+        sharedViewModel.user.changeValue(children["userLog"].toString().toBoolean())
 
-        sharedViewModel.fabButtonSettings(children["RTL"].toString().toBoolean())
-        binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+        sharedViewModel.fabButtonRTL.changeValue(children["RTL"].toString().toBoolean())
+        binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL.value) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
 
-        sharedViewModel.setDifficulty(
+        sharedViewModel.difficultySet.changeValue(
             if (children["DefaultDifficulty"].toString() == "null") MEDIUM.difficulty
             else children["DefaultDifficulty"].toString()
         )
-        sharedViewModel.setDifficultyHolder(
+        sharedViewModel.difficultyHolder.changeValue(
             if (children["DefaultDifficulty"].toString() == "null") MEDIUM.difficulty
             else children["DefaultDifficulty"].toString()
         )
 
-        sharedViewModel.mineAssistSettings(children["MineAssist"].toString().toBoolean())
-        binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB
-        if (sharedViewModel.mineAssistFAB) binding?.fabMine?.visibility = View.VISIBLE
+        sharedViewModel.mineAssistFAB.changeValue(children["MineAssist"].toString().toBoolean())
+        binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB.value
+        if (sharedViewModel.mineAssistFAB.value) binding?.fabMine?.visibility = View.VISIBLE
 
-        sharedViewModel.getUsername(children.keys.contains("username"))
-        try { if (sharedViewModel.username.value == false) createUsernameDialog() } catch (e: IllegalStateException) {}
+        sharedViewModel.username.changeValue(children.keys.contains("username"))
+        try { if (sharedViewModel.username.dataValue.value == false) createUsernameDialog() } catch (e: IllegalStateException) {}
 
-        if (children.keys.contains("username")) sharedViewModel.setUsername(children["username"].toString())
+        if (children.keys.contains("username")) sharedViewModel.usernameFromDB.changeValue(children["username"].toString())
     }
 
     private fun pickUpComplexitiesFromDatabase(dataSnapshot: DataSnapshot) {
@@ -143,11 +143,11 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun observeUserState() {
-        sharedViewModel.user.observe(viewLifecycleOwner) {
+        sharedViewModel.user.dataValue.observe(viewLifecycleOwner) {
             if (!it) findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
         }
 
-        sharedViewModel.username.observe(viewLifecycleOwner) { if (!it) createUsernameDialog() }
+        sharedViewModel.username.dataValue.observe(viewLifecycleOwner) { if (!it) createUsernameDialog() }
     }
 
     private fun createUsernameDialog() {
@@ -157,23 +157,23 @@ class MinesweeperFragment: Fragment() {
 
     private fun startGame(view: View) {
         checkIfWinMessageHasAlreadyAppeared = false
-        binding?.mineCounter?.text = sharedViewModel.howManyMines.toString()
+        binding?.mineCounter?.text = sharedViewModel.howManyMines.value.toString()
         val mainLinearLayout = binding?.mineLay as LinearLayout
-        (0 until sharedViewModel.height).forEach { i ->
+        (0 until sharedViewModel.height.value).forEach { i ->
             val rowLinearLayout = LinearLayout(requireContext())
             rowLinearLayout.orientation = LinearLayout.HORIZONTAL
-            (0 until sharedViewModel.width).forEach { j ->
+            (0 until sharedViewModel.width.value).forEach { j ->
                 val params = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
                 val displayMetrics = DisplayMetrics()
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) activity?.display?.getRealMetrics(displayMetrics)
                 else @Suppress("DEPRECATION") activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
 
-                val displayWidth = ((displayMetrics.widthPixels - (displayMetrics.widthPixels *.1)) / sharedViewModel.width).roundToInt()
+                val displayWidth = ((displayMetrics.widthPixels - (displayMetrics.widthPixels *.1)) / sharedViewModel.width.value).roundToInt()
 
                 if (displayWidth < 62) {
-                    params.height = getParams(sharedViewModel.width)
-                    params.width = getParams(sharedViewModel.width)
+                    params.height = getParams(sharedViewModel.width.value)
+                    params.width = getParams(sharedViewModel.width.value)
                 } else {
                     params.height = displayWidth
                     params.width = displayWidth
@@ -204,7 +204,7 @@ class MinesweeperFragment: Fragment() {
     private fun setupUICardView(i: Int, j: Int, params: ViewGroup.LayoutParams): CardView {
         val cardView = CardView(requireContext())
         cardView.setContentPadding(0, 0, 0, 0)
-        cardView.id = if (i == 0) j else sharedViewModel.width * i + j
+        cardView.id = if (i == 0) j else sharedViewModel.width.value * i + j
         cardView.setBackgroundColor(getColor(requireContext(), sharedViewModel.getCardBackgroundColor(cardView.id,
             R.color.cyan_900,
             R.color.cyan_dark
@@ -222,10 +222,10 @@ class MinesweeperFragment: Fragment() {
     private fun sharedViewModelSetters(cardView: CardView) {
         try { resetBackgroundColorAfterSelection() } catch (e: ClassCastException) {}
 
-        sharedViewModel.getSelectedCardId(cardView.id)
+        sharedViewModel.selectedCardId.changeValue(cardView.id)
         // ID is zeroed and needs to be offset by 1 when converting to coords
         sharedViewModel.getCurrentCoords(cardView.id + 1)
-        sharedViewModel.getSelectedCellBackgroundId(cardView.id + 2500)
+        sharedViewModel.selectedCellBackgroundId.changeValue(cardView.id + 2500)
     }
 
     private fun getCoordsAndSetupClickListeners(view: View, cardView: CardView, shortClick: Boolean) {
@@ -239,12 +239,12 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun onShortClickListener(view: View, coords: List<Int>, coordsValue: String, cardView: CardView) {
-        val findViewOfCurrentSelected = view.findViewById<CardView>(sharedViewModel.selectedCardId)
+        val findViewOfCurrentSelected = view.findViewById<CardView>(sharedViewModel.selectedCardId.value)
         findViewOfCurrentSelected.setBackgroundColor(getColor(requireContext(), R.color.red_200))
         val possibleImageId = requireActivity().findViewById<ImageView>(sharedViewModel.getFlagId())
 
         when {
-            sharedViewModel.firstMoveSwitch == 0 -> clickTheShovel()
+            sharedViewModel.firstMoveSwitch.value == 0 -> clickTheShovel()
             sharedViewModel.listOfSelections.contains(coords) && !sharedViewModel.listOfFlags.contains(coords) && sharedViewModel.listOfNumbers.contains(coordsValue) -> {
                 onClickSettings(.25F, false, 1F, true, shovelSwitch = true)
             }
@@ -255,11 +255,11 @@ class MinesweeperFragment: Fragment() {
 
     private fun onLongClickListener(coords: List<Int>, coordsValue: String, cardView: CardView) {
         when {
-            sharedViewModel.firstMoveSwitch == 0 -> clickTheShovel()
+            sharedViewModel.firstMoveSwitch.value == 0 -> clickTheShovel()
             sharedViewModel.listOfSelections.contains(coords) && !sharedViewModel.listOfFlags.contains(coords) && sharedViewModel.listOfNumbers.contains(coordsValue) -> {
                 buttonSelect()
                 onEmptySelected(sharedViewModel.currentCoords[0], sharedViewModel.currentCoords[1], true)
-                sharedViewModel.incrementMoveCounter()
+                sharedViewModel.moveCounter.increment()
             }
             else -> {
                 buttonSelect()
@@ -281,7 +281,7 @@ class MinesweeperFragment: Fragment() {
         fabFlagSettings(.25F, false)
         fabAxeSettings(.25F, false)
         try {
-            requireActivity().findViewById<ImageView>(sharedViewModel.selectedCellBackgroundId).visibility = View.GONE
+            requireActivity().findViewById<ImageView>(sharedViewModel.selectedCellBackgroundId.value).visibility = View.GONE
         } catch (e: ClassCastException) {}
         catch (e: NullPointerException) {}
     }
@@ -297,19 +297,19 @@ class MinesweeperFragment: Fragment() {
     }
 
     fun clickTheShovel() {
-        sharedViewModel.incrementMoveCounter()
+        sharedViewModel.moveCounter.increment()
 
         try {
-            val cardView = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId)
+            val cardView = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId.value)
             val findViewOfPrevious = requireActivity().findViewById<ImageView>(2273546327529688.toInt())
             cardView.removeView(findViewOfPrevious)
         } catch (e: ClassCastException) {}
 
-        if (sharedViewModel.firstMoveSwitch == 0) {
+        if (sharedViewModel.firstMoveSwitch.value == 0) {
             binding?.timeCounter?.base = SystemClock.elapsedRealtime()
             binding?.timeCounter?.start()
         }
-        sharedViewModel.move(sharedViewModel.selectedCardId)
+        sharedViewModel.move(sharedViewModel.selectedCardId.value)
         buttonSelect()
 
         if (shovelEmptySwitch) {
@@ -337,8 +337,8 @@ class MinesweeperFragment: Fragment() {
 
     private fun addImageView(image: Int, numberOrNot: Boolean) {
         // all of these image views will have their ID the same as the cardView + 7500
-        createCardAndImage(image, sharedViewModel.selectedCardId, 7500, true)
-        if (sharedViewModel.listOfSelections.distinct().size + sharedViewModel.mineCounter == sharedViewModel.height * sharedViewModel.width) {
+        createCardAndImage(image, sharedViewModel.selectedCardId.value, 7500, true)
+        if (sharedViewModel.listOfSelections.distinct().size + sharedViewModel.mineCounter.value == sharedViewModel.height.value * sharedViewModel.width.value) {
             if (numberOrNot) gameOverMessage(R.string.win)
         }
     }
@@ -367,7 +367,7 @@ class MinesweeperFragment: Fragment() {
 
                 val cardView = requireActivity().findViewById<CardView>(sharedViewModel.convertCoordsToNumber(coords))
                 if (cardView.isClickable) {
-                    sharedViewModel.incrementMoveCounter()
+                    sharedViewModel.moveCounter.increment()
                     onEmptySelected(j, i, true)
                 }
             } }
@@ -380,7 +380,7 @@ class MinesweeperFragment: Fragment() {
 
         if (!mineSelectedOnEmptySwitch) {
             addImageView(R.drawable.gnome_gnomine__2_, false)
-            mines.remove(sharedViewModel.selectedCardId)
+            mines.remove(sharedViewModel.selectedCardId.value)
         }
 
         var minesLeft = sharedViewModel.mineLocations.size
@@ -429,7 +429,7 @@ class MinesweeperFragment: Fragment() {
             }
         }
 
-        if (sharedViewModel.listOfSelections.distinct().size + sharedViewModel.mineCounter == sharedViewModel.height * sharedViewModel.width) {
+        if (sharedViewModel.listOfSelections.distinct().size + sharedViewModel.mineCounter.value == sharedViewModel.height.value * sharedViewModel.width.value) {
             if (checkIfWinMessageHasAlreadyAppeared) return else checkIfWinMessageHasAlreadyAppeared = true
             gameOverMessage(R.string.win)
         }
@@ -447,7 +447,7 @@ class MinesweeperFragment: Fragment() {
 
     private fun setEmptyBackground(card: Int) {
         val cardView = createCardView(card, background = true, clickable = false)
-        cardView.removeView(requireView().findViewById(sharedViewModel.selectedCardId + 5000))
+        cardView.removeView(requireView().findViewById(sharedViewModel.selectedCardId.value + 5000))
     }
 
     private fun createCardView(card: Int, background: Boolean, clickable: Boolean): CardView {
@@ -467,14 +467,14 @@ class MinesweeperFragment: Fragment() {
             .show(childFragmentManager, FinalMessageFragment.TAG)
     }
 
-    fun exitGame() = (0 until sharedViewModel.width * sharedViewModel.height)
+    fun exitGame() = (0 until sharedViewModel.width.value * sharedViewModel.height.value)
         .forEach { makeClickable(sharedViewModel.convertNumberToCoords(it + 1), false) }
 
     fun clickTheFlag() {
-        sharedViewModel.move(sharedViewModel.selectedCardId)
+        sharedViewModel.move(sharedViewModel.selectedCardId.value)
         buttonSelect()
 
-        val cardView = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId)
+        val cardView = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId.value)
         val possibleImageId = requireActivity().findViewById<ImageView>(sharedViewModel.getFlagId())
         val coords = sharedViewModel.currentCoords
 
@@ -487,10 +487,10 @@ class MinesweeperFragment: Fragment() {
 
         val imageView = createImageView(R.drawable.flag_in_game)
         // flag ID will be card ID + 5000
-        imageView.id = sharedViewModel.selectedCardId + 5000
+        imageView.id = sharedViewModel.selectedCardId.value + 5000
         cardView.addView(imageView)
         checkAroundTheFlags()
-        sharedViewModel.incrementMoveCounter()
+        sharedViewModel.moveCounter.increment()
         resetBackgroundColorAfterSelection()
     }
 
@@ -498,14 +498,14 @@ class MinesweeperFragment: Fragment() {
         checkAroundRemovedFlags()
         sharedViewModel.removeFlag(sharedViewModel.listOfFlags, coords, sharedViewModel.minefieldWithNumbers[y][x])
         cardView.removeView(imageView)
-        sharedViewModel.incrementMoveCounter()
+        sharedViewModel.moveCounter.increment()
         resetBackgroundColorAfterSelection()
     }
 
     private fun resetBackgroundColorAfterSelection() {
-        val findViewOfPreviouslySelected = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId)
+        val findViewOfPreviouslySelected = requireActivity().findViewById<CardView>(sharedViewModel.selectedCardId.value)
         findViewOfPreviouslySelected.setBackgroundColor(getColor(requireContext(), sharedViewModel.refreshedBackgroundColor(
-            sharedViewModel.selectedCardId, R.color.cyan_900, R.color.cyan_dark, R.color.gray_400, R.color.gray_dark
+            sharedViewModel.selectedCardId.value, R.color.cyan_900, R.color.cyan_dark, R.color.gray_400, R.color.gray_dark
         )))
     }
 
@@ -580,8 +580,8 @@ class MinesweeperFragment: Fragment() {
                 true
             }
             R.id.sign_out -> {
-                sharedViewModel.getUser(false)
-                database.child("userLog").setValue(sharedViewModel.user.value)
+                sharedViewModel.user.changeValue(false)
+                database.child("userLog").setValue(sharedViewModel.user.dataValue.value)
                 true
             }
             R.id.settings -> {
@@ -590,7 +590,7 @@ class MinesweeperFragment: Fragment() {
                 true
             }
             R.id.results -> {
-                ResultsFragment.newInstance(sharedViewModel.usernameFromDB.uppercase())
+                ResultsFragment.newInstance(sharedViewModel.usernameFromDB.value.uppercase())
                     .show(childFragmentManager, ResultsFragment.TAG)
                 true
             }
@@ -603,8 +603,8 @@ class MinesweeperFragment: Fragment() {
     }
 
     private fun observeMineCounter() {
-        sharedViewModel.mineCounterUI.observe(viewLifecycleOwner) { binding?.mineCounter?.text = it.toString() }
-        sharedViewModel.difficultySet.observe(viewLifecycleOwner) { checkDifficulty() }
+        sharedViewModel.mineCounterUI.dataValue.observe(viewLifecycleOwner) { binding?.mineCounter?.text = it.toString() }
+        sharedViewModel.difficultySet.dataValue.observe(viewLifecycleOwner) { checkDifficulty() }
     }
 
     private fun restartGame(height: Int, width: Int, numberOfMines: Int) {
@@ -619,12 +619,12 @@ class MinesweeperFragment: Fragment() {
     }
 
     fun checkDifficulty() {
-        when (sharedViewModel.getDifficultySet()) {
+        when (sharedViewModel.difficultySet.dataValue.value.toString()) {
             EASY.difficulty -> restartGame(10, 10, 10)
             MEDIUM.difficulty -> restartGame(15, 13, 40)
             HARD.difficulty -> restartGame(27, 14, 75)
             EXPERT.difficulty -> restartGame(30, 16, 99)
-            CUSTOM.difficulty -> restartGame(sharedViewModel.height, sharedViewModel.width, sharedViewModel.howManyMines)
+            CUSTOM.difficulty -> restartGame(sharedViewModel.height.value, sharedViewModel.width.value, sharedViewModel.howManyMines.value)
         }
     }
 
@@ -639,12 +639,12 @@ class MinesweeperFragment: Fragment() {
     }
 
     fun countTheLoss(message: Boolean) {
-        if (sharedViewModel.difficultySet.value == CUSTOM.difficulty) return
-        if (sharedViewModel.firstMoveSwitch != 0) {
+        if (sharedViewModel.difficultySet.dataValue.value == CUSTOM.difficulty) return
+        if (sharedViewModel.firstMoveSwitch.value != 0) {
             val timeCounter = requireView().findViewById<Chronometer>(R.id.time_counter)
             val time = SystemClock.elapsedRealtime() - timeCounter?.base!!
-            sharedViewModel.updateComplexities(sharedViewModel.difficultySet.value!!, time, message)
-            database.child(sharedViewModel.difficultySet.value!!).setValue(sharedViewModel.getComplexity()[0])
+            sharedViewModel.updateComplexities(sharedViewModel.difficultySet.dataValue.value!!, time, message)
+            database.child(sharedViewModel.difficultySet.dataValue.value!!).setValue(sharedViewModel.getComplexity()[0])
         }
     }
 }

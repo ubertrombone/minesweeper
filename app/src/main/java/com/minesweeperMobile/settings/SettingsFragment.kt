@@ -56,12 +56,12 @@ class SettingsFragment : DialogFragment() {
             settingsFragment = this@SettingsFragment
         }
 
-        mineAssistTurnedOn = sharedViewModel.mineAssistFAB
-        binding?.rtlSwitch?.isChecked = sharedViewModel.fabButtonRTL
-        binding?.mineAssistSwitch?.isChecked = sharedViewModel.mineAssistFAB
+        mineAssistTurnedOn = sharedViewModel.mineAssistFAB.value
+        binding?.rtlSwitch?.isChecked = sharedViewModel.fabButtonRTL.value
+        binding?.mineAssistSwitch?.isChecked = sharedViewModel.mineAssistFAB.value
         setupView()
         createSpinnerForLaunch(sharedViewModel.listOfDifficulties.dropLast(1))
-        binding?.setDifficultyDropdown?.setText(sharedViewModel.difficultyHolder)
+        binding?.setDifficultyDropdown?.setText(sharedViewModel.difficultyHolder.value)
         saveSettings()
         binding?.mineAssistSwitch?.setOnClickListener { mineSwitchWarning() }
     }
@@ -90,22 +90,22 @@ class SettingsFragment : DialogFragment() {
     private fun saveSettings() = binding?.save?.setOnClickListener {
         onSwitchClicked()
         onMineAssistSwitch()
-        if (sharedViewModel.mineAssistFAB != mineAssistTurnedOn) sharedViewModel.changeMineAssist(true)
-        else sharedViewModel.changeMineAssist(false)
+        if (sharedViewModel.mineAssistFAB.value != mineAssistTurnedOn) sharedViewModel.mineAssistChanged.changeValue(true)
+        else sharedViewModel.mineAssistChanged.changeValue(false)
         onLaunchDifficultySet()
-        if (!mineAssistTurnedOn && sharedViewModel.mineAssistFAB && sharedViewModel.firstMoveSwitch != 0)
+        if (!mineAssistTurnedOn && sharedViewModel.mineAssistFAB.value && sharedViewModel.firstMoveSwitch.value != 0)
             ForfeitWarningFragment.newInstance(getString(R.string.forfeit), TAG)
                 .show(childFragmentManager, ForfeitWarningFragment.TAG)
         else {
             dismiss()
-            if (sharedViewModel.mineAssistChanged) (parentFragment as MinesweeperFragment).checkDifficulty()
+            if (sharedViewModel.mineAssistChanged.value) (parentFragment as MinesweeperFragment).checkDifficulty()
         }
     }
 
     private fun orientFABButtons() {
-        sharedViewModel.fabButtonSettings(binding?.rtlSwitch!!.isChecked)
+        sharedViewModel.fabButtonRTL.changeValue(binding?.rtlSwitch!!.isChecked)
         val fabButtons = requireActivity().findViewById<LinearLayout>(R.id.fab_buttons)
-        fabButtons.layoutDirection = if (sharedViewModel.fabButtonRTL) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+        fabButtons.layoutDirection = if (sharedViewModel.fabButtonRTL.value) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
     }
 
     private fun onSwitchClicked() {
@@ -115,7 +115,7 @@ class SettingsFragment : DialogFragment() {
 
     private fun onLaunchDifficultySet() {
         database.child("DefaultDifficulty").setValue(binding?.setDifficultyDropdown?.text.toString())
-        sharedViewModel.setDifficultyHolder(binding?.setDifficultyDropdown?.text.toString())
+        sharedViewModel.difficultyHolder.changeValue(binding?.setDifficultyDropdown?.text.toString())
     }
 
     private fun onMineAssistSwitch() {
@@ -131,10 +131,10 @@ class SettingsFragment : DialogFragment() {
     }
 
     private fun engageMineAssist() {
-        sharedViewModel.mineAssistSettings(binding?.mineAssistSwitch!!.isChecked)
+        sharedViewModel.mineAssistFAB.changeValue(binding?.mineAssistSwitch!!.isChecked)
         val mineAssistButton = requireActivity().findViewById<FloatingActionButton>(R.id.fab_mine)
-        mineAssistButton.isEnabled = sharedViewModel.mineAssistFAB
-        mineAssistButton.visibility = if (sharedViewModel.mineAssistFAB) View.VISIBLE else View.GONE
+        mineAssistButton.isEnabled = sharedViewModel.mineAssistFAB.value
+        mineAssistButton.visibility = if (sharedViewModel.mineAssistFAB.value) View.VISIBLE else View.GONE
     }
 
     fun countTheLossInSettings() = (parentFragment as MinesweeperFragment).countTheLoss(false)

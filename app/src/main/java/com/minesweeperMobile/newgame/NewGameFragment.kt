@@ -121,9 +121,9 @@ class NewGameFragment: DialogFragment() {
                             errorOne = true, errorTwo = false)
                     }
                     else -> {
-                        sharedViewModel.setHeight(height?.text.toString().toInt())
-                        sharedViewModel.setWidth(width?.text.toString().toInt())
-                        sharedViewModel.setMines(mine?.text.toString().toInt())
+                        sharedViewModel.height.changeValue(height?.text.toString().toInt())
+                        sharedViewModel.width.changeValue(width?.text.toString().toInt())
+                        sharedViewModel.howManyMines.changeValue(mine?.text.toString().toInt())
                         isItAForfeit(dropdownValue)
                         orElse(height!!, heightField!!, width!!, widthField!!, mine!!, mineField!!, maxNumberOfMines,
                             errorOne = false, errorTwo = false)
@@ -139,11 +139,11 @@ class NewGameFragment: DialogFragment() {
     }
 
     private fun isItAForfeit(dropdownValue: String) {
-        if (sharedViewModel.firstMoveSwitch != 0) {
+        if (sharedViewModel.firstMoveSwitch.value != 0) {
             ForfeitWarningFragment.newInstance(getString(R.string.forfeit), TAG)
                 .show(childFragmentManager, ForfeitWarningFragment.TAG)
         } else {
-            sharedViewModel.setDifficulty(dropdownValue)
+            sharedViewModel.difficultySet.changeValue(dropdownValue)
             dismiss()
         }
     }

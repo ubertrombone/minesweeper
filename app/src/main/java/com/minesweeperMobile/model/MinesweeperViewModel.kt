@@ -4,42 +4,55 @@ import androidx.lifecycle.*
 import com.minesweeperMobile.Markers.*
 import com.minesweeperMobile.Numbers.*
 import com.minesweeperMobile.Difficulties.*
-import com.minesweeperMobile.database.LeaderPairs
 import com.minesweeperMobile.database.Statistics
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class MinesweeperViewModel: ViewModel() {
 
-    private var _user = MutableLiveData(false)
-    val user: LiveData<Boolean>
-        get() = _user
+    val listOfDifficulties = mutableListOf(EASY.difficulty, MEDIUM.difficulty, HARD.difficulty, EXPERT.difficulty, CUSTOM.difficulty)
+    private val listOfNonNumbers = listOf(MINE.mark, EMPTY.mark, FLAG.mark, CLEARED.mark)
+    val listOfNumbers = listOf(ONE.alphaNumber, TWO.alphaNumber, THREE.alphaNumber, FOUR.alphaNumber, FIVE.alphaNumber, SIX.alphaNumber, SEVEN.alphaNumber, EIGHT.alphaNumber)
+    val listOfRecords = listOf("Most Wins", "Fastest Game", "Fewest Moves", "Longest Streak", "Longest Current Streak", "Win Percentage")
+    val mapOfRecords = mapOf(listOfRecords[0] to "gamesWon", listOfRecords[1] to "fastestGame", listOfRecords[2] to "fewestMoves",
+        listOfRecords[3] to "longestStreak", listOfRecords[4] to "currentStreak", listOfRecords[5] to "winPercentage")
+    val listOfDescendingRecords = listOf(mapOfRecords[listOfRecords[1]], mapOfRecords[listOfRecords[2]])
+    private val profanityFilter = listOf("fuck", "f4ck", "f4k", "fck", "fuk", "shit", "sh1t", "shiz", "sh1z", "bitch", "b1tch",
+        "biatch", "b1atch", "bi4tch", "b14tch", "cunt", "kunt", "ass", "4ss", "balls", "ballz", "b4lls", "b4llz", "dick",
+        "d1ck", "dik", "d1k", "dic", "d1c", "fuc", "f4k", "f4c", "vagina", "v4gina", "v4g1na", "v4g1n4", "v4gin4", "vagin4",
+        "vag1na", "vag1n4", "pussy", "pusy", "pussee", "pusee", "tits", "t1ts", "titz", "t1tz", "titties", "t1tties")
 
-    fun getUser(user: Boolean) { _user.value = user }
+    val user = BooleanLiveData(false)
+    val username = BooleanLiveData(true)
 
-    private var _usernameSwitch = false
-    val usernameSwitch: Boolean
-        get() = _usernameSwitch
+    val usernameFromDB = StringData("")
+    val difficultyHolder = StringData(MEDIUM.difficulty)
+    val leaderBoardFragmentPage = StringData(mapOfRecords[listOfRecords[0]]!!)
 
-    fun changeUsernameSwitch(switch: Boolean) { _usernameSwitch = switch }
+    val usernameSwitch = BooleanData(false)
+    val startSwitch = BooleanData(false)
+    val longestStreak = BooleanData(false)
+    val fewestMoves = BooleanData(false)
+    val fastestGame = BooleanData(false)
+    val fabButtonRTL = BooleanData(true)
+    val mineAssistFAB = BooleanData(false)
+    val mineAssistChanged = BooleanData(false)
 
-    private var _username = MutableLiveData(true)
-    val username: LiveData<Boolean>
-        get() = _username
+    val height = IntegerData(15)
+    val width = IntegerData(13)
+    val selectedCellBackgroundId = IntegerData(0)
+    val selectedCardId = IntegerData(0)
+    private val firstMove = IntegerData(width.value * height.value + 1)
+    val howManyMines = IntegerData(40)
+    val mineCounter = IntegerData(howManyMines.value)
+    private val flagCounter = IntegerData(0)
+    val moveCounter = IntegerData(0)
+    val firstMoveSwitch = IntegerData(0)
+    val difficultySet = StringLiveData(MEDIUM.difficulty)
+    val mineCounterUI = IntegerLiveData(howManyMines.value - flagCounter.value)
 
-    fun getUsername(username: Boolean) { _username.value = username }
-
-    private var _usernameFromDB = ""
-    val usernameFromDB: String
-        get() = _usernameFromDB
-
-    fun setUsername(name: String) { _usernameFromDB = name }
-
-    private var _startSwitch = false
-    val startSwitch: Boolean
-        get() = _startSwitch
-
-    fun changeStartSwitch(switch: Boolean) { _startSwitch = switch }
+    val leaderBoardData = ListLiveData()
+    val leaderBoardComplexitySelection = StringLiveData("Easy")
 
     private var _usernames = mutableListOf<String>()
     val usernames: List<String>
@@ -75,24 +88,6 @@ class MinesweeperViewModel: ViewModel() {
         changeExpert(stats)
     }
 
-    private var _longestStreak = false
-    val longestStreak: Boolean
-        get() = _longestStreak
-    private var _fewestMoves = false
-    val fewestMoves: Boolean
-        get() = _fewestMoves
-    private var _fastestGame = false
-    val fastestGame: Boolean
-        get() = _fastestGame
-    fun setLongestStreak(set: Boolean) {
-        _longestStreak = set
-    }fun setFastestGame(set: Boolean) {
-        _fastestGame = set
-    }
-    fun setFewestMoves(set: Boolean) {
-        _fewestMoves = set
-    }
-
     fun updateComplexities(difficulty: String, time: Long, message: Boolean) {
         val complexity = when(difficulty) {
             EASY.difficulty -> _easy
@@ -121,11 +116,11 @@ class MinesweeperViewModel: ViewModel() {
         complexity[0].currentStreak ++
         if (complexity[0].currentStreak > complexity[0].longestStreak) {
             complexity[0].longestStreak = complexity[0].currentStreak
-            _longestStreak = true
+            longestStreak.changeValue(true)
         }
     }
     private fun addMovesAndTime(complexity: List<Statistics>, time: Long) {
-        complexity[0].totalMoves += _moveCounter
+        complexity[0].totalMoves += moveCounter.value
         complexity[0].totalTime += time
     }
     private fun calculateAverageMovesAndTime(complexity: List<Statistics>) {
@@ -133,80 +128,20 @@ class MinesweeperViewModel: ViewModel() {
         complexity[0].averageTime = complexity[0].totalTime / complexity[0].gamesWon
     }
     private fun calculateFewestMovesAndFastestTime(complexity: List<Statistics>, time: Long) {
-        if (_moveCounter < complexity[0].fewestMoves || complexity[0].fewestMoves == 0) {
-            complexity[0].fewestMoves = _moveCounter
-            _fewestMoves = true
+        if (moveCounter.value < complexity[0].fewestMoves || complexity[0].fewestMoves == 0) {
+            complexity[0].fewestMoves = moveCounter.value
+            fewestMoves.changeValue(true)
         }
         if (time < complexity[0].fastestGame || complexity[0].fastestGame == 0L) {
             complexity[0].fastestGame = time
-            _fastestGame = true
+            fastestGame.changeValue(true)
         }
     }
-
-    private var _leaderBoardData = MutableLiveData<List<LeaderPairs>>()
-    val leaderBoardData: LiveData<List<LeaderPairs>>
-        get() = _leaderBoardData
-
-    fun newLeaderBoardData(username: String, value: Float) {
-        if (_leaderBoardData.value.isNullOrEmpty()) _leaderBoardData.value = listOf(LeaderPairs(username, value))
-        else _leaderBoardData.value = _leaderBoardData.value!!.plus(LeaderPairs(username, value))
-    }
-
-    fun clearLeaderBoardData() {
-        if (_leaderBoardData.value.isNullOrEmpty()) return
-        _leaderBoardData.value!!.forEach { _leaderBoardData.value = _leaderBoardData.value!!.minus(it) }
-    }
-
-    private var _leaderBoardComplexitySelection = MutableLiveData("Easy")
-    val leaderBoardComplexitySelection: LiveData<String>
-        get() = _leaderBoardComplexitySelection
-
-    fun setLeaderBoardComplexitySelection(string: String) { _leaderBoardComplexitySelection.value = string }
-
-    private var _height: Int
-    val height: Int
-        get() = _height
-
-    private var _width: Int
-    val width: Int
-        get() = _width
-
-    val listOfDifficulties = mutableListOf(EASY.difficulty, MEDIUM.difficulty, HARD.difficulty, EXPERT.difficulty, CUSTOM.difficulty)
-    private val listOfNonNumbers = listOf(MINE.mark, EMPTY.mark, FLAG.mark, CLEARED.mark)
-    val listOfNumbers = listOf(ONE.alphaNumber, TWO.alphaNumber, THREE.alphaNumber, FOUR.alphaNumber, FIVE.alphaNumber, SIX.alphaNumber, SEVEN.alphaNumber, EIGHT.alphaNumber)
-    val listOfRecords = listOf("Most Wins", "Fastest Game", "Fewest Moves", "Longest Streak", "Longest Current Streak", "Win Percentage")
-    private val mapOfRecords = mapOf(listOfRecords[0] to "gamesWon", listOfRecords[1] to "fastestGame", listOfRecords[2] to "fewestMoves",
-        listOfRecords[3] to "longestStreak", listOfRecords[4] to "currentStreak", listOfRecords[5] to "winPercentage")
-    val listOfDescendingRecords = listOf(mapOfRecords[listOfRecords[1]], mapOfRecords[listOfRecords[2]])
-    private val profanityFilter = listOf("fuck", "f4ck", "f4k", "fck", "fuk", "shit", "sh1t", "shiz", "sh1z", "bitch", "b1tch",
-        "biatch", "b1atch", "bi4tch", "b14tch", "cunt", "kunt", "ass", "4ss", "balls", "ballz", "b4lls", "b4llz", "dick",
-        "d1ck", "dik", "d1k", "dic", "d1c", "fuc", "f4k", "f4c", "vagina", "v4gina", "v4g1na", "v4g1n4", "v4gin4", "vagin4",
-        "vag1na", "vag1n4", "pussy", "pusy", "pussee", "pusee", "tits", "t1ts", "titz", "t1tz", "titties", "t1tties")
 
     fun checkProfanityFilter(string: String):Boolean {
         profanityFilter.forEach { if (string.contains(it)) return true }
         return false
     }
-
-    private var _leaderBoardFragmentPage = mapOfRecords[listOfRecords[0]]!!
-    val leaderBoardFragmentPage: String
-        get() = _leaderBoardFragmentPage
-
-    fun getLeaderBoardFragmentPage(string: String) { _leaderBoardFragmentPage = mapOfRecords[string]!! }
-
-    private var _selectedCellBackgroundId: Int
-    val selectedCellBackgroundId: Int
-        get() = _selectedCellBackgroundId
-
-    private var _selectedCardId: Int
-    val selectedCardId: Int
-        get() = _selectedCardId
-
-    private var _firstMove: Int
-
-    private var _howManyMines: Int
-    val howManyMines: Int
-        get() = _howManyMines
 
     private var _currentCoords = listOf<Int>()
     val currentCoords: List<Int>
@@ -230,72 +165,12 @@ class MinesweeperViewModel: ViewModel() {
     val minefieldWithNumbers: Array<Array<String>>
         get() = _minefieldWithNumbers
 
-    private var _fabButtonsRTL = true
-    val fabButtonRTL: Boolean
-        get() = _fabButtonsRTL
-
-    private var _mineAssistFAB = false
-    val mineAssistFAB: Boolean
-        get() = _mineAssistFAB
-
-    private var _mineAssistChanged = false
-    val mineAssistChanged: Boolean
-        get() = _mineAssistChanged
-
-    fun changeMineAssist(switch: Boolean) { _mineAssistChanged = switch }
-
-    private var _mineCounter: Int
-    val mineCounter: Int
-        get() = _mineCounter
-
-    private var _mineCounterUI = MutableLiveData<Int>()
-    val mineCounterUI: LiveData<Int>
-        get() = _mineCounterUI
-
-    private var _difficultySet = MutableLiveData<String>()
-    val difficultySet: LiveData<String>
-        get() = _difficultySet
-
-    private var _difficultyHolder = MEDIUM.difficulty
-    val difficultyHolder: String
-        get() = _difficultyHolder
-
-    fun setDifficultyHolder(difficulty: String) { _difficultyHolder = difficulty }
-
-    private var _flagCounter: Int
-
-    private var _moveCounter: Int
-    val moveCounter: Int
-        get() = _moveCounter
-
-    private var _firstMoveSwitch: Int
-    val firstMoveSwitch: Int
-        get() = _firstMoveSwitch
-
-    fun setHeight(height: Int) { _height = height }
-
-    fun setWidth(width: Int) { _width = width }
-
-    fun setMines(mines: Int) { _howManyMines = mines }
-
-    fun getSelectedCellBackgroundId(id: Int) { _selectedCellBackgroundId = id }
-
-    fun getSelectedCardId(id: Int) { _selectedCardId = id }
-
     fun getCurrentCoords(id: Int) { _currentCoords = convertNumberToCoords(id) }
 
-    fun getFlagId() = _selectedCardId + 5000
-    fun getDifficultySet() = _difficultySet.value.toString()
-
-    fun incrementMoveCounter() = _moveCounter ++
-    fun setDifficulty(diff: String) { _difficultySet.value = diff }
-
-    fun fabButtonSettings(switch: Boolean) { _fabButtonsRTL = switch }
-
-    fun mineAssistSettings(switch: Boolean) { _mineAssistFAB = switch }
+    fun getFlagId() = selectedCardId.value + 5000
 
     fun getComplexity(): MutableList<Statistics> {
-        return when(_difficultySet.value) {
+        return when(difficultySet.dataValue.value) {
             EASY.difficulty -> _easy
             MEDIUM.difficulty -> _medium
             HARD.difficulty -> _hard
@@ -303,33 +178,18 @@ class MinesweeperViewModel: ViewModel() {
         }
     }
 
-    init {
-        _height = 15
-        _width = 13
-        _selectedCellBackgroundId = 0
-        _selectedCardId = 0
-        _firstMove = _width * _height + 1
-        _howManyMines = 40
-        _mineCounter = _howManyMines
-        _flagCounter = 0
-        _mineCounterUI.value = _howManyMines - _flagCounter
-        _moveCounter = 0
-        _firstMoveSwitch = 0
-        _difficultySet.value = MEDIUM.difficulty
-    }
-
     fun move(cardId: Int) {
-        if (_firstMoveSwitch == 0) {
-            _firstMove = cardId + 1
-            _minefieldWithNumbers = readMinefield(_howManyMines)
-            _firstMoveSwitch ++
+        if (firstMoveSwitch.value == 0) {
+            firstMove.changeValue(cardId + 1)
+            _minefieldWithNumbers = readMinefield(howManyMines.value)
+            firstMoveSwitch.increment()
         }
     }
 
-    fun resetFirstMove() { _firstMoveSwitch = 0 }
+    fun resetFirstMove() = firstMoveSwitch.changeValue(0)
 
     fun convertCoordsToNumber(coords: List<Int>) =
-        if (coords[1] == 0) coords[0] else (coords[1]) * _width + coords[0]
+        if (coords[1] == 0) coords[0] else (coords[1]) * width.value + coords[0]
 
     fun convertNumberToCoords(number: Int): List<Int> {
         val offsetNumber = number - 1
@@ -338,27 +198,23 @@ class MinesweeperViewModel: ViewModel() {
 
         return when {
             listOfXStarts.contains(number) -> listOf(0, listOfXStarts.indexOf(number)) // If number should be in column 0
-            listOfXEnds.contains(number) -> listOf(_width - 1, listOfXEnds.indexOf(number)) // if number should be in column _height - 1
-            else -> listOf(offsetNumber % _width, offsetNumber / _width) // For all other numbers.
+            listOfXEnds.contains(number) -> listOf(width.value - 1, listOfXEnds.indexOf(number)) // if number should be in column _height - 1
+            else -> listOf(offsetNumber % width.value, offsetNumber / width.value) // For all other numbers.
         }
     }
-
-    private fun getXMinValues() = (0 until _height).map { it * _width + 1 }
-    private fun getXMaxValues() = (0 until _height).map { it * _width + _width }
+    private fun getXMinValues() = (0 until height.value).map { it * width.value + 1 }
+    private fun getXMaxValues() = (0 until height.value).map { it * width.value + width.value }
 
     fun getItemAtMinefieldPosition() = _minefieldWithNumbers[_currentCoords[1]][_currentCoords[0]]
 
     fun addToSelections(selection: List<Int>) = _listOfSelections.add(selection)
 
     private var _hours = 0L
-    val hours: Long
-        get() = _hours
+    val hours: Long get() = _hours
     private var _minutes = 0L
-    val minutes: Long
-        get() = _minutes
+    val minutes: Long get() = _minutes
     private var _seconds = 0L
-    val seconds: Long
-        get() = _seconds
+    val seconds: Long get() = _seconds
 
     fun getTimes(time: Long) {
         _hours = getHours(time)
@@ -370,19 +226,19 @@ class MinesweeperViewModel: ViewModel() {
     private fun getMinutes(time: Long) = TimeUnit.MILLISECONDS.toMinutes(time)
     private fun getHours(time: Long) = TimeUnit.MILLISECONDS.toHours(time)
 
-    fun resetGame(height: Int, width: Int, numberOfMines: Int) {
-        _height = height
-        _width = width
-        _selectedCellBackgroundId = 0
-        _selectedCardId = 0
-        _firstMove = _width * _height + 1
-        _howManyMines = numberOfMines
-        _mineCounter = _howManyMines
+    fun resetGame(newHeight: Int, newWidth: Int, newNumberOfMines: Int) {
+        height.changeValue(newHeight)
+        width.changeValue(newWidth)
+        selectedCellBackgroundId.changeValue(0)
+        selectedCardId.changeValue(0)
+        firstMove.changeValue(width.value * height.value + 1)
+        howManyMines.changeValue(newNumberOfMines)
+        mineCounter.changeValue(howManyMines.value)
+        flagCounter.changeValue(0)
+        mineCounterUI.changeValue(howManyMines.value - flagCounter.value)
+        moveCounter.changeValue(0)
+        firstMoveSwitch.changeValue(0)
         _minefieldWithNumbers = arrayOf()
-        _flagCounter = 0
-        _mineCounterUI.value = _howManyMines - _flagCounter
-        _moveCounter = 0
-        _firstMoveSwitch = 0
         _listOfSelections.clear()
         _listOfFlags.clear()
         mineLocations.clear()
@@ -391,18 +247,18 @@ class MinesweeperViewModel: ViewModel() {
 
     fun addFlag(listOfFlags: MutableList<List<Int>>, coords: List<Int>, coordValue: String) {
         listOfFlags.add(coords)
-        _flagCounter++
-        if (coordValue == MINE.mark) _mineCounter --
-        _mineCounterUI.value = _mineCounterUI.value?.minus(1)
+        flagCounter.increment()
+        if (coordValue == MINE.mark) mineCounter.decrement()
+        mineCounterUI.changeValue(mineCounterUI.dataValue.value!!.minus(1))
         addToSelections(coords)
     }
 
     fun removeFlag(listOfFlags: MutableList<List<Int>>, coords: List<Int>, coordValue: String) {
         listOfFlags.remove(coords)
         removeAllItems(_listOfSelections, coords)
-        _flagCounter --
-        if (coordValue == MINE.mark) _mineCounter ++
-        _mineCounterUI.value = _mineCounterUI.value?.plus(1)
+        flagCounter.decrement()
+        if (coordValue == MINE.mark) mineCounter.increment()
+        mineCounterUI.changeValue(mineCounterUI.dataValue.value!!.plus(1))
     }
 
     fun publicRemoveAll(item: List<Int>) = removeAllItems(_listOfFlags, item)
@@ -438,31 +294,25 @@ class MinesweeperViewModel: ViewModel() {
 
                 val xCurrent = column + j
                 val yCurrent = row + i
-                val currentCoordsInEmptyFunc = listOf(xCurrent, yCurrent)
+                val currentCoords = listOf(xCurrent, yCurrent)
 
-                try {
-                    minefield[yCurrent][xCurrent]
-                } catch (e: ArrayIndexOutOfBoundsException) {
-                    continue
-                }
-
-                if (_listOfSelections.contains(currentCoordsInEmptyFunc)) continue
+                try { minefield[yCurrent][xCurrent] } catch (e: ArrayIndexOutOfBoundsException) { continue }
+                if (_listOfSelections.contains(currentCoords)) continue
 
                 val currentCell = minefield[yCurrent][xCurrent]
-                if (currentCell == EMPTY.mark && !_listOfSelections.contains(currentCoordsInEmptyFunc)) {
-                    _listOfSelections.add(currentCoordsInEmptyFunc)
-                    emptyCells(yCurrent, xCurrent, minefield, false)
-                    if (_listOfFlags.contains(currentCoordsInEmptyFunc)) {
-                        _listOfFlags.remove(currentCoordsInEmptyFunc)
+
+                when {
+                    currentCell == EMPTY.mark -> {
+                        _listOfSelections.add(currentCoords)
+                        emptyCells(yCurrent, xCurrent, minefield, false)
+                        if (_listOfFlags.contains(currentCoords)) _listOfFlags.remove(currentCoords)
                     }
-                } else if (currentCell !in listOfNonNumbers && !_listOfSelections.contains(currentCoordsInEmptyFunc)) {
-                    _listOfSelections.add(currentCoordsInEmptyFunc)
-                    _emptySelections.add(currentCoordsInEmptyFunc)
-                    if (_listOfFlags.contains(currentCoordsInEmptyFunc)) {
-                        _listOfFlags.remove(currentCoordsInEmptyFunc)
+                    !listOfNonNumbers.contains(currentCell) -> {
+                        _listOfSelections.add(currentCoords)
+                        _emptySelections.add(currentCoords)
+                        if (_listOfFlags.contains(currentCoords)) _listOfFlags.remove(currentCoords)
                     }
-                } else if (currentCell == MINE.mark && currentCoordsInEmptyFunc !in _listOfFlags && !_listOfSelections.contains(currentCoordsInEmptyFunc)) {
-                    _emptySelections.add(currentCoordsInEmptyFunc)
+                    currentCell == MINE.mark && !_listOfFlags.contains(currentCoords) -> _emptySelections.add(currentCoords)
                 }
             }
         }
@@ -487,8 +337,8 @@ class MinesweeperViewModel: ViewModel() {
 
     private fun readMinefield(size: Int): Array<Array<String>> {
         val minefield = createMinefield(size)
-        for (i in 0 until _height) {
-            for (j in 0 until _width) {
+        for (i in 0 until height.value) {
+            for (j in 0 until width.value) {
                 if (!minefield[i][j].contentEquals(MINE.mark)) {
                     val number = createNumberField(i, j, minefield)
                     minefield[i][j] = if (number > 0) number.toString() else EMPTY.mark
@@ -502,9 +352,9 @@ class MinesweeperViewModel: ViewModel() {
         placeAMine(size)
         var mineLocationCounter = 1
         val list = mutableListOf<String>()
-        return Array(_height) {
+        return Array(height.value) {
             list.clear()
-            (1.._width).forEach { _ ->
+            (1..width.value).forEach { _ ->
                 if (mineLocations.contains(mineLocationCounter)) list.add(MINE.mark)
                 else list.add(EMPTY.mark)
                 mineLocationCounter++
@@ -515,9 +365,9 @@ class MinesweeperViewModel: ViewModel() {
 
     private val areaAroundFirstMoveList = mutableListOf<Int>()
     private fun placeAMine(size: Int) {
-        areaAroundFirstMove(_firstMove)
+        areaAroundFirstMove(firstMove.value)
         do {
-            val randomDigit = Random.nextInt(1, _height * _width + 1)
+            val randomDigit = Random.nextInt(1, height.value * width.value + 1)
             if (areaAroundFirstMoveList.contains(randomDigit)) continue
             if (!mineLocations.contains(randomDigit)) mineLocations.add(randomDigit)
         } while (mineLocations.size < size)
@@ -526,18 +376,20 @@ class MinesweeperViewModel: ViewModel() {
     private fun areaAroundFirstMove(firstMove: Int) {
         areaAroundFirstMoveList.clear()
         val rangeSize = when {
-            _difficultySet.value == CUSTOM.difficulty && _height * _width > 200 && (_height * _width) / _howManyMines > 5 -> 2
-            _difficultySet.value == CUSTOM.difficulty && _height * _width > 200 && (_height * _width) / _howManyMines > 2 -> 1
-            _difficultySet.value == CUSTOM.difficulty && _height * _width > 200 -> {
+            difficultySet.dataValue.value == CUSTOM.difficulty && height.value * width.value > 200
+                    && (height.value * width.value) / howManyMines.value > 5 -> 2
+            difficultySet.dataValue.value == CUSTOM.difficulty && height.value * width.value > 200
+                    && (height.value * width.value) / howManyMines.value > 2 -> 1
+            difficultySet.dataValue.value == CUSTOM.difficulty && height.value * width.value > 200 -> {
                 areaAroundFirstMoveList.add(firstMove)
                 return
             }
-            _difficultySet.value == CUSTOM.difficulty && _howManyMines / (_height * _width) > 5 -> 1
-            _difficultySet.value == CUSTOM.difficulty -> {
+            difficultySet.dataValue.value == CUSTOM.difficulty && howManyMines.value / (height.value * width.value) > 5 -> 1
+            difficultySet.dataValue.value == CUSTOM.difficulty -> {
                 areaAroundFirstMoveList.add(firstMove)
                 return
             }
-            _height * _width > 200 -> 2
+            height.value * width.value > 200 -> 2
             else -> 1
         }
         (rangeSize * -1..rangeSize).forEach { i -> (rangeSize * -1..rangeSize).forEach { j ->
@@ -547,8 +399,8 @@ class MinesweeperViewModel: ViewModel() {
     }
 
     fun getCardBackgroundColor(card: Int, colorOne: Int, colorTwo: Int) =
-        if (_width % 2 == 0) {
-            if (((card / _width) % 2) % 2 == 0) {
+        if (width.value % 2 == 0) {
+            if (((card / width.value) % 2) % 2 == 0) {
                 if (card % 2 == 0) colorOne else colorTwo
             } else { if (card % 2 == 0) colorTwo else colorOne }
         } else { if (card % 2 == 0) colorOne else colorTwo }

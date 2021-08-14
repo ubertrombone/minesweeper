@@ -71,7 +71,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         observeUserState()
     }
 
-    private fun observeUserState() = sharedViewModel.user.observe(viewLifecycleOwner) {
+    private fun observeUserState() = sharedViewModel.user.dataValue.observe(viewLifecycleOwner) {
         if (it) {
             binding?.googleSigninButton?.visibility = View.GONE
             binding?.loadingPanel?.visibility = View.VISIBLE
@@ -135,10 +135,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             userId = user.uid
-            sharedViewModel.getUser(true)
+            sharedViewModel.user.changeValue(true)
 
             val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${userId}/")
-            database.child("userLog").setValue(sharedViewModel.user.value)
+            database.child("userLog").setValue(sharedViewModel.user.dataValue.value)
             database.addListenerForSingleValueEvent(readDatabase(database))
         }
     }
@@ -157,10 +157,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setupDatabase(database: DatabaseReference) {
-        database.child("RTL").setValue(sharedViewModel.fabButtonRTL)
-        database.child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder)
-        database.child("userLog").setValue(sharedViewModel.user.value)
-        database.child("MineAssist").setValue(sharedViewModel.mineAssistFAB)
+        database.child("RTL").setValue(sharedViewModel.fabButtonRTL.value)
+        database.child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder.value)
+        database.child("userLog").setValue(sharedViewModel.user.dataValue.value)
+        database.child("MineAssist").setValue(sharedViewModel.mineAssistFAB.value)
         val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
         sharedViewModel.changeAll(allComplexities)
         database.child(Difficulties.EASY.difficulty).setValue(sharedViewModel.easy[0])
