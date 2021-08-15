@@ -57,20 +57,16 @@ class MinesweeperViewModel: ViewModel() {
     val usernames = MutableStringListData()
 
     private var _easy = mutableListOf<Statistics>()
-    val easy: List<Statistics>
-        get() = _easy
+    val easy: List<Statistics> get() = _easy
 
     private var _medium = mutableListOf<Statistics>()
-    val medium: List<Statistics>
-        get() = _medium
+    val medium: List<Statistics> get() = _medium
 
     private var _hard = mutableListOf<Statistics>()
-    val hard: List<Statistics>
-        get() = _hard
+    val hard: List<Statistics> get() = _hard
 
     private var _expert = mutableListOf<Statistics>()
-    val expert: List<Statistics>
-        get() = _expert
+    val expert: List<Statistics> get() = _expert
 
     fun changeEasy(stats: Statistics) = _easy.add(stats)
     fun changeMedium(stats: Statistics) = _medium.add(stats)
@@ -134,26 +130,21 @@ class MinesweeperViewModel: ViewModel() {
     }
 
     private var _currentCoords = listOf<Int>()
-    val currentCoords: List<Int>
-        get() = _currentCoords
+    val currentCoords: List<Int> get() = _currentCoords
 
     val mineLocations = mutableListOf<Int>()
 
     private var _listOfSelections = mutableListOf<List<Int>>()
-    val listOfSelections: List<List<Int>>
-        get() = _listOfSelections
+    val listOfSelections: List<List<Int>> get() = _listOfSelections
 
     private var _listOfFlags = mutableListOf<List<Int>>()
-    val listOfFlags: MutableList<List<Int>>
-        get() = _listOfFlags
+    val listOfFlags: MutableList<List<Int>> get() = _listOfFlags
 
     private var _emptySelections = mutableListOf<List<Int>>()
-    val emptySelections: List<List<Int>>
-        get() = _emptySelections
+    val emptySelections: List<List<Int>> get() = _emptySelections
 
     private var _minefieldWithNumbers = arrayOf<Array<String>>()
-    val minefieldWithNumbers: Array<Array<String>>
-        get() = _minefieldWithNumbers
+    val minefieldWithNumbers: Array<Array<String>> get() = _minefieldWithNumbers
 
     fun getCurrentCoords(id: Int) { _currentCoords = convertNumberToCoords(id) }
 
