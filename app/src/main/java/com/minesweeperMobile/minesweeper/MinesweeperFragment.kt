@@ -643,7 +643,7 @@ class MinesweeperFragment: Fragment() {
         if (sharedViewModel.firstMoveSwitch.value != 0) {
             val timeCounter = requireView().findViewById<Chronometer>(R.id.time_counter)
             val time = SystemClock.elapsedRealtime() - timeCounter?.base!!
-            sharedViewModel.updateComplexities(sharedViewModel.difficultySet.dataValue.value!!, time, message)
+            sharedViewModel.updateComplexities(time, message)
             database.child(sharedViewModel.difficultySet.dataValue.value!!).setValue(sharedViewModel.getComplexity()[0])
         }
     }

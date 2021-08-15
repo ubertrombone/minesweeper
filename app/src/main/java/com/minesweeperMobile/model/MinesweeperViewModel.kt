@@ -54,12 +54,7 @@ class MinesweeperViewModel: ViewModel() {
     val leaderBoardData = ListLiveData()
     val leaderBoardComplexitySelection = StringLiveData("Easy")
 
-    private var _usernames = mutableListOf<String>()
-    val usernames: List<String>
-        get() = _usernames
-
-    fun checkUsernameUniqueness(username: String) = _usernames.contains(username)
-    fun addToUsernames(username: String) = _usernames.add(username)
+    val usernames = MutableStringListData()
 
     private var _easy = mutableListOf<Statistics>()
     val easy: List<Statistics>
@@ -88,13 +83,8 @@ class MinesweeperViewModel: ViewModel() {
         changeExpert(stats)
     }
 
-    fun updateComplexities(difficulty: String, time: Long, message: Boolean) {
-        val complexity = when(difficulty) {
-            EASY.difficulty -> _easy
-            MEDIUM.difficulty -> _medium
-            HARD.difficulty -> _hard
-            else -> _expert
-        }
+    fun updateComplexities(time: Long, message: Boolean) {
+        val complexity = getComplexity()
         incrementGamesPlayed(complexity)
         if (message) {
             incrementWinsAndStreaks(complexity)

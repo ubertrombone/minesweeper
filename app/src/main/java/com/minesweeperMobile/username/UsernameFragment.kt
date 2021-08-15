@@ -93,10 +93,10 @@ class UsernameFragment : DialogFragment() {
             return
         } else usernameProfane(usernameInput, usernameField, false)
 
-        if (!sharedViewModel.checkUsernameUniqueness(usernameInput.text.toString())) {
+        if (!sharedViewModel.usernames.isValueUnique(usernameInput.text.toString())) {
             sharedViewModel.usernameFromDB.changeValue(usernameInput.text.toString())
-            database.child("username").setValue(sharedViewModel.usernameFromDB)
-            usernamesDatabase.child(sharedViewModel.usernameFromDB.value).setValue(sharedViewModel.usernameFromDB)
+            database.child("username").setValue(sharedViewModel.usernameFromDB.value)
+            usernamesDatabase.child(sharedViewModel.usernameFromDB.value).setValue(sharedViewModel.usernameFromDB.value)
             usernameExists(usernameInput, usernameField, false)
             dismiss()
         } else {
@@ -110,7 +110,7 @@ class UsernameFragment : DialogFragment() {
     }
 
     private fun usernameExists(input: TextInputEditText, field: TextInputLayout, error: Boolean) {
-        errorCheck(error, sharedViewModel.usernames.contains(input.text.toString()), field, R.string.username_exists)
+        errorCheck(error, sharedViewModel.usernames.value.contains(input.text.toString()), field, R.string.username_exists)
     }
 
     private fun usernameProfane(input: TextInputEditText, field: TextInputLayout, error: Boolean) {
@@ -131,7 +131,7 @@ class UsernameFragment : DialogFragment() {
     private fun readDatabase(): ValueEventListener {
         return object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.children.forEach { child -> sharedViewModel.addToUsernames(child.key.toString()) }
+                dataSnapshot.children.forEach { child -> sharedViewModel.usernames.addValue(child.key.toString()) }
             }
             override fun onCancelled(error: DatabaseError) = println("FAIL")
         }
