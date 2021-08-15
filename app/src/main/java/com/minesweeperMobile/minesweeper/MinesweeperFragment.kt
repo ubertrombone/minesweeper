@@ -21,7 +21,6 @@ import com.minesweeperMobile.Difficulties.*
 import com.minesweeperMobile.Markers.*
 import com.minesweeperMobile.Numbers.*
 import com.minesweeperMobile.R
-import com.minesweeperMobile.database.Statistics
 import com.minesweeperMobile.databinding.FragmentMinesweeperBinding
 import com.minesweeperMobile.finalmessage.FinalMessageFragment
 import com.minesweeperMobile.leaderboard.LeaderBoardFragment
@@ -68,85 +67,17 @@ class MinesweeperFragment: Fragment() {
             minesweeperFragment = this@MinesweeperFragment
         }
 
-        queryUserFromDatabase()
         observeUserState()
+        binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL.value) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+        binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB.value
+        if (sharedViewModel.mineAssistFAB.value) binding?.fabMine?.visibility = View.VISIBLE
+        try { if (sharedViewModel.username.dataValue.value == false) createUsernameDialog() } catch (e: IllegalStateException) {}
         startGame(view)
         observeMineCounter()
         restartGameButtonClickListener()
     }
 
-    private fun queryUserFromDatabase() {
-        database.addListenerForSingleValueEvent(readDatabase("user"))
-
-        if (!sharedViewModel.startSwitch.value) {
-            sharedViewModel.startSwitch.changeValue(true)
-            return
-        }
-
-        database.addListenerForSingleValueEvent(readDatabase("complexities"))
-    }
-
-    private fun readDatabase(reference: String): ValueEventListener {
-        return object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (reference == "user") pickUpUserFromDatabase(dataSnapshot)
-                else if (reference == "complexities") pickUpComplexitiesFromDatabase(dataSnapshot)
-            }
-            override fun onCancelled(error: DatabaseError) = println("FAIL")
-        }
-    }
-
-    private fun pickUpUserFromDatabase(dataSnapshot: DataSnapshot) {
-        val children = mutableMapOf<String, String>()
-        dataSnapshot.children.forEach { child -> children[child.key.toString()] = child.value.toString() }
-
-        sharedViewModel.user.changeValue(children["userLog"].toString().toBoolean())
-
-        sharedViewModel.fabButtonRTL.changeValue(children["RTL"].toString().toBoolean())
-        binding?.fabButtons?.layoutDirection = if (sharedViewModel.fabButtonRTL.value) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-
-        sharedViewModel.difficultySet.changeValue(
-            if (children["DefaultDifficulty"].toString() == "null") MEDIUM.difficulty
-            else children["DefaultDifficulty"].toString()
-        )
-        sharedViewModel.difficultyHolder.changeValue(
-            if (children["DefaultDifficulty"].toString() == "null") MEDIUM.difficulty
-            else children["DefaultDifficulty"].toString()
-        )
-
-        sharedViewModel.mineAssistFAB.changeValue(children["MineAssist"].toString().toBoolean())
-        binding?.fabMine?.isEnabled = sharedViewModel.mineAssistFAB.value
-        if (sharedViewModel.mineAssistFAB.value) binding?.fabMine?.visibility = View.VISIBLE
-
-        sharedViewModel.username.changeValue(children.keys.contains("username"))
-        try { if (sharedViewModel.username.dataValue.value == false) createUsernameDialog() } catch (e: IllegalStateException) {}
-
-        if (children.keys.contains("username")) sharedViewModel.usernameFromDB.changeValue(children["username"].toString())
-    }
-
-    private fun pickUpComplexitiesFromDatabase(dataSnapshot: DataSnapshot) {
-        dataSnapshot.children.forEach { child ->
-            val complexityChildren = mutableListOf<String>()
-            child.children.forEach { item -> complexityChildren.add(item.value.toString()) }
-            when (child.key) {
-                EASY.difficulty -> sharedViewModel.changeEasy(getComplexityValue(complexityChildren))
-                MEDIUM.difficulty -> sharedViewModel.changeMedium(getComplexityValue(complexityChildren))
-                HARD.difficulty -> sharedViewModel.changeHard(getComplexityValue(complexityChildren))
-                EXPERT.difficulty -> sharedViewModel.changeExpert(getComplexityValue(complexityChildren))
-            }
-        }
-    }
-
-    private fun getComplexityValue(value: MutableList<String>): Statistics {
-        return Statistics(value[5].toInt(), value[6].toInt(), value[8].toInt(), value[0].toDouble(), value[9].toLong(),
-            value[1].toLong(), value[4].toInt(), value[3].toLong(), value[2].toInt(), value[7].toInt(), value[10].toDouble())
-    }
-
     private fun observeUserState() {
-        sharedViewModel.user.dataValue.observe(viewLifecycleOwner) {
-            if (!it) findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
-        }
-
         sharedViewModel.username.dataValue.observe(viewLifecycleOwner) { if (!it) createUsernameDialog() }
     }
 
@@ -581,7 +512,8 @@ class MinesweeperFragment: Fragment() {
             }
             R.id.sign_out -> {
                 sharedViewModel.user.changeValue(false)
-                database.child("userLog").setValue(sharedViewModel.user.dataValue.value)
+                database.child("userLog").setValue(sharedViewModel.user.value)
+                findNavController().navigate(R.id.action_minesweeperFragment_to_loginFragment)
                 true
             }
             R.id.settings -> {

@@ -22,15 +22,14 @@ class MinesweeperViewModel: ViewModel() {
         "d1ck", "dik", "d1k", "dic", "d1c", "fuc", "f4k", "f4c", "vagina", "v4gina", "v4g1na", "v4g1n4", "v4gin4", "vagin4",
         "vag1na", "vag1n4", "pussy", "pusy", "pussee", "pusee", "tits", "t1ts", "titz", "t1tz", "titties", "t1tties")
 
-    val user = BooleanLiveData(false)
     val username = BooleanLiveData(true)
 
     val usernameFromDB = StringData("")
     val difficultyHolder = StringData(MEDIUM.difficulty)
     val leaderBoardFragmentPage = StringData(mapOfRecords[listOfRecords[0]]!!)
 
+    val user = BooleanData(false)
     val usernameSwitch = BooleanData(false)
-    val startSwitch = BooleanData(false)
     val longestStreak = BooleanData(false)
     val fewestMoves = BooleanData(false)
     val fastestGame = BooleanData(false)

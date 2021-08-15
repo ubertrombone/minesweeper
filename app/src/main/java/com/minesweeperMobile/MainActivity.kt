@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration
             .Builder(
                 R.id.minesweeperFragment,
-                R.id.loginFragment)
+                R.id.loginFragment,
+                R.id.splashFragment)
             .build()
 
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -3,7 +3,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/nav_graph.xml"
-            app:startDestination="@id/minesweeperFragment">
+            app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/minesweeperFragment"
@@ -26,6 +26,15 @@
             app:destination="@id/minesweeperFragment"
             app:popUpTo="@id/nav_graph.xml"
             app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.minesweeperMobile.splash.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action android:id="@+id/action_splashFragment_to_loginFragment" app:destination="@id/loginFragment"/>
+        <action android:id="@+id/action_splashFragment_to_minesweeperFragment"
+                app:destination="@id/minesweeperFragment"/>
     </fragment>
 
 </navigation>

@@ -68,18 +68,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-        observeUserState()
-    }
-
-    private fun observeUserState() = sharedViewModel.user.dataValue.observe(viewLifecycleOwner) {
-        if (it) {
-            binding?.googleSigninButton?.visibility = View.GONE
-            binding?.loadingPanel?.visibility = View.VISIBLE
-            findNavController().navigate(R.id.action_loginFragment_to_minesweeperFragment)
-            val toast = Toast.makeText(requireContext(), "Long press to \n\n- lay a flag \n\n- clear numbers", Toast.LENGTH_LONG)
-            toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.show()
-        }
     }
 
     @Suppress("DEPRECATION")
@@ -127,10 +115,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         } catch (e: Exception) { updateUI(null) }
     }
 
-    override fun onClick(v: View) {
-        if (v.id == R.id.google_signin_button) signIn()
-        else signOut()
-    }
+    override fun onClick(v: View) = if (v.id == R.id.google_signin_button) signIn() else signOut()
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
@@ -138,8 +123,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
             sharedViewModel.user.changeValue(true)
 
             val database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${userId}/")
-            database.child("userLog").setValue(sharedViewModel.user.dataValue.value)
+            database.child("userLog").setValue(sharedViewModel.user.value)
             database.addListenerForSingleValueEvent(readDatabase(database))
+
+            navigate()
         }
     }
 
@@ -159,7 +146,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun setupDatabase(database: DatabaseReference) {
         database.child("RTL").setValue(sharedViewModel.fabButtonRTL.value)
         database.child("DefaultDifficulty").setValue(sharedViewModel.difficultyHolder.value)
-        database.child("userLog").setValue(sharedViewModel.user.dataValue.value)
+        database.child("userLog").setValue(sharedViewModel.user.value)
         database.child("MineAssist").setValue(sharedViewModel.mineAssistFAB.value)
         val allComplexities = Statistics(0, 0, 0, 0.0, 0L, 0L, 0, 0L, 0, 0, 0.0)
         sharedViewModel.changeAll(allComplexities)
@@ -167,5 +154,16 @@ class LoginFragment : Fragment(), View.OnClickListener {
         database.child(Difficulties.MEDIUM.difficulty).setValue(sharedViewModel.medium[0])
         database.child(Difficulties.HARD.difficulty).setValue(sharedViewModel.hard[0])
         database.child(Difficulties.EXPERT.difficulty).setValue(sharedViewModel.expert[0])
+    }
+
+    private fun navigate() {
+        if (sharedViewModel.user.value) {
+            binding?.googleSigninButton?.visibility = View.GONE
+            binding?.loadingPanel?.visibility = View.VISIBLE
+            findNavController().navigate(R.id.action_loginFragment_to_minesweeperFragment)
+            val toast = Toast.makeText(requireContext(), "Long press to \n\n- lay a flag \n\n- clear numbers", Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
     }
 }

@@ -41,6 +41,11 @@ class SettingsFragment : DialogFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        println("SF ID: ${LoginFragment.userId}")
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val fragmentBinding = FragmentSettingsBinding.inflate(inflater, container, false)
         binding = fragmentBinding
