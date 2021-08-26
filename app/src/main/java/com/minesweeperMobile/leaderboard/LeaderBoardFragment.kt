@@ -49,6 +49,8 @@ class LeaderBoardFragment : DialogFragment() {
         viewPager = binding?.pager!!
         viewPager.adapter = leaderBoardPagerAdapter
 
+        getID(sharedViewModel.leaderBoardComplexitySelection.dataValue.value.toString())
+
         setClickListeners(view, R.id.text_view_easy)
         setClickListeners(view, R.id.text_view_medium)
         setClickListeners(view, R.id.text_view_hard)
@@ -70,20 +72,20 @@ class LeaderBoardFragment : DialogFragment() {
 
     private fun setClickListeners(view: View, id: Int) {
         val textView = view.findViewById<TextView>(id)
-        textView.setOnClickListener { getID(textView) }
+        textView.setOnClickListener { getID(textView.text.toString()) }
     }
 
-    private fun getID(textView: TextView) {
-        setSelected(textView, EASY.difficulty, R.id.easy_constraint)
-        setSelected(textView, MEDIUM.difficulty, R.id.medium_constraint)
-        setSelected(textView, HARD.difficulty, R.id.hard_constraint)
-        setSelected(textView, EXPERT.difficulty, R.id.expert_constraint)
-        sharedViewModel.leaderBoardComplexitySelection.changeValue(textView.text.toString())
+    private fun getID(string: String) {
+        setSelected(string, EASY.difficulty, R.id.easy_constraint)
+        setSelected(string, MEDIUM.difficulty, R.id.medium_constraint)
+        setSelected(string, HARD.difficulty, R.id.hard_constraint)
+        setSelected(string, EXPERT.difficulty, R.id.expert_constraint)
+        sharedViewModel.leaderBoardComplexitySelection.changeValue(string)
     }
 
-    private fun setSelected(textView: TextView, difficulty: String, id: Int) {
+    private fun setSelected(string: String, difficulty: String, id: Int) {
         val constraint = requireView().findViewById<ConstraintLayout>(id)
-        if (textView.text.toString() == difficulty) {
+        if (string == difficulty) {
             constraint.background = getDrawable(requireContext(), R.drawable.dialog_straight_selected)
         }
         else constraint.background = getDrawable(requireContext(), R.drawable.dialog_straight)
