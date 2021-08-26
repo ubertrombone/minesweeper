@@ -87,7 +87,6 @@ class LeaderBoardFragment : DialogFragment() {
         val constraint = requireView().findViewById<ConstraintLayout>(id)
         if (string == difficulty) {
             constraint.background = getDrawable(requireContext(), R.drawable.dialog_straight_selected)
-        }
-        else constraint.background = getDrawable(requireContext(), R.drawable.dialog_straight)
+        } else constraint.background = getDrawable(requireContext(), R.drawable.dialog_straight)
     }
 }
