@@ -45,11 +45,11 @@ class LeaderBoardFragment : DialogFragment() {
             leaderBoardFragment = this@LeaderBoardFragment
         }
 
+        getID(sharedViewModel.leaderBoardComplexitySelection.dataValue.value.toString())
+
         leaderBoardPagerAdapter = LeaderBoardPagerAdapter(this)
         viewPager = binding?.pager!!
         viewPager.adapter = leaderBoardPagerAdapter
-
-        getID(sharedViewModel.leaderBoardComplexitySelection.dataValue.value.toString())
 
         setClickListeners(view, R.id.text_view_easy)
         setClickListeners(view, R.id.text_view_medium)
