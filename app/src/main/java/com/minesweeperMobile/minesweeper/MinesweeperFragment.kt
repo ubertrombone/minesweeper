@@ -102,7 +102,7 @@ class MinesweeperFragment: Fragment() {
 
                 val displayWidth = ((displayMetrics.widthPixels - (displayMetrics.widthPixels *.1)) / sharedViewModel.width.value).roundToInt()
 
-                if (displayWidth < 62) {
+                if (sharedViewModel.difficultySet.dataValue.value == CUSTOM.difficulty && displayWidth < 62) {
                     params.height = getParams(sharedViewModel.width.value)
                     params.width = getParams(sharedViewModel.width.value)
                 } else {

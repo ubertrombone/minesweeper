@@ -31,6 +31,7 @@ class SplashFragment : Fragment() {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
         auth = Firebase.auth
+        if (auth.uid == null) findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
         LoginFragment.userId = auth.uid.toString()
         database = FirebaseDatabase.getInstance("https://minesweeper-2bf76-default-rtdb.europe-west1.firebasedatabase.app/").getReference("${auth.uid}/")
     }
